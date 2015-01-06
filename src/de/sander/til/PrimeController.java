@@ -40,7 +40,12 @@ public class PrimeController implements MouseMotionListener, MouseListener, KeyL
 	}
 	
 	public void refreshMouse() {
-		Point b = MouseInfo.getPointerInfo().getLocation();
+		Point b = null;
+		try {
+			b = MouseInfo.getPointerInfo().getLocation();
+		} catch (NullPointerException npe) {
+			return;
+		}
 		SwingUtilities.convertPointFromScreen(b, view);
 		int x = (int) b.getX();
 		int y = (int) b.getY();
@@ -203,6 +208,9 @@ public class PrimeController implements MouseMotionListener, MouseListener, KeyL
 						break;
 		        	case 's':
 						this.model.setStats(!this.model.isStats());
+						break;
+		        	case 't':
+						this.model.setPrimes(!this.model.isPrimes());
 						break;
 					}
 		        	break;

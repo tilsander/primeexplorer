@@ -18,7 +18,7 @@ public class PrimeModel {
 			exponents = true, drawRect = true, helper = true,
 			rays = true, rayBox = true, chart = true, chartProp = true,
 			chartExp = true, chartPrimes = true, chartMatch = true,
-			chartExpSum = true, stats=true;
+			chartExpSum = true, stats=true, primes=true;
 	private PMMode pmmode=PMMode.NORMAL;
 
 	public int getDelta() {
@@ -220,6 +220,20 @@ public class PrimeModel {
 
 	public void setStats(boolean stats) {
 		this.stats = stats;
+	}
+
+	/**
+	 * @return the primes
+	 */
+	public boolean isPrimes() {
+		return primes;
+	}
+
+	/**
+	 * @param primes the primes to set
+	 */
+	public void setPrimes(boolean primes) {
+		this.primes = primes;
 	}
 
 	public Map<String,String> getInfo() {

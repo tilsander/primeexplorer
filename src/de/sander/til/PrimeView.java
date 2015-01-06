@@ -615,7 +615,7 @@ public class PrimeView extends JPanel {
 			}
 		}
 		if (Primes._().isPrime(x)) {
-			if (Primes._().isMatch(x, y*2)) {
+			if (this.model.isPrimes() && Primes._().isMatch(x, y*2)) {
 				switch (ct) {
 				case BORDER: return MATCH_BORDER;
 				case BOX: return MATCH_BOX;
@@ -629,10 +629,30 @@ public class PrimeView extends JPanel {
 					case TEXT: return EXP_TEXT;
 					}
 				}
-				switch (ct) {
-				case BORDER: return PRIME_BORDER;
-				case BOX: return PRIME_BOX;
-				case TEXT: return PRIME_TEXT;
+				if (this.model.isPrimes()) {
+					switch (ct) {
+					case BORDER: return PRIME_BORDER;
+					case BOX: return PRIME_BOX;
+					case TEXT: return PRIME_TEXT;
+					}
+				} else {
+					if (x%2==0) {
+						switch (ct) {
+						case BORDER:
+							if (y%x==0 && this.model.isRayBox()) return RAY_BORDER;
+							else return EVEN_BORDER;
+						case BOX: return EVEN_BOX;
+						case TEXT: return EVEN_TEXT;
+						}
+					} else {
+						switch (ct) {
+						case BORDER:
+							if (y%x==0 && this.model.isRayBox()) return RAY_BORDER;
+							else return ODD_BORDER;
+						case BOX: return ODD_BOX;
+						case TEXT: return ODD_TEXT;
+						}
+					}
 				}
 			}
 		} else if (x==y || x == 2*y) {
