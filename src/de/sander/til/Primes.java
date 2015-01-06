@@ -1,6 +1,7 @@
 package de.sander.til;
 
 import java.util.HashMap;
+import java.util.TreeMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
@@ -48,7 +49,7 @@ public class Primes {
 	}
 	
 	private void generateExponents(int num) {
-		HashMap<Integer,Integer> entry = new HashMap<Integer,Integer>();
+		Map<Integer,Integer> entry = new TreeMap<Integer,Integer>();
 		this.generatePrimes(num);
 		for (int i = 2; i <= num; ++i) {
 			if (this.isPrime(i)) {
