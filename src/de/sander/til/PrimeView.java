@@ -70,36 +70,6 @@ public class PrimeView extends JPanel {
 	}
 	
 	private static final long serialVersionUID = 1L;
-	private Color BACKGROUND=null,
-			TEXT_COLOR=null,
-			HIGHLIGHT_TEXT_COLOR=null,
-			LIGHT_WHITE=null,
-			PRIME_BOX=null,
-			PRIME_BORDER=null,
-			PRIME_TEXT=null,
-			EXP_BOX=null,
-			EXP_BORDER=null,
-			EXP_TEXT=null,
-			MATCH_BORDER=null,
-			MATCH_BOX=null,
-			MATCH_TEXT=null,
-			EVEN_BOX=null,
-			EVEN_BORDER=null,
-			EVEN_TEXT=null,
-			ODD_BOX=null,
-			ODD_BORDER=null,
-			ODD_TEXT=null,
-			AX_BOX=null,
-			AX_BORDER=null,
-			AX_TEXT=null,
-			HELPER_BOX=null,
-			HELPER_BOX_LIGHT=null,
-			HELPER_BORDER=null,
-			HELPER_TEXT=null,
-			RAY_BORDER=null,
-			CHART_PRIME=null,
-			CHART_EXP=null,
-			CHART_MATCH=null;
 	private PrimeModel model;
 	private int X_LEFT=40,
 			Y_TOP=50,
@@ -126,36 +96,6 @@ public class PrimeView extends JPanel {
 	
 	public PrimeView(PrimeModel mod) {
 		this.setModel(mod);
-		this.BACKGROUND = new Color(0,0,0);
-		this.TEXT_COLOR = new Color(255,255,255);
-		this.HIGHLIGHT_TEXT_COLOR = new Color(255,190,55);
-		this.LIGHT_WHITE = new Color(255,255,255,150);
-		this.PRIME_BOX = new Color(180,230,255);
-		this.PRIME_BORDER = new Color(140,190,235);
-		this.PRIME_TEXT = new Color(100,150,225);
-		this.EXP_BOX = new Color(185,45,90);
-		this.EXP_BORDER = new Color(125,65,10);
-		this.EXP_TEXT = new Color(255,255,255);
-		this.MATCH_BORDER = new Color(80,130,205);
-		this.MATCH_BOX = new Color(60,75,215);
-		this.MATCH_TEXT = new Color(180,230,255);
-		this.ODD_BOX = new Color(25,25,25);
-		this.ODD_BORDER = new Color(10,10,10);
-		this.ODD_TEXT = null;
-		this.EVEN_BOX = null;
-		this.EVEN_BORDER = new Color(25,25,25);
-		this.EVEN_TEXT = null;
-		this.AX_BOX = new Color(160,225,140);
-		this.AX_BORDER = new Color(140,235,190);
-		this.AX_TEXT = new Color(100,225,150);
-		this.HELPER_BOX = new Color(55,55,55);
-		this.HELPER_BOX_LIGHT = new Color(255,205,100);
-		this.HELPER_BORDER = new Color(35,35,35);
-		this.HELPER_TEXT = new Color(255,255,255);
-		this.RAY_BORDER = new Color(255,155,155,150);
-		this.CHART_PRIME = new Color(160,225,140);
-		this.CHART_MATCH = new Color(255,190,55);
-		this.CHART_EXP = new Color(185,45,90);
 	}
 	
 	public PrimeModel getModel() {
@@ -370,13 +310,13 @@ public class PrimeView extends JPanel {
 		
 		switch (type) {
 		case PRIME:
-			this.g2d.setColor(this.CHART_PRIME);
+			this.g2d.setColor(this.model.getColor("CHART_PRIME"));
 			break;
 		case MATCH:
-			this.g2d.setColor(this.CHART_MATCH);
+			this.g2d.setColor(this.model.getColor("CHART_MATCH"));
 			break;
 		case EXPONENT:
-			this.g2d.setColor(this.CHART_EXP);
+			this.g2d.setColor(this.model.getColor("CHART_EXP"));
 			break;
 		default:
 			return;
@@ -438,16 +378,16 @@ public class PrimeView extends JPanel {
 			yp /= this.model.getVerticalStep();
 			yp -= this.model.getYPos();
 			String str = "-";
-			this.g2d.setColor(this.CHART_EXP);
+			this.g2d.setColor(this.model.getColor("CHART_EXP"));
 			if (this.model.isChartExpSum()) str = "" + Primes._().getExponentSum(y);
 			else str = "" + Primes._().getExponentCount(y);
 			g2d.drawString(str, WIDTH-X_RIGHT+10, yp*BLOCK);
 			
-			this.g2d.setColor(this.CHART_MATCH);
+			this.g2d.setColor(this.model.getColor("CHART_MATCH"));
 			str = "" + Primes._().getMatchCount(y*2);
 			g2d.drawString(str, WIDTH-X_RIGHT+10, yp*BLOCK+((int)STRING_HEIGHT+2));
 			
-			this.g2d.setColor(this.CHART_PRIME);
+			this.g2d.setColor(this.model.getColor("CHART_PRIME"));
 			str = "" + Primes._().primesUntil(y);
 			g2d.drawString(str, WIDTH-X_RIGHT+10, yp*BLOCK+((int)STRING_HEIGHT+2)*2);
 		}
@@ -472,7 +412,7 @@ public class PrimeView extends JPanel {
 						double ratio = ((double)order)*((double)X_STEP/(double)Y_STEP);
 						if (rays.get(order) == null || y == MOUSE_Y) {
 							if (Primes._().isPrime(x) && y == MOUSE_Y) g2d.setColor(this.getHightlightTextColor());
-							else g2d.setColor(this.RAY_BORDER); 
+							else g2d.setColor(this.model.getColor("RAY_BORDER")); 
 							x_left = ((double)xp - 0.5)*(double)BLOCK;
 							y_up = (x_left*ratio);
 							cut_top = y_up - (((double)yp - 0.5)*(double)BLOCK);
@@ -605,77 +545,77 @@ public class PrimeView extends JPanel {
 			|| this.isOnLine(x,y,this.model.getMouseX()) || this.isOnLine(x,y,this.model.getMouseY()))) {
 			switch (ct) {
 			case BORDER:
-				if (y%x==0 && this.model.isRayBox()) return RAY_BORDER;
-				else return HELPER_BORDER;
+				if (y%x==0 && this.model.isRayBox()) return this.model.getColor("RAY_BORDER");
+				else return this.model.getColor("HELPER_BORDER");
 			case BOX:
-				if (Primes._().isMatch(x, y*2)) return HELPER_BOX_LIGHT;
-				else if (Primes._().getExponent(x, y)>0) return EXP_BOX;
-				else return HELPER_BOX;
-			case TEXT: return HELPER_TEXT;
+				if (Primes._().isMatch(x, y*2)) return this.model.getColor("HELPER_BOX_LIGHT");
+				else if (Primes._().getExponent(x, y)>0) return this.model.getColor("EXP_BOX");
+				else return this.model.getColor("HELPER_BOX");
+			case TEXT: return this.model.getColor("HELPER_TEXT");
 			}
 		}
 		if (Primes._().isPrime(x)) {
 			if (this.model.isPrimes() && Primes._().isMatch(x, y*2)) {
 				switch (ct) {
-				case BORDER: return MATCH_BORDER;
-				case BOX: return MATCH_BOX;
-				case TEXT: return MATCH_TEXT;
+				case BORDER: return this.model.getColor("MATCH_BORDER");
+				case BOX: return this.model.getColor("MATCH_BOX");
+				case TEXT: return this.model.getColor("MATCH_TEXT");
 				}
 			} else {
 				if (Primes._().getExponent(x, y)>0) {
 					switch (ct) {
-					case BORDER: return EXP_BORDER;
-					case BOX: return EXP_BOX;
-					case TEXT: return EXP_TEXT;
+					case BORDER: return this.model.getColor("EXP_BORDER");
+					case BOX: return this.model.getColor("EXP_BOX");
+					case TEXT: return this.model.getColor("EXP_TEXT");
 					}
 				}
 				if (this.model.isPrimes()) {
 					switch (ct) {
-					case BORDER: return PRIME_BORDER;
-					case BOX: return PRIME_BOX;
-					case TEXT: return PRIME_TEXT;
+					case BORDER: return this.model.getColor("PRIME_BORDER");
+					case BOX: return this.model.getColor("PRIME_BOX");
+					case TEXT: return this.model.getColor("PRIME_TEXT");
 					}
 				} else {
 					if (x%2==0) {
 						switch (ct) {
 						case BORDER:
-							if (y%x==0 && this.model.isRayBox()) return RAY_BORDER;
-							else return EVEN_BORDER;
-						case BOX: return EVEN_BOX;
-						case TEXT: return EVEN_TEXT;
+							if (y%x==0 && this.model.isRayBox()) return this.model.getColor("RAY_BORDER");
+							else return this.model.getColor("EVEN_BORDER");
+						case BOX: return this.model.getColor("EVEN_BOX");
+						case TEXT: return this.model.getColor("EVEN_TEXT");
 						}
 					} else {
 						switch (ct) {
 						case BORDER:
-							if (y%x==0 && this.model.isRayBox()) return RAY_BORDER;
-							else return ODD_BORDER;
-						case BOX: return ODD_BOX;
-						case TEXT: return ODD_TEXT;
+							if (y%x==0 && this.model.isRayBox()) return this.model.getColor("RAY_BORDER");
+							else return this.model.getColor("ODD_BORDER");
+						case BOX: return this.model.getColor("ODD_BOX");
+						case TEXT: return this.model.getColor("ODD_TEXT");
 						}
 					}
 				}
 			}
 		} else if (x==y || x == 2*y) {
 			switch (ct) {
-			case BORDER: return AX_BORDER;
-			case BOX: return AX_BOX;
-			case TEXT: return AX_TEXT;
+			case BORDER: return this.model.getColor("AX_BORDER");
+			case BOX: return this.model.getColor("AX_BOX");
+			case TEXT: return this.model.getColor("AX_TEXT");
 			}
 		} else if (x%2==0) {
 			switch (ct) {
 			case BORDER:
-				if (y%x==0 && this.model.isRayBox()) return RAY_BORDER;
-				else return EVEN_BORDER;
-			case BOX: return EVEN_BOX;
-			case TEXT: return EVEN_TEXT;
+				if (y%x==0 && this.model.isRayBox()) return this.model.getColor("RAY_BORDER");
+				else return this.model.getColor("EVEN_BORDER");
+			case BOX: return this.model.getColor("EVEN_BOX");
+			case TEXT: return this.model.getColor("EVEN_TEXT");
 			}
 		} else {
 			switch (ct) {
 			case BORDER:
-				if (y%x==0 && this.model.isRayBox()) return RAY_BORDER;
-				else return ODD_BORDER;
-			case BOX: return ODD_BOX;
-			case TEXT: return ODD_TEXT;
+				if (y%x==0 && this.model.isRayBox()) return this.model.getColor("RAY_BORDER");
+				else return this.model.getColor("ODD_BORDER");
+			case BOX: return this.model.getColor("ODD_BOX");
+			case TEXT: return this.model.getColor("ODD_TEXT");
 			}
 		}
 		return null;
@@ -690,15 +630,15 @@ public class PrimeView extends JPanel {
 	}
 	
 	protected Color getBackgroundColor() {
-		return this.BACKGROUND;
+		return this.model.getColor("BACKGROUND");
 	}
 	
 	protected Color getTextColor() {
-		return this.TEXT_COLOR;
+		return this.model.getColor("TEXT_COLOR");
 	}
 	
 	protected Color getHightlightTextColor() {
-		return this.HIGHLIGHT_TEXT_COLOR;
+		return this.model.getColor("HIGHLIGHT_TEXT_COLOR");
 	}
 	
 	public int transformMouseX(int x) {
