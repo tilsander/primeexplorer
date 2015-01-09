@@ -19,7 +19,7 @@ public class PrimeModel {
 			exponents = true, drawRect = true, helper = true,
 			rays = true, rayBox = true, chart = true, chartProp = true,
 			chartExp = true, chartPrimes = true, chartMatch = true,
-			chartExpSum = true, stats=true, primes=true;
+			chartExpSum = true, stats=true, primes=true, changed=false;
 	private PMMode pmmode=PMMode.NORMAL;
 	private Color BACKGROUND=null,
 			TEXT_COLOR=null,
@@ -92,7 +92,7 @@ public class PrimeModel {
 		if (cname.equals("BACKGROUND")) return this.BACKGROUND;
 		if (cname.equals("TEXT_COLOR")) return this.TEXT_COLOR;
 		if (cname.equals("HIGHLIGHT_TEXT_COLOR")) return this.HIGHLIGHT_TEXT_COLOR;
-		if (cname.equals("LIGHT_WHITE")) return this.LIGHT_WHITE;
+		//if (cname.equals("LIGHT_WHITE")) return this.LIGHT_WHITE;
 		if (cname.equals("PRIME_BOX")) return this.PRIME_BOX;
 		if (cname.equals("PRIME_BORDER")) return this.PRIME_BORDER;
 		if (cname.equals("PRIME_TEXT")) return this.PRIME_TEXT;
@@ -154,6 +154,7 @@ public class PrimeModel {
 		if (cname.equals("CHART_PRIME")) this.CHART_PRIME = color;
 		if (cname.equals("CHART_MATCH")) this.CHART_MATCH = color;
 		if (cname.equals("CHART_EXP")) this.CHART_EXP = color;
+		this.changed();
 	}
 	
 	public String[] getColors() {
@@ -188,6 +189,18 @@ public class PrimeModel {
 		        "CHART_MATCH",
 		        "CHART_EXP"};
 	}
+	
+	public boolean isChanged() {
+		if (this.changed) {
+			this.changed = false;
+			return true;
+		}
+		return false;
+	}
+	
+	private void changed() {
+		this.changed = true;
+	}
 
 	public int getDelta() {
 		int d = (int) (20.0F / (double) this.blockSize);
@@ -202,6 +215,7 @@ public class PrimeModel {
 
 	public void setBlockSize(int blockSize) {
 		if (blockSize > 0) this.blockSize = blockSize;
+		this.changed();
 	}
 
 	public int getXPos() {
@@ -212,6 +226,7 @@ public class PrimeModel {
 		if (xPos < 0)
 			xPos = 0;
 		this.xPos = xPos;
+		this.changed();
 	}
 
 	public int getYPos() {
@@ -222,6 +237,7 @@ public class PrimeModel {
 		if (yPos < 0)
 			yPos = 0;
 		this.yPos = yPos;
+		this.changed();
 	}
 
 	public int getMouseX() {
@@ -230,6 +246,7 @@ public class PrimeModel {
 
 	public void setMouseX(int mouseX) {
 		this.mouseX = mouseX;
+		this.changed();
 	}
 
 	public int getMouseY() {
@@ -238,6 +255,7 @@ public class PrimeModel {
 
 	public void setMouseY(int mouseY) {
 		this.mouseY = mouseY;
+		this.changed();
 	}
 
 	public boolean isXYTransform() {
@@ -246,6 +264,7 @@ public class PrimeModel {
 
 	public void setXyTransform(boolean xyTransform) {
 		this.xyTransform = xyTransform;
+		this.changed();
 	}
 
 	public boolean isExponents() {
@@ -254,6 +273,7 @@ public class PrimeModel {
 
 	public void setExponents(boolean exponents) {
 		this.exponents = exponents;
+		this.changed();
 	}
 
 	public boolean isDrawRect() {
@@ -262,6 +282,7 @@ public class PrimeModel {
 
 	public void setDrawRect(boolean drawRect) {
 		this.drawRect = drawRect;
+		this.changed();
 	}
 
 	public boolean isHelper() {
@@ -270,6 +291,7 @@ public class PrimeModel {
 
 	public void setHelper(boolean helper) {
 		this.helper = helper;
+		this.changed();
 	}
 
 	public boolean isRays() {
@@ -278,6 +300,7 @@ public class PrimeModel {
 
 	public void setRays(boolean rays) {
 		this.rays = rays;
+		this.changed();
 	}
 
 	public boolean isRayBox() {
@@ -286,6 +309,7 @@ public class PrimeModel {
 
 	public void setRayBox(boolean rayBox) {
 		this.rayBox = rayBox;
+		this.changed();
 	}
 
 	public boolean isChart() {
@@ -294,6 +318,7 @@ public class PrimeModel {
 
 	public void setChart(boolean chart) {
 		this.chart = chart;
+		this.changed();
 	}
 
 	public boolean isChartProp() {
@@ -302,6 +327,7 @@ public class PrimeModel {
 
 	public void setChartProp(boolean chartProp) {
 		this.chartProp = chartProp;
+		this.changed();
 	}
 
 	public boolean isChartExp() {
@@ -310,6 +336,7 @@ public class PrimeModel {
 
 	public void setChartExp(boolean chartExp) {
 		this.chartExp = chartExp;
+		this.changed();
 	}
 
 	public boolean isChartPrimes() {
@@ -318,6 +345,7 @@ public class PrimeModel {
 
 	public void setChartPrimes(boolean chartPrimes) {
 		this.chartPrimes = chartPrimes;
+		this.changed();
 	}
 
 	public boolean isChartMatch() {
@@ -326,6 +354,7 @@ public class PrimeModel {
 
 	public void setChartMatch(boolean chartMatch) {
 		this.chartMatch = chartMatch;
+		this.changed();
 	}
 
 	public boolean isChartExpSum() {
@@ -334,6 +363,7 @@ public class PrimeModel {
 
 	public void setChartExpSum(boolean chartExpSum) {
 		this.chartExpSum = chartExpSum;
+		this.changed();
 	}
 
 	public int getVerticalStep() {
@@ -344,6 +374,7 @@ public class PrimeModel {
 		if (verticalStep > 0) {
 			this.verticalStep = verticalStep;
 			this.setVerticalOffset(0);
+			this.changed();
 		}
 	}
 
@@ -355,6 +386,7 @@ public class PrimeModel {
 		if (horizontalStep > 0) {
 			this.horizontalStep = horizontalStep;
 			this.setHorizontalOffset(0);
+			this.changed();
 		}
 	}
 
@@ -364,6 +396,7 @@ public class PrimeModel {
 
 	public void setPmmode(PMMode pmmode) {
 		this.pmmode = pmmode;
+		this.changed();
 	}
 
 	public int getVerticalOffset() {
@@ -371,7 +404,10 @@ public class PrimeModel {
 	}
 
 	public void setVerticalOffset(int verticalOffset) {
-		if (verticalOffset >= 0) this.verticalOffset = verticalOffset%this.getVerticalStep();
+		if (verticalOffset >= 0) {
+			this.verticalOffset = verticalOffset%this.getVerticalStep();
+			this.changed();
+		}
 	}
 
 	public int getHorizontalOffset() {
@@ -379,7 +415,10 @@ public class PrimeModel {
 	}
 
 	public void setHorizontalOffset(int horizontalOffset) {
-		if (horizontalOffset >= 0) this.horizontalOffset = horizontalOffset%this.getHorizontalStep();
+		if (horizontalOffset >= 0) {
+			this.horizontalOffset = horizontalOffset%this.getHorizontalStep();
+			this.changed();
+		}
 	}
 	
 	public boolean isStats() {
@@ -388,6 +427,7 @@ public class PrimeModel {
 
 	public void setStats(boolean stats) {
 		this.stats = stats;
+		this.changed();
 	}
 
 	/**
@@ -402,6 +442,7 @@ public class PrimeModel {
 	 */
 	public void setPrimes(boolean primes) {
 		this.primes = primes;
+		this.changed();
 	}
 
 	public Map<String,String> getInfo() {

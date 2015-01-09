@@ -9,8 +9,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.event.KeyListener;
+import javax.swing.*;
 
-import javax.swing.JPanel;
 
 public class PrimeView extends JPanel {
 	
@@ -89,13 +92,24 @@ public class PrimeView extends JPanel {
 			WIDTH=0,
 			HEIGHT=0,
 			Y_AXIS_DELTA=0;
-	double STRING_HEIGHT=0.0;
+	public double STRING_HEIGHT=0.0;
 	private StringMetrics metric;
 	private Font FONT, SMALL_FONT;
 	private Graphics2D g2d=null;
+	private JTextField typingArea;
+	private JFrame viewFrame;
 	
 	public PrimeView(PrimeModel mod) {
 		this.setModel(mod);
+		this.viewFrame = new JFrame();
+		this.viewFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.typingArea = new JTextField(1);
+		this.typingArea.setPreferredSize(new Dimension(3, 2));
+		this.typingArea.setOpaque(true);
+		this.add(this.typingArea, BorderLayout.PAGE_END);
+		this.viewFrame.getContentPane().add(this);
+		this.viewFrame.setSize(1200, 800);
+		this.viewFrame.setVisible(true);
 	}
 	
 	public PrimeModel getModel() {
@@ -674,6 +688,10 @@ public class PrimeView extends JPanel {
 		y *= this.model.getVerticalStep();
 		y += this.model.getVerticalOffset();
 		return y;
+	}
+	
+	public void addKeyListener(KeyListener keyl) {
+		this.typingArea.addKeyListener(keyl);
 	}
 
 }

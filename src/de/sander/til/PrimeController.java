@@ -14,23 +14,31 @@ public class PrimeController implements MouseMotionListener, MouseListener, KeyL
 	
 	private PrimeModel model;
 	private PrimeView view;
-	private boolean REFRESH=true;
+	private ColorController colorer;
+	private boolean REFRESH=true, EXIT=false;
 	
 	public PrimeController(PrimeModel mod, PrimeView view) {
 		this.model = mod;
 		this.view = view;
 		this.view.addMouseMotionListener(this);
 		this.view.addMouseListener(this);
+		this.view.addKeyListener(this);
+		this.colorer = new ColorController(this.model,new ColorView(this.model));
 	}
 	
 	public void start() {
 		while (true) {
-			if (this.REFRESH) {
+			if (EXIT) return;
+			if (this.REFRESH || this.model.isChanged()) {
 				this.REFRESH = false;
 				this.view.draw();
 			}
 			this.sleep(60);
 		}
+	}
+	
+	public void stop() {
+		this.EXIT = true;
 	}
 	
 	public void sleep(long milis) {
