@@ -14,11 +14,11 @@ public class PrimeModel {
 		NORMAL
 	}
 
-	private int blockSize = 12, xPos = 0, yPos = 0, mouseX = 0, mouseY = 0, verticalStep=1, horizontalStep=1, verticalOffset=0, horizontalOffset=0;
+	private int blockSize = 12, xPos = 0, yPos = 0, mouseX = 0, mouseY = 0, verticalStep=1, horizontalStep=1, verticalOffset=0, horizontalOffset=0, window_width=1200, window_height=800;
 	private boolean xyTransform = false,
 			exponents = true, drawRect = true, helper = true,
 			rays = true, rayBox = true, chart = true, chartProp = true,
-			chartExp = true, chartPrimes = true, chartMatch = true,
+			chartExp = true, chartPrimes = true, chartMatchCount = true, chartFirstMatch=true, chartFirstVoid=true, chartVoidCount=true,
 			chartExpSum = true, stats=true, primes=true, changed=false;
 	private PMMode pmmode=PMMode.NORMAL;
 	private Color BACKGROUND=null,
@@ -50,14 +50,17 @@ public class PrimeModel {
 			RAY_BORDER=null,
 			CHART_PRIME=null,
 			CHART_EXP=null,
-			CHART_MATCH=null,
+			CHART_MATCH_COUNT=null,
+			CHART_FIRST_MATCH=null,
+			CHART_FIRST_VOID=null,
+			CHART_VOID_COUNT=null,
 			ALPHA=null;
 	
 	public PrimeModel() {
 		this.BACKGROUND = new Color(0,0,0);
 		this.TEXT_COLOR = new Color(255,255,255);
 		this.HIGHLIGHT_TEXT_COLOR = new Color(255,190,55);
-		this.LIGHT_WHITE = new Color(255,255,255,150);
+		this.LIGHT_WHITE = new Color(255,255,255,255);
 		this.PRIME_BOX = new Color(180,230,255);
 		this.PRIME_BORDER = new Color(140,190,235);
 		this.PRIME_TEXT = new Color(100,150,225);
@@ -82,8 +85,11 @@ public class PrimeModel {
 		this.HELPER_TEXT = new Color(255,255,255);
 		this.RAY_BORDER = new Color(255,155,155,150);
 		this.CHART_PRIME = new Color(160,225,140);
-		this.CHART_MATCH = new Color(255,190,55);
+		this.CHART_MATCH_COUNT = new Color(255,190,55);
 		this.CHART_EXP = new Color(185,45,90);
+		this.CHART_FIRST_MATCH = new Color(185,45,190);
+		this.CHART_FIRST_VOID = new Color(85,145,190);
+		this.CHART_VOID_COUNT = new Color(225,145,90);
 		this.ALPHA = new Color(0,0,0,0);
 	}
 	
@@ -92,7 +98,7 @@ public class PrimeModel {
 		if (cname.equals("BACKGROUND")) return this.BACKGROUND;
 		if (cname.equals("TEXT_COLOR")) return this.TEXT_COLOR;
 		if (cname.equals("HIGHLIGHT_TEXT_COLOR")) return this.HIGHLIGHT_TEXT_COLOR;
-		//if (cname.equals("LIGHT_WHITE")) return this.LIGHT_WHITE;
+		if (cname.equals("LIGHT_WHITE")) return this.LIGHT_WHITE;
 		if (cname.equals("PRIME_BOX")) return this.PRIME_BOX;
 		if (cname.equals("PRIME_BORDER")) return this.PRIME_BORDER;
 		if (cname.equals("PRIME_TEXT")) return this.PRIME_TEXT;
@@ -117,8 +123,11 @@ public class PrimeModel {
 		if (cname.equals("HELPER_TEXT")) return this.HELPER_TEXT;
 		if (cname.equals("RAY_BORDER")) return this.RAY_BORDER;
 		if (cname.equals("CHART_PRIME")) return this.CHART_PRIME;
-		if (cname.equals("CHART_MATCH")) return this.CHART_MATCH;
+		if (cname.equals("CHART_MATCH_COUNT")) return this.CHART_MATCH_COUNT;
 		if (cname.equals("CHART_EXP")) return this.CHART_EXP;
+		if (cname.equals("CHART_FIRST_MATCH")) return this.CHART_FIRST_MATCH;
+		if (cname.equals("CHART_FIRST_VOID")) return this.CHART_FIRST_VOID;
+		if (cname.equals("CHART_VOID_COUNT")) return this.CHART_VOID_COUNT;
 		return this.ALPHA;
 	}
 	
@@ -152,8 +161,11 @@ public class PrimeModel {
 		if (cname.equals("HELPER_TEXT")) this.HELPER_TEXT = color;
 		if (cname.equals("RAY_BORDER")) this.RAY_BORDER = color;
 		if (cname.equals("CHART_PRIME")) this.CHART_PRIME = color;
-		if (cname.equals("CHART_MATCH")) this.CHART_MATCH = color;
+		if (cname.equals("CHART_MATCH_COUNT")) this.CHART_MATCH_COUNT = color;
 		if (cname.equals("CHART_EXP")) this.CHART_EXP = color;
+		if (cname.equals("CHART_FIRST_MATCH")) this.CHART_FIRST_MATCH = color;
+		if (cname.equals("CHART_FIRST_VOID")) this.CHART_FIRST_VOID = color;
+		if (cname.equals("CHART_VOID_COUNT")) this.CHART_VOID_COUNT = color;
 		this.changed();
 	}
 	
@@ -186,8 +198,11 @@ public class PrimeModel {
 		        "HELPER_TEXT",
 		        "RAY_BORDER",
 		        "CHART_PRIME",
-		        "CHART_MATCH",
-		        "CHART_EXP"};
+		        "CHART_MATCH_COUNT",
+		        "CHART_EXP",
+		        "CHART_FIRST_MATCH",
+		        "CHART_FIRST_VOID",
+		        "CHART_VOID_COUNT"};
 	}
 	
 	public boolean isChanged() {
@@ -348,13 +363,37 @@ public class PrimeModel {
 		this.changed();
 	}
 
-	public boolean isChartMatch() {
-		return chartMatch;
+	public boolean isChartMatchCount() {
+		return chartMatchCount;
 	}
 
-	public void setChartMatch(boolean chartMatch) {
-		this.chartMatch = chartMatch;
+	public void setChartMatchCount(boolean chartMatch) {
+		this.chartMatchCount = chartMatch;
 		this.changed();
+	}
+
+	public boolean isChartFirstMatch() {
+		return chartFirstMatch;
+	}
+
+	public void setChartFirstMatch(boolean chartFirstMatch) {
+		this.chartFirstMatch = chartFirstMatch;
+	}
+
+	public boolean isChartFirstVoid() {
+		return chartFirstVoid;
+	}
+
+	public void setChartFirstVoid(boolean chartFirstVoid) {
+		this.chartFirstVoid = chartFirstVoid;
+	}
+
+	public boolean isChartVoidCount() {
+		return chartVoidCount;
+	}
+
+	public void setChartVoidCount(boolean chartVoidCount) {
+		this.chartVoidCount = chartVoidCount;
 	}
 
 	public boolean isChartExpSum() {
@@ -445,6 +484,22 @@ public class PrimeModel {
 		this.changed();
 	}
 
+	public int getWindow_width() {
+		return window_width;
+	}
+
+	public void setWindow_width(int window_width) {
+		this.window_width = window_width;
+	}
+
+	public int getWindow_height() {
+		return window_height;
+	}
+
+	public void setWindow_height(int window_height) {
+		this.window_height = window_height;
+	}
+
 	public Map<String,String> getInfo() {
 		Map<String,String> ret = new TreeMap<String,String>();
 		String str = "";
@@ -467,9 +522,19 @@ public class PrimeModel {
 		}
 		ret.put("_MODE",str);
 		ret.put("_BLOCK_SIZE",""+this.getBlockSize());
-		ret.put("_DELTA",""+this.getDelta());
-		ret.put("_EXP_SUM",""+this.isChartExpSum());
-		ret.put("_CHART_PROP",""+this.isChartProp());
+		ret.put("_EXP_SUM [E]",""+this.isChartExpSum());
+		ret.put("_CHART_PROP [P]",""+this.isChartProp());
+		ret.put("_SHOW_PRIMES [T]",""+this.isPrimes());
+		ret.put("_SHOW_FACTORS [B]",""+this.isRayBox());
+		ret.put("_RECTANGLES [R]",""+this.isDrawRect());
+		ret.put("_SHOW_HELPER [H]",""+this.isHelper());
+		ret.put("_SHOW_RAYS [L]",""+this.isRays());
+		ret.put("__CHART_PRIMES [1]",""+this.isChartPrimes());
+		ret.put("__CHART_EXP [2]",""+this.isChartExp());
+		ret.put("__CHART_MATCH_COUNT [3]",""+this.isChartMatchCount());
+		ret.put("__CHART_FIRST_MATCH [4]",""+this.isChartFirstMatch());
+		ret.put("__CHART_VOID_COUNT [5]",""+this.isChartVoidCount());
+		ret.put("__CHART_FIRST_VOID [6]",""+this.isChartFirstVoid());
 		ret.put("POS_X",""+this.getXPos());
 		ret.put("POS_Y",""+this.getYPos());
 		ret.put("STEP_X",""+this.getHorizontalStep());

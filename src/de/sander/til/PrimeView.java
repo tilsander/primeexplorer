@@ -5,13 +5,17 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.KeyListener;
+
 import javax.swing.*;
 
 
@@ -25,8 +29,11 @@ public class PrimeView extends JPanel {
 	
 	private enum ChartType {
 		PRIME,
-		MATCH,
-		EXPONENT
+		MATCH_COUNT,
+		EXPONENT,
+		FIRST_MATCH,
+		VOID_COUNT,
+		FIRST_VOID
 	}
 	
 	class Point2D {
@@ -92,7 +99,7 @@ public class PrimeView extends JPanel {
 			WIDTH=0,
 			HEIGHT=0,
 			Y_AXIS_DELTA=0;
-	public double STRING_HEIGHT=0.0;
+	private double STRING_HEIGHT=0.0;
 	private StringMetrics metric;
 	private Font FONT, SMALL_FONT;
 	private Graphics2D g2d=null;
@@ -108,7 +115,20 @@ public class PrimeView extends JPanel {
 		this.typingArea.setOpaque(true);
 		this.add(this.typingArea, BorderLayout.PAGE_END);
 		this.viewFrame.getContentPane().add(this);
-		this.viewFrame.setSize(1200, 800);
+		this.viewFrame.setSize(this.model.getWindow_width(), this.model.getWindow_height());
+		this.viewFrame.addComponentListener(new ComponentListener() {
+			public void componentResized(ComponentEvent e) {
+				model.setWindow_width(viewFrame.getWidth());
+				model.setWindow_height(viewFrame.getHeight());
+			}
+			public void componentMoved(ComponentEvent e) {}
+			public void componentShown(ComponentEvent e) {}
+			public void componentHidden(ComponentEvent e) {}
+        });
+		
+	}
+	
+	public void focus() {
 		this.viewFrame.setVisible(true);
 	}
 	
@@ -147,9 +167,12 @@ public class PrimeView extends JPanel {
 		this.drawBottomRight();
 		this.drawRayOrder(rays);
 		if (this.model.isChart()) {
-			this.drawChart(ChartType.PRIME);
-			this.drawChart(ChartType.EXPONENT);
-			this.drawChart(ChartType.MATCH);
+			if (this.model.isChartPrimes()) this.drawChart(ChartType.PRIME);
+			if (this.model.isChartExp()) this.drawChart(ChartType.EXPONENT);
+			if (this.model.isChartMatchCount()) this.drawChart(ChartType.MATCH_COUNT);
+			if (this.model.isChartFirstMatch()) this.drawChart(ChartType.FIRST_MATCH);
+			if (this.model.isChartVoidCount()) this.drawChart(ChartType.VOID_COUNT);
+			if (this.model.isChartFirstVoid()) this.drawChart(ChartType.FIRST_VOID);
 			this.drawChartDesc();
 		}
 		if (this.model.isStats()) this.drawStats();
@@ -174,7 +197,7 @@ public class PrimeView extends JPanel {
 		else Y_BOTTOM=30;
 		if (X_RIGHT > WIDTH - X_LEFT) X_RIGHT = WIDTH - X_LEFT;
 		STRING_HEIGHT = this.metric.getHeight("1");
-		this.Y_AXIS_DELTA = (int)(STRING_HEIGHT/(double)BLOCK);
+		this.Y_AXIS_DELTA = (int)(STRING_HEIGHT/(double)BLOCK)*Y_STEP+Y_OFF;
 		if (Y_AXIS_DELTA <= 0) Y_AXIS_DELTA = 1;
 		
 		{
@@ -192,7 +215,7 @@ public class PrimeView extends JPanel {
 		g2d.setBackground(this.getBackgroundColor());
 		g2d.clearRect(0, 0, WIDTH, HEIGHT);
 		// draw view rect
-		g2d.setColor(this.getTextColor());
+		g2d.setColor(this.model.getColor("LIGHT_WHITE"));
 		g2d.drawLine(X_LEFT-1, Y_TOP-1, X_LEFT-1, HEIGHT-1);
 		g2d.drawLine(X_LEFT-1, Y_TOP-1, WIDTH-1, Y_TOP-1);
 	}
@@ -202,7 +225,7 @@ public class PrimeView extends JPanel {
 		g2d.setColor(this.getBackgroundColor());
 		g2d.fillRect(this.X_LEFT, HEIGHT-this.Y_BOTTOM, WIDTH-this.X_LEFT, this.Y_BOTTOM);
 		g2d.fillRect(WIDTH-this.X_RIGHT,this.Y_TOP,this.X_RIGHT,HEIGHT-this.Y_BOTTOM);
-		g2d.setColor(this.getTextColor());
+		g2d.setColor(this.model.getColor("LIGHT_WHITE"));
 		g2d.drawLine(this.X_LEFT, HEIGHT-this.Y_BOTTOM, WIDTH-this.X_RIGHT, HEIGHT-this.Y_BOTTOM);
 		g2d.drawLine(WIDTH-this.X_RIGHT,this.Y_TOP,WIDTH-this.X_RIGHT,HEIGHT-this.Y_BOTTOM);
 	}
@@ -326,11 +349,20 @@ public class PrimeView extends JPanel {
 		case PRIME:
 			this.g2d.setColor(this.model.getColor("CHART_PRIME"));
 			break;
-		case MATCH:
-			this.g2d.setColor(this.model.getColor("CHART_MATCH"));
+		case MATCH_COUNT:
+			this.g2d.setColor(this.model.getColor("CHART_MATCH_COUNT"));
 			break;
 		case EXPONENT:
 			this.g2d.setColor(this.model.getColor("CHART_EXP"));
+			break;
+		case FIRST_MATCH:
+			this.g2d.setColor(this.model.getColor("CHART_FIRST_MATCH"));
+			break;
+		case FIRST_VOID:
+			this.g2d.setColor(this.model.getColor("CHART_FIRST_VOID"));
+			break;
+		case VOID_COUNT:
+			this.g2d.setColor(this.model.getColor("CHART_VOID_COUNT"));
 			break;
 		default:
 			return;
@@ -341,23 +373,37 @@ public class PrimeView extends JPanel {
 			xc_val=0, y=0;
 		double chart_px=0.0, cpx_dev=1.0;
 		if (this.model.isChartProp()) {
-			double pdev = (double)(Primes._().primesUntil(Y_MAX*2));
-			double mdev = (double)(Primes._().getMaxMatchCount(Y_MAX*2));
-			double edev;
-			if (this.model.isChartExpSum()) edev = (double)(Primes._().getMaxExpSum(Y_MAX));
-			else edev = (double)(Primes._().getMaxExpCount(Y_MAX));
-			cpx_dev = Math.max(pdev, Math.max(mdev, edev));
+			List<Double> devs = new ArrayList<Double>();
+			if (this.model.isChartPrimes()) devs.add((double)(Primes._().primesUntil(Y_MAX)));
+			if (this.model.isChartMatchCount()) devs.add((double)(Primes._().getMaxMatchCount(Y_MAX)));
+			if (this.model.isChartExp()) {
+				if (this.model.isChartExpSum()) devs.add((double)(Primes._().getMaxExpSum(Y_MAX)));
+				else devs.add((double)(Primes._().getMaxExpCount(Y_MAX)));
+			}
+			if (this.model.isChartFirstMatch()) devs.add((double)(Primes._().getMaxFirstMatch(Y_MAX)));
+			if (this.model.isChartFirstVoid()) devs.add((double)(Primes._().getMaxFirstVoid(Y_MAX)));
+			if (this.model.isChartVoidCount()) devs.add((double)(Primes._().getMaxVoidCount(Y_MAX)));
+			cpx_dev = Collections.max(devs);
 		} else {
 			switch (type) {
 			case PRIME:
 				cpx_dev = (double)(Primes._().primesUntil(Y_MAX));
 				break;
-			case MATCH:
-				cpx_dev = (double)(Primes._().getMaxMatchCount(Y_MAX*2));
+			case MATCH_COUNT:
+				cpx_dev = (double)(Primes._().getMaxMatchCount(Y_MAX));
 				break;
 			case EXPONENT:
 				if (this.model.isChartExpSum()) cpx_dev = (double)(Primes._().getMaxExpSum(Y_MAX)); 
 				else cpx_dev = (double)(Primes._().getMaxExpCount(Y_MAX));
+				break;
+			case FIRST_MATCH:
+				cpx_dev = (double)(Primes._().getMaxFirstMatch(Y_MAX));
+				break;
+			case FIRST_VOID:
+				cpx_dev = (double)(Primes._().getMaxFirstVoid(Y_MAX));
+				break;
+			case VOID_COUNT:
+				cpx_dev = (double)(Primes._().getMaxVoidCount(Y_MAX));
 				break;
 			default:
 				return;
@@ -371,20 +417,28 @@ public class PrimeView extends JPanel {
 			case PRIME:
 				xc_val = X_CHART_LEFT + (int)((double)Primes._().primesUntil(y)*chart_px);
 				break;
-			case MATCH:
-				xc_val = X_CHART_LEFT + (int)((double)Primes._().getMatchCount(y*2)*chart_px);
+			case MATCH_COUNT:
+				xc_val = X_CHART_LEFT + (int)((double)Primes._().getMatchCount(y)*chart_px);
 				break;
 			case EXPONENT:
 				if (this.model.isChartExpSum()) xc_val = X_CHART_LEFT + (int)((double)Primes._().getExponentSum(y)*chart_px);
 				else xc_val = X_CHART_LEFT + (int)((double)Primes._().getExponentCount(y)*chart_px);
+				break;
+			case FIRST_MATCH:
+				xc_val = X_CHART_LEFT + (int)((double)Primes._().getFirstMatch(y)*chart_px);
+				break;
+			case FIRST_VOID:
+				xc_val = X_CHART_LEFT + (int)((double)Primes._().getFirstVoid(y)*chart_px);
+				break;
+			case VOID_COUNT:
+				xc_val = X_CHART_LEFT + (int)((double)Primes._().getVoidCount(y)*chart_px);
 				break;
 			}
 			g2d.drawLine(xc_val, (yp-1)*BLOCK+Y_TOP, xc_val, yp*BLOCK+Y_TOP);
 		}
 	}
 	
-	public void drawChartDesc() {
-		
+	private void drawChartDesc() {
 		if (MOUSE_Y > Y_POS) {
 			int y = MOUSE_Y;
 			int yp = y;
@@ -392,18 +446,44 @@ public class PrimeView extends JPanel {
 			yp /= this.model.getVerticalStep();
 			yp -= this.model.getYPos();
 			String str = "-";
-			this.g2d.setColor(this.model.getColor("CHART_EXP"));
-			if (this.model.isChartExpSum()) str = "" + Primes._().getExponentSum(y);
-			else str = "" + Primes._().getExponentCount(y);
-			g2d.drawString(str, WIDTH-X_RIGHT+10, yp*BLOCK);
-			
-			this.g2d.setColor(this.model.getColor("CHART_MATCH"));
-			str = "" + Primes._().getMatchCount(y*2);
-			g2d.drawString(str, WIDTH-X_RIGHT+10, yp*BLOCK+((int)STRING_HEIGHT+2));
-			
-			this.g2d.setColor(this.model.getColor("CHART_PRIME"));
-			str = "" + Primes._().primesUntil(y);
-			g2d.drawString(str, WIDTH-X_RIGHT+10, yp*BLOCK+((int)STRING_HEIGHT+2)*2);
+			int chartCount = 0;
+			if (this.model.isChartPrimes()) {
+				this.g2d.setColor(this.model.getColor("CHART_PRIME"));
+				str = "" + Primes._().primesUntil(y);
+				g2d.drawString(str, WIDTH-X_RIGHT+10, yp*BLOCK+((int)STRING_HEIGHT+2)*chartCount);
+				chartCount++;
+			}
+			if (this.model.isChartMatchCount()) {
+				this.g2d.setColor(this.model.getColor("CHART_MATCH_COUNT"));
+				str = "" + Primes._().getMatchCount(y);
+				g2d.drawString(str, WIDTH-X_RIGHT+10, yp*BLOCK+((int)STRING_HEIGHT+2)*chartCount);
+				chartCount++;
+			}
+			if (this.model.isChartExp()) {
+				this.g2d.setColor(this.model.getColor("CHART_EXP"));
+				if (this.model.isChartExpSum()) str = "" + Primes._().getExponentSum(y);
+				else str = "" + Primes._().getExponentCount(y);
+				g2d.drawString(str, WIDTH-X_RIGHT+10, yp*BLOCK+((int)STRING_HEIGHT+2)*chartCount);
+				chartCount++;
+			}
+			if (this.model.isChartFirstMatch()) {
+				this.g2d.setColor(this.model.getColor("CHART_FIRST_MATCH"));
+				str = "" + Primes._().getFirstMatch(y);
+				g2d.drawString(str, WIDTH-X_RIGHT+10, yp*BLOCK+((int)STRING_HEIGHT+2)*chartCount);
+				chartCount++;
+			}
+			if (this.model.isChartVoidCount()) {
+				this.g2d.setColor(this.model.getColor("CHART_VOID_COUNT"));
+				str = "" + Primes._().getVoidCount(y);
+				g2d.drawString(str, WIDTH-X_RIGHT+10, yp*BLOCK+((int)STRING_HEIGHT+2)*chartCount);
+				chartCount++;
+			}
+			if (this.model.isChartFirstVoid()) {
+				this.g2d.setColor(this.model.getColor("CHART_FIRST_VOID"));
+				str = "" + Primes._().getFirstVoid(y);
+				g2d.drawString(str, WIDTH-X_RIGHT+10, yp*BLOCK+((int)STRING_HEIGHT+2)*chartCount);
+				chartCount++;
+			}
 		}
 	}
 	
@@ -576,46 +656,50 @@ public class PrimeView extends JPanel {
 				case TEXT: return this.model.getColor("MATCH_TEXT");
 				}
 			} else {
-				if (Primes._().getExponent(x, y)>0) {
+				if (this.model.isChartExpSum() && Primes._().getExponent(x, y)>0) {
 					switch (ct) {
 					case BORDER: return this.model.getColor("EXP_BORDER");
 					case BOX: return this.model.getColor("EXP_BOX");
 					case TEXT: return this.model.getColor("EXP_TEXT");
 					}
 				}
-				if (this.model.isPrimes()) {
-					switch (ct) {
-					case BORDER: return this.model.getColor("PRIME_BORDER");
-					case BOX: return this.model.getColor("PRIME_BOX");
-					case TEXT: return this.model.getColor("PRIME_TEXT");
-					}
-				} else {
-					if (x%2==0) {
+				if (!(x == 2 && y == 1)) {
+					if (this.model.isPrimes()) {
 						switch (ct) {
-						case BORDER:
-							if (y%x==0 && this.model.isRayBox()) return this.model.getColor("RAY_BORDER");
-							else return this.model.getColor("EVEN_BORDER");
-						case BOX: return this.model.getColor("EVEN_BOX");
-						case TEXT: return this.model.getColor("EVEN_TEXT");
+						case BORDER: return this.model.getColor("PRIME_BORDER");
+						case BOX: return this.model.getColor("PRIME_BOX");
+						case TEXT: return this.model.getColor("PRIME_TEXT");
 						}
 					} else {
-						switch (ct) {
-						case BORDER:
-							if (y%x==0 && this.model.isRayBox()) return this.model.getColor("RAY_BORDER");
-							else return this.model.getColor("ODD_BORDER");
-						case BOX: return this.model.getColor("ODD_BOX");
-						case TEXT: return this.model.getColor("ODD_TEXT");
+						if (x%2==0) {
+							switch (ct) {
+							case BORDER:
+								if (y%x==0 && this.model.isRayBox()) return this.model.getColor("RAY_BORDER");
+								else return this.model.getColor("EVEN_BORDER");
+							case BOX: return this.model.getColor("EVEN_BOX");
+							case TEXT: return this.model.getColor("EVEN_TEXT");
+							}
+						} else {
+							switch (ct) {
+							case BORDER:
+								if (y%x==0 && this.model.isRayBox()) return this.model.getColor("RAY_BORDER");
+								else return this.model.getColor("ODD_BORDER");
+							case BOX: return this.model.getColor("ODD_BOX");
+							case TEXT: return this.model.getColor("ODD_TEXT");
+							}
 						}
 					}
 				}
 			}
-		} else if (x==y || x == 2*y) {
+		}
+		if (x==y || x == 2*y) {
 			switch (ct) {
 			case BORDER: return this.model.getColor("AX_BORDER");
 			case BOX: return this.model.getColor("AX_BOX");
 			case TEXT: return this.model.getColor("AX_TEXT");
 			}
-		} else if (x%2==0) {
+		}
+		if (x%2==0) {
 			switch (ct) {
 			case BORDER:
 				if (y%x==0 && this.model.isRayBox()) return this.model.getColor("RAY_BORDER");

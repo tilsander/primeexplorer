@@ -21,7 +21,7 @@ public class ColorView extends JPanel {
 		this.viewFrame = new JFrame();
 		this.viewFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		this.viewFrame.getContentPane().add(this);
-		this.viewFrame.setSize(450, 430);
+		this.viewFrame.setSize(700, 430);
 		this.viewFrame.setResizable(false);
 		this.colors = new JComboBox<String>(model.getColors());
 		this.colors.setSelectedIndex(1);

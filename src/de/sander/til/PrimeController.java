@@ -24,6 +24,7 @@ public class PrimeController implements MouseMotionListener, MouseListener, KeyL
 		this.view.addMouseListener(this);
 		this.view.addKeyListener(this);
 		this.colorer = new ColorController(this.model,new ColorView(this.model));
+		this.view.focus();
 	}
 	
 	public void start() {
@@ -202,7 +203,7 @@ public class PrimeController implements MouseMotionListener, MouseListener, KeyL
 		        	case 'v':
 						this.model.setPmmode(PrimeModel.PMMode.VERTICAL_STEP);
 						break;
-		        	case 'o':
+		        	case 'g':
 						this.model.setPmmode(PrimeModel.PMMode.HORIZONTAL_STEP);
 						break;
 		        	case 'n':
@@ -220,6 +221,32 @@ public class PrimeController implements MouseMotionListener, MouseListener, KeyL
 		        	case 't':
 						this.model.setPrimes(!this.model.isPrimes());
 						break;
+		        	case 'o':
+						this.model.setXPos(0);
+						this.model.setYPos(0);
+						break;
+		        	case 'x':
+						if (this.model.getXPos() < this.model.getYPos()) this.model.setXPos(this.model.getYPos()/this.model.getHorizontalStep());
+						else this.model.setYPos(this.model.getXPos()/this.model.getVerticalStep());
+						break;
+		        	case '1':
+		        		this.model.setChartPrimes(!this.model.isChartPrimes());
+		        		break;
+		        	case '2':
+		        		this.model.setChartExp(!this.model.isChartExp());
+		        		break;
+		        	case '3':
+		        		this.model.setChartMatchCount(!this.model.isChartMatchCount());
+		        		break;
+		        	case '4':
+		        		this.model.setChartFirstMatch(!this.model.isChartFirstMatch());
+		        		break;
+		        	case '5':
+		        		this.model.setChartVoidCount(!this.model.isChartVoidCount());
+		        		break;
+		        	case '6':
+		        		this.model.setChartFirstVoid(!this.model.isChartFirstVoid());
+		        		break;
 					}
 		        	break;
 		     }

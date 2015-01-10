@@ -1,6 +1,8 @@
 package de.sander.til;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.TreeMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -12,6 +14,7 @@ public class Primes {
 	private Map<Integer,Integer> primes;
 	private Map<Integer,Map<Integer,Integer>> exponents; // (number, (prime_factor, exponent)) 
 	private Map<Integer,Map<Integer,Integer>> matches;
+	private Map<Integer,List<Integer>> voids;
 	private int prime_offset = 0, prime_count=0;
 	private static Primes instance = null;
 	
@@ -19,6 +22,7 @@ public class Primes {
 		this.primes = new HashMap<Integer,Integer>();
 		this.exponents = new HashMap<Integer,Map<Integer,Integer>>();
 		this.matches = new HashMap<Integer,Map<Integer,Integer>>();
+		this.voids = new HashMap<Integer,List<Integer>>();
 	}
 	
 	public static Primes getInstance() {
@@ -62,7 +66,7 @@ public class Primes {
 	
 	private void generateMatches(int n2) {
 		if (n2 % 2 == 1) return;
-		HashMap<Integer,Integer> entry = new HashMap<Integer,Integer>();
+		Map<Integer,Integer> entry = new TreeMap<Integer,Integer>();
 		int m_count = 1;
 		this.generatePrimes(n2-3);
 		for (int i = 3; i <= n2/2; ++i) {
@@ -181,19 +185,81 @@ public class Primes {
 		return ret;
 	}
 	
-	public int getMatchCount(int n2) {
-		Map<Integer,Integer> ret = this.getMatches(n2);
+	public int getMatchCount(int number) {
+		Map<Integer,Integer> ret = this.getMatches(number*2);
 		if (ret == null) return 0;
 		return ret.size();
 	}
 	
-	public int getMaxMatchCount(int n2) {
+	public int getMaxMatchCount(int number) {
 		int ret=0, temp=0;
-		for (int i = 4; i <= n2; ++i) {
+		for (int i = 2; i <= number; ++i) {
 			temp = this.getMatchCount(i);
 			if (temp > ret) ret = temp;
 		}
 		return ret;
+	}
+	
+	public int getFirstMatch(int number) {
+		Map<Integer,Integer> ret = this.getMatches(number*2);
+		if (ret == null) return 0;
+		try {
+			return ret.keySet().iterator().next();
+		} catch (Exception e) {}
+		return 0;
+	}
+	
+	public int getMaxFirstMatch(int upto) {
+		int max = 0, temp = 0;
+		for (int i = 1; i <= upto; ++i) {
+			temp = this.getFirstMatch(i);
+			if (temp > max) max = temp;
+		}
+		return max;
+	}
+	
+	private List<Integer> getVoids(int number) {
+		List<Integer> void_list = this.voids.get(number);
+		if (void_list == null) {
+			void_list = new ArrayList<Integer>();
+			for (int i = 1; i <= number/2; ++i) {
+				if (((number+i)%(1+i*2)==0)) void_list.add(1+i*2);
+			}
+			this.voids.put(number, void_list);
+		}
+		return void_list;
+	}
+	
+	public int getFirstVoid(int number) {
+		if (this.isMatch(3, (number+1)*2)) return 0;
+		List<Integer> void_list = this.getVoids(number);
+		if (void_list != null && void_list.size() > 0) return void_list.get(0);
+		else return 0;
+	}
+	
+	public int getVoidCount(int number) {
+		if (this.isMatch(3, (number+1)*2)) return 0;
+		List<Integer> void_list = this.getVoids(number);
+		if (void_list != null) return void_list.size();
+		else return 0;
+	}
+	
+	public int getMaxFirstVoid(int upto) {
+		int max = 0, temp = 0;
+		for (int i = 1; i <= upto; ++i) {
+			temp = this.getFirstVoid(i);
+			if (temp > max) max = temp;
+		}
+		return max;
+	}
+	
+	public int getMaxVoidCount(int upto) {
+		int max = 0, temp = 0;
+		for (int i = 1; i <= upto; ++i) {
+			temp = this.getVoidCount(i);
+			if (temp > max) max = temp;
+		}
+		return max;
 	}
 	
 	// algorithms
