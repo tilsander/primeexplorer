@@ -11,15 +11,16 @@ public class PrimeModel {
 		HORIZONTAL_STEP,
 		VERTICAL_OFFSET,
 		HORIZONTAL_OFFSET,
-		NORMAL
+		NORMAL,
+		POLY_SIZE
 	}
 
-	private int blockSize = 12, xPos = 0, yPos = 0, mouseX = 0, mouseY = 0, verticalStep=1, horizontalStep=1, verticalOffset=0, horizontalOffset=0, window_width=1200, window_height=800;
+	private int blockSize = 12, xPos = 0, yPos = 0, mouseX = 0, mouseY = 0, verticalStep=1, horizontalStep=1, verticalOffset=0, horizontalOffset=0, window_width=1200, window_height=800, polySize=1;
 	private boolean xyTransform = false,
 			exponents = true, drawRect = true, helper = true,
 			rays = true, rayBox = true, chart = true, chartProp = true,
 			chartExp = true, chartPrimes = true, chartMatchCount = true, chartFirstMatch=true, chartFirstVoid=true, chartVoidCount=true,
-			chartExpSum = true, stats=true, primes=true, changed=false;
+			chartExpSum = true, stats=true, primes=true, changed=false, polynomials=true;
 	private PMMode pmmode=PMMode.NORMAL;
 	private Color BACKGROUND=null,
 			TEXT_COLOR=null,
@@ -48,6 +49,7 @@ public class PrimeModel {
 			HELPER_BORDER=null,
 			HELPER_TEXT=null,
 			RAY_BORDER=null,
+			POLY_COLOR=null,
 			CHART_PRIME=null,
 			CHART_EXP=null,
 			CHART_MATCH_COUNT=null,
@@ -84,6 +86,7 @@ public class PrimeModel {
 		this.HELPER_BORDER = new Color(35,35,35);
 		this.HELPER_TEXT = new Color(255,255,255);
 		this.RAY_BORDER = new Color(255,155,155,150);
+		this.POLY_COLOR = new Color(255,155,155,50);
 		this.CHART_PRIME = new Color(160,225,140);
 		this.CHART_MATCH_COUNT = new Color(255,190,55);
 		this.CHART_EXP = new Color(185,45,90);
@@ -122,6 +125,7 @@ public class PrimeModel {
 		if (cname.equals("HELPER_BORDER")) return this.HELPER_BORDER;
 		if (cname.equals("HELPER_TEXT")) return this.HELPER_TEXT;
 		if (cname.equals("RAY_BORDER")) return this.RAY_BORDER;
+		if (cname.equals("POLY_COLOR")) return this.POLY_COLOR;
 		if (cname.equals("CHART_PRIME")) return this.CHART_PRIME;
 		if (cname.equals("CHART_MATCH_COUNT")) return this.CHART_MATCH_COUNT;
 		if (cname.equals("CHART_EXP")) return this.CHART_EXP;
@@ -160,6 +164,7 @@ public class PrimeModel {
 		if (cname.equals("HELPER_BORDER")) this.HELPER_BORDER = color;
 		if (cname.equals("HELPER_TEXT")) this.HELPER_TEXT = color;
 		if (cname.equals("RAY_BORDER")) this.RAY_BORDER = color;
+		if (cname.equals("POLY_COLOR")) this.POLY_COLOR = color;
 		if (cname.equals("CHART_PRIME")) this.CHART_PRIME = color;
 		if (cname.equals("CHART_MATCH_COUNT")) this.CHART_MATCH_COUNT = color;
 		if (cname.equals("CHART_EXP")) this.CHART_EXP = color;
@@ -197,6 +202,7 @@ public class PrimeModel {
 		        "HELPER_BORDER",
 		        "HELPER_TEXT",
 		        "RAY_BORDER",
+		        "POLY_COLOR",
 		        "CHART_PRIME",
 		        "CHART_MATCH_COUNT",
 		        "CHART_EXP",
@@ -500,6 +506,25 @@ public class PrimeModel {
 		this.window_height = window_height;
 	}
 
+	public int getPolySize() {
+		return polySize;
+	}
+
+	public void setPolySize(int polySize) {
+		if (polySize > 0) {
+			this.polySize = polySize;
+			this.changed();
+		}
+	}
+
+	public boolean isPolynomials() {
+		return polynomials;
+	}
+
+	public void setPolynomials(boolean polynomials) {
+		this.polynomials = polynomials;
+	}
+
 	public Map<String,String> getInfo() {
 		Map<String,String> ret = new TreeMap<String,String>();
 		String str = "";
@@ -519,6 +544,9 @@ public class PrimeModel {
 		case NORMAL:
 			str = "NORMAL";
 			break;
+		case POLY_SIZE:
+			str = "POLY_SIZE";
+			break;
 		}
 		ret.put("_MODE",str);
 		ret.put("_BLOCK_SIZE",""+this.getBlockSize());
@@ -529,6 +557,7 @@ public class PrimeModel {
 		ret.put("_RECTANGLES [R]",""+this.isDrawRect());
 		ret.put("_SHOW_HELPER [H]",""+this.isHelper());
 		ret.put("_SHOW_RAYS [L]",""+this.isRays());
+		ret.put("_POLY_SIZE",""+this.getPolySize());
 		ret.put("__CHART_PRIMES [1]",""+this.isChartPrimes());
 		ret.put("__CHART_EXP [2]",""+this.isChartExp());
 		ret.put("__CHART_MATCH_COUNT [3]",""+this.isChartMatchCount());

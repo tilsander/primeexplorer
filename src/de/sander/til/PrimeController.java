@@ -158,6 +158,9 @@ public class PrimeController implements MouseMotionListener, MouseListener, KeyL
 						case NORMAL:
 							this.model.setBlockSize(this.model.getBlockSize()+1);
 							break;
+						case POLY_SIZE:
+							this.model.setPolySize(this.model.getPolySize()+1);
+							break;
 						}
 						break;
 					case '-':
@@ -176,6 +179,9 @@ public class PrimeController implements MouseMotionListener, MouseListener, KeyL
 							break;
 						case NORMAL:
 							this.model.setBlockSize(this.model.getBlockSize()-1);
+							break;
+						case POLY_SIZE:
+							this.model.setPolySize(this.model.getPolySize()-1);
 							break;
 						}
 						break;
@@ -214,6 +220,8 @@ public class PrimeController implements MouseMotionListener, MouseListener, KeyL
 						break;
 		        	case 'w':
 						this.model.setPmmode(PrimeModel.PMMode.HORIZONTAL_OFFSET);
+		        	case 'q':
+						this.model.setPmmode(PrimeModel.PMMode.POLY_SIZE);
 						break;
 		        	case 's':
 						this.model.setStats(!this.model.isStats());

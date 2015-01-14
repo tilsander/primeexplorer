@@ -4,10 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 public class Primes {
 
@@ -15,14 +13,45 @@ public class Primes {
 	private Map<Integer,Map<Integer,Integer>> exponents; // (number, (prime_factor, exponent)) 
 	private Map<Integer,Map<Integer,Integer>> matches;
 	private Map<Integer,List<Integer>> voids;
+	private Map<String,Polynomial> polys;
 	private int prime_offset = 0, prime_count=0;
 	private static Primes instance = null;
+	
+	class Polynomial {
+		
+		private int x_pos, y_pos, x_step, factor;
+		
+		public Polynomial(int xp, int yp, int xs, int f) {
+			this.x_pos = xp;
+			this.y_pos = yp;
+			this.x_step = xs;
+			this.factor = f;
+		}
+
+		public int getXPos() {
+			return x_pos;
+		}
+
+		public int getYPos() {
+			return y_pos;
+		}
+
+		public int getStep() {
+			return x_step;
+		}
+
+		public int getFactor() {
+			return factor;
+		}
+		
+	}
 	
 	private Primes() {
 		this.primes = new HashMap<Integer,Integer>();
 		this.exponents = new HashMap<Integer,Map<Integer,Integer>>();
 		this.matches = new HashMap<Integer,Map<Integer,Integer>>();
 		this.voids = new HashMap<Integer,List<Integer>>();
+		this.polys = new HashMap<String,Polynomial>();
 	}
 	
 	public static Primes getInstance() {
@@ -260,6 +289,33 @@ public class Primes {
 			if (temp > max) max = temp;
 		}
 		return max;
+	}
+	
+	public Polynomial getPoly(int xp, int yp) {
+		//if (xp==7&&yp==49) return new Polynomial(7,49,1,1);
+		//else if (1==1) return null;
+		if (xp <= 4) return null;
+		if (yp%xp != 0) return null;
+		String pos_key = ""+xp+"."+yp;
+		if (this.polys.containsKey(pos_key)) return this.polys.get(pos_key);
+		for (int x = 1; x <= 100; ++x) {
+			for (int y = -1; y >= -100; --y) {
+				if (yp+y==0 || xp-x==0) continue;
+				if ((yp+y)%(xp+x)==0 && (yp+y)%(xp-x)==0 && (double)y%(double)x==0) {
+					if ((yp-4*((y*y)/x))%(xp+2*(-y))!=0) continue;
+					Polynomial ret = new Polynomial(xp,yp,-y,-y/x);
+					this.polys.put(pos_key, ret);
+					return ret;
+				}
+			}
+		}
+		this.polys.put(pos_key, null);
+		return null;
+	}
+	
+	public void cancelPoly(int xp, int yp) {
+		String pos_key = ""+xp+"."+yp;
+		this.polys.put(pos_key, null);
 	}
 	
 	// algorithms
