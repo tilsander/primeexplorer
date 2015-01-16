@@ -160,13 +160,13 @@ public class PrimeView extends JPanel {
 		this.setupEnv();
 		// draw view
 		this.drawBackground();
-		this.drawAxis();
 		this.drawField();
 		Map<Integer,Point2D> rays = this.drawRays();
 		this.drawText();
+		this.drawPolys();
+		this.drawAxis();
 		this.drawBottomRight();
 		this.drawRayOrder(rays);
-		this.drawPolys();
 		if (this.model.isChart()) {
 			if (this.model.isChartPrimes()) this.drawChart(ChartType.PRIME);
 			if (this.model.isChartExp()) this.drawChart(ChartType.EXPONENT);
@@ -215,10 +215,6 @@ public class PrimeView extends JPanel {
 		// clear background
 		g2d.setBackground(this.getBackgroundColor());
 		g2d.clearRect(0, 0, WIDTH, HEIGHT);
-		// draw view rect
-		g2d.setColor(this.model.getColor("LIGHT_WHITE"));
-		g2d.drawLine(X_LEFT-1, Y_TOP-1, X_LEFT-1, HEIGHT-1);
-		g2d.drawLine(X_LEFT-1, Y_TOP-1, WIDTH-1, Y_TOP-1);
 	}
 	
 	private void drawBottomRight() {
@@ -233,6 +229,13 @@ public class PrimeView extends JPanel {
 	
 	private void drawAxis() {
 		int x, y;
+		g2d.setColor(this.getBackgroundColor());
+		g2d.fillRect(0, 0, X_LEFT-1, HEIGHT);
+		g2d.fillRect(0, 0, WIDTH, Y_TOP-1);
+		// draw view rect
+		g2d.setColor(this.model.getColor("LIGHT_WHITE"));
+		g2d.drawLine(X_LEFT-1, Y_TOP-1, X_LEFT-1, HEIGHT-1);
+		g2d.drawLine(X_LEFT-1, Y_TOP-1, WIDTH-1, Y_TOP-1);
 		g2d.setColor(this.getTextColor());
 		// y-achsis
 		for (int yp = 1; yp <= Y_COUNT; ++yp) {
@@ -295,7 +298,7 @@ public class PrimeView extends JPanel {
 			}
 		}
 		// borders
-		if (BLOCK >= 3) {
+		if (BLOCK >= 2) {
 			for (int yp = 1; yp <= Y_COUNT; ++yp) {
 				y = this.transformY(yp);
 				for (int xp = 1; xp <= X_COUNT; ++xp) {
