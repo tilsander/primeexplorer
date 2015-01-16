@@ -12,15 +12,17 @@ public class PrimeModel {
 		VERTICAL_OFFSET,
 		HORIZONTAL_OFFSET,
 		NORMAL,
-		POLY_SIZE
+		POLY_SIZE,
+		POLY_FACTOR,
+		POLY_DELTA
 	}
 
-	private int blockSize = 12, xPos = 0, yPos = 0, mouseX = 0, mouseY = 0, verticalStep=1, horizontalStep=1, verticalOffset=0, horizontalOffset=0, window_width=1200, window_height=800, polySize=1;
+	private int blockSize = 12, xPos = 0, yPos = 0, mouseX = 0, mouseY = 0, verticalStep=1, horizontalStep=1, verticalOffset=0, horizontalOffset=0, window_width=1200, window_height=800, polySize=5, polyFactor=1, polyDelta=1;
 	private boolean xyTransform = false,
 			exponents = true, drawRect = true, helper = true,
 			rays = true, rayBox = true, chart = true, chartProp = true,
 			chartExp = true, chartPrimes = true, chartMatchCount = true, chartFirstMatch=true, chartFirstVoid=true, chartVoidCount=true,
-			chartExpSum = true, stats=true, primes=true, changed=false, polynomials=true;
+			chartExpSum = true, stats=true, primes=true, _changed=false, polynomials=true;
 	private PMMode pmmode=PMMode.NORMAL;
 	private Color BACKGROUND=null,
 			TEXT_COLOR=null,
@@ -63,14 +65,14 @@ public class PrimeModel {
 		this.TEXT_COLOR = new Color(255,255,255);
 		this.HIGHLIGHT_TEXT_COLOR = new Color(255,190,55);
 		this.LIGHT_WHITE = new Color(255,255,255,255);
-		this.PRIME_BOX = new Color(180,230,255);
-		this.PRIME_BORDER = new Color(140,190,235);
+		this.PRIME_BOX = new Color(150,210,255,50);
+		this.PRIME_BORDER = new Color(140,190,235,60);
 		this.PRIME_TEXT = new Color(100,150,225);
 		this.EXP_BOX = new Color(185,45,90);
 		this.EXP_BORDER = new Color(125,65,10);
 		this.EXP_TEXT = new Color(255,255,255);
-		this.MATCH_BORDER = new Color(80,130,205);
-		this.MATCH_BOX = new Color(60,75,215);
+		this.MATCH_BORDER = new Color(102,150,255,150);
+		this.MATCH_BOX = new Color(110,155,245,120);
 		this.MATCH_TEXT = new Color(180,230,255);
 		this.ODD_BOX = new Color(25,25,25);
 		this.ODD_BORDER = new Color(10,10,10);
@@ -86,7 +88,7 @@ public class PrimeModel {
 		this.HELPER_BORDER = new Color(35,35,35);
 		this.HELPER_TEXT = new Color(255,255,255);
 		this.RAY_BORDER = new Color(255,155,155,150);
-		this.POLY_COLOR = new Color(255,155,155,50);
+		this.POLY_COLOR = new Color(155,235,255,250);
 		this.CHART_PRIME = new Color(160,225,140);
 		this.CHART_MATCH_COUNT = new Color(255,190,55);
 		this.CHART_EXP = new Color(185,45,90);
@@ -212,15 +214,15 @@ public class PrimeModel {
 	}
 	
 	public boolean isChanged() {
-		if (this.changed) {
-			this.changed = false;
+		if (this._changed) {
+			this._changed = false;
 			return true;
 		}
 		return false;
 	}
 	
 	private void changed() {
-		this.changed = true;
+		this._changed = true;
 	}
 
 	public int getDelta() {
@@ -525,6 +527,28 @@ public class PrimeModel {
 		this.polynomials = polynomials;
 	}
 
+	public int getPolyFactor() {
+		return polyFactor;
+	}
+
+	public void setPolyFactor(int polyFactor) {
+		if (polyFactor > 0) {
+			this.polyFactor = polyFactor;
+			this.changed();
+		}
+	}
+
+	public int getPolyDelta() {
+		return polyDelta;
+	}
+
+	public void setPolyDelta(int polyDelta) {
+		if (polyDelta > 0) {
+			this.polyDelta = polyDelta;
+			this.changed();
+		}
+	}
+
 	public Map<String,String> getInfo() {
 		Map<String,String> ret = new TreeMap<String,String>();
 		String str = "";
@@ -547,6 +571,12 @@ public class PrimeModel {
 		case POLY_SIZE:
 			str = "POLY_SIZE";
 			break;
+		case POLY_FACTOR:
+			str = "POLY_FACTOR";
+			break;
+		case POLY_DELTA:
+			str = "POLY_DELTA";
+			break;
 		}
 		ret.put("_MODE",str);
 		ret.put("_BLOCK_SIZE",""+this.getBlockSize());
@@ -557,7 +587,10 @@ public class PrimeModel {
 		ret.put("_RECTANGLES [R]",""+this.isDrawRect());
 		ret.put("_SHOW_HELPER [H]",""+this.isHelper());
 		ret.put("_SHOW_RAYS [L]",""+this.isRays());
+		ret.put("_SHOW_POLY [U]",""+this.isPolynomials());
 		ret.put("_POLY_SIZE",""+this.getPolySize());
+		ret.put("_POLY_FACTOR",""+this.getPolyFactor());
+		ret.put("_POLY_DELTA",""+this.getPolyDelta());
 		ret.put("__CHART_PRIMES [1]",""+this.isChartPrimes());
 		ret.put("__CHART_EXP [2]",""+this.isChartExp());
 		ret.put("__CHART_MATCH_COUNT [3]",""+this.isChartMatchCount());

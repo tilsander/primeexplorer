@@ -291,23 +291,35 @@ public class Primes {
 		return max;
 	}
 	
-	public Polynomial getPoly(int xp, int yp) {
-		//if (xp==7&&yp==49) return new Polynomial(7,49,1,1);
-		//else if (1==1) return null;
-		if (xp <= 4) return null;
+	public Polynomial getPoly(int xp, int yp, int pdelta, int y_factor) {
+		if (pdelta <= 0 || y_factor <= 0) return null;
+		if (xp <= 0 || yp <= 0) return null;
 		if (yp%xp != 0) return null;
-		String pos_key = ""+xp+"."+yp;
+		if ((double)yp/(double)xp <= 2.0) return null;
+		String pos_key = ""+xp+"."+yp+"."+pdelta+"."+y_factor;
 		if (this.polys.containsKey(pos_key)) return this.polys.get(pos_key);
-		for (int x = 1; x <= 100; ++x) {
-			for (int y = -1; y >= -100; --y) {
-				if (yp+y==0 || xp-x==0) continue;
-				if ((yp+y)%(xp+x)==0 && (yp+y)%(xp-x)==0 && (double)y%(double)x==0) {
-					if ((yp-4*((y*y)/x))%(xp+2*(-y))!=0) continue;
-					Polynomial ret = new Polynomial(xp,yp,-y,-y/x);
-					this.polys.put(pos_key, ret);
-					return ret;
-				}
+		
+		int base = 0, step = 0, y_val = 0;
+		boolean left=false, right=false;
+		while (left == false || right == false) {
+			++base;
+			step += pdelta;
+			y_val = base*base*pdelta*y_factor;
+			if (left == false) {
+				if (xp - step <= 0) left = true;
+				else if ((double)(yp-y_val)/(double)(xp-step) < 2.0) left = true;
+				else if ((yp-y_val) % (xp-step) != 0) break;
 			}
+			if (right == false) {
+				if ((double)(yp-y_val)/(double)(xp+step) < 2.0) right = true;
+				if ((yp-y_val) % (xp+step) != 0) break;
+			}
+		}
+		
+		if (left && right && base >= 2) {
+			Polynomial ret = new Polynomial(xp,yp,pdelta,y_factor);
+			this.polys.put(pos_key, ret);
+			return ret;
 		}
 		this.polys.put(pos_key, null);
 		return null;

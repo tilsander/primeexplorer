@@ -161,6 +161,12 @@ public class PrimeController implements MouseMotionListener, MouseListener, KeyL
 						case POLY_SIZE:
 							this.model.setPolySize(this.model.getPolySize()+1);
 							break;
+						case POLY_FACTOR:
+							this.model.setPolyFactor(this.model.getPolyFactor()+1);
+							break;
+						case POLY_DELTA:
+							this.model.setPolyDelta(this.model.getPolyDelta()+1);
+							break;
 						}
 						break;
 					case '-':
@@ -182,6 +188,12 @@ public class PrimeController implements MouseMotionListener, MouseListener, KeyL
 							break;
 						case POLY_SIZE:
 							this.model.setPolySize(this.model.getPolySize()-1);
+							break;
+						case POLY_FACTOR:
+							this.model.setPolyFactor(this.model.getPolyFactor()-1);
+							break;
+						case POLY_DELTA:
+							this.model.setPolyDelta(this.model.getPolyDelta()-1);
 							break;
 						}
 						break;
@@ -221,13 +233,19 @@ public class PrimeController implements MouseMotionListener, MouseListener, KeyL
 		        	case 'w':
 						this.model.setPmmode(PrimeModel.PMMode.HORIZONTAL_OFFSET);
 		        	case 'q':
-						this.model.setPmmode(PrimeModel.PMMode.POLY_SIZE);
+						if (this.model.getPmmode()==PrimeModel.PMMode.POLY_SIZE) this.model.setPmmode(PrimeModel.PMMode.POLY_FACTOR);
+						else if (this.model.getPmmode()==PrimeModel.PMMode.POLY_FACTOR) this.model.setPmmode(PrimeModel.PMMode.POLY_DELTA);
+						else if (this.model.getPmmode()==PrimeModel.PMMode.POLY_DELTA) this.model.setPmmode(PrimeModel.PMMode.POLY_SIZE);
+						else this.model.setPmmode(PrimeModel.PMMode.POLY_SIZE);
 						break;
 		        	case 's':
 						this.model.setStats(!this.model.isStats());
 						break;
 		        	case 't':
 						this.model.setPrimes(!this.model.isPrimes());
+						break;
+		        	case 'u':
+						this.model.setPolynomials(!this.model.isPolynomials());
 						break;
 		        	case 'o':
 						this.model.setXPos(0);

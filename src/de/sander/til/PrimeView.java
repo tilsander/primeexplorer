@@ -627,15 +627,17 @@ public class PrimeView extends JPanel {
 	}
 	
 	private void drawPolys() {
-		int x, y, y_sub=0,step=0,base=0,cur_x=0,cur_y=0,last_x=0,last_y=0;
+		if (!this.model.isPolynomials()) return;
+		int x, y, y_sub=0,step=0,base=0,cur_x=0,cur_y=0,last_x=0,last_y=0, polySize=this.model.getPolySize();
 		g2d.setColor(this.model.getColor("POLY_COLOR"));
-		for (int yp = 1; yp <= Y_COUNT*2; ++yp) {
+		int max_y = (polySize*polySize)*this.model.getPolyDelta()*this.model.getPolyFactor();
+		for (int yp = 1; yp <= Y_COUNT+max_y; ++yp) {
 			y = this.transformY(yp);
-			for (int xp = 1; xp <= X_COUNT; ++xp) {
+			for (int xp = -polySize*this.model.getPolyDelta(); xp <= X_COUNT+polySize*this.model.getPolyDelta(); ++xp) {
 				if ((xp-1)*BLOCK+X_LEFT > WIDTH-X_RIGHT) continue;
 				x = this.transformX(xp);
-				Primes.Polynomial poly = Primes._().getPoly(x, y);
-				if (poly != null && poly.getStep() == this.model.getPolySize()) {
+				Primes.Polynomial poly = Primes._().getPoly(x, y, this.model.getPolyDelta(),this.model.getPolyFactor());
+				if (poly != null && poly.getStep() == this.model.getPolyDelta() && poly.getFactor() == this.model.getPolyFactor()) {
 					if (x==this.MOUSE_X && y==this.MOUSE_Y) g2d.setColor(this.model.getColor("RAY_BORDER"));
 					else g2d.setColor(this.model.getColor("POLY_COLOR"));
 					base=0;
@@ -644,23 +646,17 @@ public class PrimeView extends JPanel {
 					last_x=0;
 					last_y=0;
 					do_poly: do {
-						if (poly.getFactor() != 1) break do_poly;
-						if (poly.getStep() <= 0 || poly.getFactor() <= 0) break do_poly;
-						if ((x-last_x)>0 && (x+last_x)!=0 && ((double)(y+last_y)/(double)(x+last_x))>=2 && !((y+last_y)%(x+last_x)==0 && (y+last_y)%(x-last_x)==0)) {
-							System.out.println("no poly at: "+poly.getXPos()+" "+poly.getYPos()+" "+poly.getStep()+" "+poly.getFactor());
-							Primes._().cancelPoly(x,y);
-							break do_poly;
-						}
 						++base;
 						step += poly.getStep();
 						y_sub = base*base*poly.getStep()*poly.getFactor();
 						if (y_sub==0) break do_poly;
 						cur_x = step;
 						cur_y = -y_sub;
-						if (y_sub < 20 || y_sub <= poly.getStep()*poly.getStep()) {
+						//if ((double)(y+cur_y)/(double)(x+cur_x) < 2.0) break do_poly;
+						if (base <= polySize) {
 							g2d.drawLine((int)((xp+last_x-0.5)*BLOCK+X_LEFT), (int)((yp+last_y-0.5)*BLOCK+Y_TOP), (int)((xp+cur_x-0.5)*BLOCK+X_LEFT), (int)((yp+cur_y-0.5)*BLOCK+Y_TOP));
 							g2d.drawLine((int)((xp-last_x-0.5)*BLOCK+X_LEFT), (int)((yp+last_y-0.5)*BLOCK+Y_TOP), (int)((xp-cur_x-0.5)*BLOCK+X_LEFT), (int)((yp+cur_y-0.5)*BLOCK+Y_TOP));
-						}
+						} else break do_poly;
 						last_x=cur_x;
 						last_y=cur_y;
 					} while (y_sub <= yp);
