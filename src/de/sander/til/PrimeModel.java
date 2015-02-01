@@ -22,7 +22,7 @@ public class PrimeModel {
 			exponents = true, drawRect = true, helper = true,
 			rays = true, rayBox = true, chart = true, chartProp = true,
 			chartExp = true, chartPrimes = true, chartMatchCount = true, chartFirstMatch=true, chartFirstVoid=true, chartVoidCount=true,
-			chartExpSum = true, stats=true, primes=true, _changed=false, polynomials=true;
+			chartExpSum = true, stats=true, primes=true, _changed=false, polynomials=true, checkedPattern=true, primeMirror=true;
 	private PMMode pmmode=PMMode.NORMAL;
 	private Color BACKGROUND=null,
 			TEXT_COLOR=null,
@@ -58,6 +58,7 @@ public class PrimeModel {
 			CHART_FIRST_MATCH=null,
 			CHART_FIRST_VOID=null,
 			CHART_VOID_COUNT=null,
+			PRIME_MIRROR=null,
 			ALPHA=null;
 	
 	public PrimeModel() {
@@ -95,6 +96,7 @@ public class PrimeModel {
 		this.CHART_FIRST_MATCH = new Color(185,45,190);
 		this.CHART_FIRST_VOID = new Color(85,145,190);
 		this.CHART_VOID_COUNT = new Color(225,145,90);
+		this.PRIME_MIRROR = new Color(255,235,235);
 		this.ALPHA = new Color(0,0,0,0);
 	}
 	
@@ -134,6 +136,7 @@ public class PrimeModel {
 		if (cname.equals("CHART_FIRST_MATCH")) return this.CHART_FIRST_MATCH;
 		if (cname.equals("CHART_FIRST_VOID")) return this.CHART_FIRST_VOID;
 		if (cname.equals("CHART_VOID_COUNT")) return this.CHART_VOID_COUNT;
+		if (cname.equals("PRIME_MIRROR")) return this.PRIME_MIRROR;
 		return this.ALPHA;
 	}
 	
@@ -173,6 +176,7 @@ public class PrimeModel {
 		if (cname.equals("CHART_FIRST_MATCH")) this.CHART_FIRST_MATCH = color;
 		if (cname.equals("CHART_FIRST_VOID")) this.CHART_FIRST_VOID = color;
 		if (cname.equals("CHART_VOID_COUNT")) this.CHART_VOID_COUNT = color;
+		if (cname.equals("PRIME_MIRROR")) this.PRIME_MIRROR = color;
 		this.changed();
 	}
 	
@@ -210,7 +214,8 @@ public class PrimeModel {
 		        "CHART_EXP",
 		        "CHART_FIRST_MATCH",
 		        "CHART_FIRST_VOID",
-		        "CHART_VOID_COUNT"};
+		        "CHART_VOID_COUNT",
+		        "PRIME_MIRROR"};
 	}
 	
 	public boolean isChanged() {
@@ -549,6 +554,22 @@ public class PrimeModel {
 		}
 	}
 
+	public boolean isCheckedPattern() {
+		return checkedPattern;
+	}
+
+	public void setCheckedPattern(boolean checkedPattern) {
+		this.checkedPattern = checkedPattern;
+	}
+
+	public boolean isPrimeMirror() {
+		return primeMirror;
+	}
+
+	public void setPrimeMirror(boolean primeMirror) {
+		this.primeMirror = primeMirror;
+	}
+
 	public Map<String,String> getInfo() {
 		Map<String,String> ret = new TreeMap<String,String>();
 		String str = "";
@@ -588,6 +609,8 @@ public class PrimeModel {
 		ret.put("_SHOW_HELPER [H]",""+this.isHelper());
 		ret.put("_SHOW_RAYS [L]",""+this.isRays());
 		ret.put("_SHOW_POLY [U]",""+this.isPolynomials());
+		ret.put("_SHOW_MIRROR [M]",""+this.isPrimeMirror());
+		ret.put("_SHOW_CHECKED_PAT [F]",""+this.isCheckedPattern());
 		ret.put("_POLY_SIZE",""+this.getPolySize());
 		ret.put("_POLY_FACTOR",""+this.getPolyFactor());
 		ret.put("_POLY_DELTA",""+this.getPolyDelta());

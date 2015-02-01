@@ -46,13 +46,11 @@ public class StateLoader {
     		try {
 				saved_model.createNewFile();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		} else {
 			saved_model.delete();
 		}
-
 		FileWriter fw;
 		try {
 			fw = new FileWriter(saved_model.getAbsoluteFile());
@@ -60,7 +58,6 @@ public class StateLoader {
 			bw.write(new Gson().toJson(model));
 			bw.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

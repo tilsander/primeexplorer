@@ -110,6 +110,7 @@ public class PrimeView extends JPanel {
 		this.setModel(mod);
 		this.viewFrame = new JFrame();
 		this.viewFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.viewFrame.setTitle("PrimeExplorer");
 		this.typingArea = new JTextField(1);
 		this.typingArea.setPreferredSize(new Dimension(3, 2));
 		this.typingArea.setOpaque(true);
@@ -145,7 +146,7 @@ public class PrimeView extends JPanel {
 		this.repaint();
 	}
 	
-	public void initMetric(Graphics2D g2d) {
+	private void initMetric(Graphics2D g2d) {
 		if (this.metric == null) {
 			this.FONT = g2d.getFont();
 			this.SMALL_FONT = FONT.deriveFont(9.0f);
@@ -198,7 +199,7 @@ public class PrimeView extends JPanel {
 		else Y_BOTTOM=30;
 		if (X_RIGHT > WIDTH - X_LEFT) X_RIGHT = WIDTH - X_LEFT;
 		STRING_HEIGHT = this.metric.getHeight("1");
-		this.Y_AXIS_DELTA = (int)(STRING_HEIGHT/(double)BLOCK)*Y_STEP+Y_OFF;
+		this.Y_AXIS_DELTA = (int)(STRING_HEIGHT/(double)BLOCK);
 		if (Y_AXIS_DELTA <= 0) Y_AXIS_DELTA = 1;
 		
 		{
@@ -228,7 +229,7 @@ public class PrimeView extends JPanel {
 	}
 	
 	private void drawAxis() {
-		int x, y;
+		int x, y, y_str;
 		g2d.setColor(this.getBackgroundColor());
 		g2d.fillRect(0, 0, X_LEFT-1, HEIGHT);
 		g2d.fillRect(0, 0, WIDTH, Y_TOP-1);
@@ -241,9 +242,10 @@ public class PrimeView extends JPanel {
 		for (int yp = 1; yp <= Y_COUNT; ++yp) {
 			y = this.transformY(yp);
 			// delta logic
-			if ((y%Y_AXIS_DELTA!=0 || (y > MOUSE_Y-Y_AXIS_DELTA && y < MOUSE_Y+Y_AXIS_DELTA) || (y > MOUSE_X-Y_AXIS_DELTA && y < MOUSE_X+Y_AXIS_DELTA)) && MOUSE_Y!=y && (MOUSE_X!=y)) continue;
+			if ((yp%Y_AXIS_DELTA!=0 || (y > MOUSE_Y-Y_AXIS_DELTA && y < MOUSE_Y+Y_AXIS_DELTA) || (y > MOUSE_X-Y_AXIS_DELTA && y < MOUSE_X+Y_AXIS_DELTA)) && MOUSE_Y!=y && (MOUSE_X!=y)) continue;
 			if (MOUSE_Y==y || MOUSE_X==y) g2d.setColor(this.getHightlightTextColor());
-			g2d.drawString(""+y, 2, yp*BLOCK+Y_TOP);
+			y_str = this.model.isCheckedPattern() ? y*2 - 1 : y;
+			g2d.drawString(""+y_str, 2, yp*BLOCK+Y_TOP);
 			if (MOUSE_Y==y || MOUSE_X==y) g2d.setColor(this.getTextColor());
 		}
 		// x-achsis
@@ -283,14 +285,15 @@ public class PrimeView extends JPanel {
 	}
 	
 	private void drawField() {
-		int x, y;
+		int x, y, cp=0;
 		// blocks
 		for (int yp = 1; yp <= Y_COUNT; ++yp) {
 			y = this.transformY(yp);
 			for (int xp = 1; xp <= X_COUNT; ++xp) {
 				if ((xp-1)*BLOCK+X_LEFT > WIDTH-X_RIGHT) continue;
 				x = this.transformX(xp);
-				Color col = this.getColor(x,y,ColorType.BOX);
+				cp = this.model.isCheckedPattern() ? x/2 : 0;
+				Color col = this.getColor(x,y+cp,ColorType.BOX);
 				if (col != null) {
 					g2d.setColor(col);
 					this.drawBox((xp-1)*BLOCK+X_LEFT, (yp-1)*BLOCK+Y_TOP, BLOCK, BLOCK);
@@ -298,24 +301,25 @@ public class PrimeView extends JPanel {
 			}
 		}
 		// borders
-		if (BLOCK >= 2) {
+		if (BLOCK > 1) {
 			for (int yp = 1; yp <= Y_COUNT; ++yp) {
 				y = this.transformY(yp);
 				for (int xp = 1; xp <= X_COUNT; ++xp) {
 					if ((xp-1)*BLOCK+X_LEFT > WIDTH-X_RIGHT) continue;
 					x = this.transformX(xp);
-					Color bor = this.getColor(x,y,ColorType.BORDER);
+					cp = this.model.isCheckedPattern() ? x/2 : 0;
+					Color bor = this.getColor(x,y+cp,ColorType.BORDER);
 					if (bor != null) {
 						g2d.setColor(bor);
 						if (this.model.isDrawRect()) {
 							g2d.drawLine((xp-1)*BLOCK+X_LEFT, yp *BLOCK+Y_TOP, xp*BLOCK+X_LEFT, yp*BLOCK+Y_TOP); // bottom
-							if (y%x==0 && this.model.isRayBox()) {
+							if ((y+cp)%x==0 && this.model.isRayBox()) {
 								g2d.drawLine((xp-1)*BLOCK+X_LEFT, (yp-1)  *BLOCK+Y_TOP, xp*BLOCK+X_LEFT, (yp-1)*BLOCK+Y_TOP); // top
 								g2d.drawLine((xp-1)*BLOCK+X_LEFT, (yp-1)  *BLOCK+Y_TOP, (xp-1)*BLOCK+X_LEFT, yp*BLOCK+Y_TOP); // left
 								g2d.drawLine(xp*BLOCK+X_LEFT, (yp-1)  *BLOCK+Y_TOP, xp*BLOCK+X_LEFT, yp*BLOCK+Y_TOP); // right
 							}
 						} else {
-							if (y%x==0 && this.model.isRayBox()) {
+							if ((y+cp)%x==0 && this.model.isRayBox()) {
 								g2d.drawOval((xp-1)*BLOCK+X_LEFT, (yp-1)*BLOCK+Y_TOP, BLOCK, BLOCK);
 							}
 						}
@@ -326,7 +330,7 @@ public class PrimeView extends JPanel {
 	}
 	
 	private void drawText() {
-		int x, y;
+		int x, y, cp=0;
 		// text
 		if (STRING_HEIGHT <= BLOCK + 5) {
 			for (int yp = 1; yp <= Y_COUNT; ++yp) {
@@ -334,9 +338,10 @@ public class PrimeView extends JPanel {
 				for (int xp = 1; xp <= X_COUNT; ++xp) {
 					if ((xp-1)*BLOCK+X_LEFT > WIDTH-X_RIGHT) continue;
 					x = this.transformX(xp);
-					Color tex = this.getColor(x,y,ColorType.TEXT);
+					cp = this.model.isCheckedPattern() ? x/2 : 0;
+					Color tex = this.getColor(x,y+cp,ColorType.TEXT);
 					if (tex != null) {
-						String lbl = this.getText(x,y);
+						String lbl = this.getText(x,y+cp);
 						if (lbl != null && lbl.equals("") == false) {
 							g2d.setColor(tex);
 							g2d.drawString(lbl, (xp-1)*BLOCK+X_LEFT+(BLOCK/5), yp*BLOCK+Y_TOP-(BLOCK/7));
@@ -622,19 +627,19 @@ public class PrimeView extends JPanel {
 	}
 	
 	private void drawBox(int x, int y, int width, int height) {
-		if (this.model.isDrawRect()) this.g2d.fillRect(x, y, width, height);
+		if (this.model.isDrawRect() || (width == 1 && height == 1)) this.g2d.fillRect(x, y, width, height);
 		else this.g2d.fillOval(x, y, width, height);
 	}
 	
 	private void drawPolys() {
-		if (!this.model.isPolynomials()) return;
+		if (!this.model.isPolynomials() || this.model.isCheckedPattern() || this.model.getVerticalStep() > 1 || this.model.getHorizontalStep() > 1) return;
 		int x, y, y_sub=0,step=0,base=0,cur_x=0,cur_y=0,last_x=0,last_y=0, polySize=this.model.getPolySize();
 		g2d.setColor(this.model.getColor("POLY_COLOR"));
 		int max_y = (polySize*polySize)*this.model.getPolyDelta()*this.model.getPolyFactor();
-		for (int yp = 1; yp <= Y_COUNT+max_y; ++yp) {
+		column: for (int yp = 1; yp <= Y_COUNT+max_y; ++yp) {
 			y = this.transformY(yp);
-			for (int xp = -polySize*this.model.getPolyDelta(); xp <= X_COUNT+polySize*this.model.getPolyDelta(); ++xp) {
-				if ((xp-1)*BLOCK+X_LEFT > WIDTH-X_RIGHT) continue;
+			row: for (int xp = -polySize*this.model.getPolyDelta(); xp <= X_COUNT+polySize*this.model.getPolyDelta(); ++xp) {
+				if ((xp-1)*BLOCK+X_LEFT > WIDTH-X_RIGHT) continue row;
 				x = this.transformX(xp);
 				Primes.Polynomial poly = Primes._().getPoly(x, y, this.model.getPolyDelta(),this.model.getPolyFactor());
 				if (poly != null && poly.getStep() == this.model.getPolyDelta() && poly.getFactor() == this.model.getPolyFactor()) {
@@ -678,6 +683,11 @@ public class PrimeView extends JPanel {
 	}
 	
 	private Color getColor(int x, int y, ColorType ct) {
+		if (this.model.isPrimeMirror() && MOUSE_Y == y) {
+			if (Primes._().isPrime(MOUSE_Y*2-x) && ct == ColorType.BOX) {
+				return this.model.getColor("PRIME_MIRROR");
+			}
+		}
 		if (this.model.isHelper() && (x == this.model.getMouseX() || y == this.model.getMouseY() || y == this.model.getMouseX() || x == this.model.getMouseY()
 			|| this.isOnLine(x,y,this.model.getMouseX()) || this.isOnLine(x,y,this.model.getMouseY()))) {
 			switch (ct) {
@@ -807,6 +817,7 @@ public class PrimeView extends JPanel {
 		x += this.model.getXPos();
 		x *= this.model.getHorizontalStep();
 		x += this.model.getHorizontalOffset();
+		x -= this.model.getHorizontalStep()-1;
 		return x;
 	}
 	
@@ -814,6 +825,7 @@ public class PrimeView extends JPanel {
 		y += this.model.getYPos();
 		y *= this.model.getVerticalStep();
 		y += this.model.getVerticalOffset();
+		y -= this.model.getVerticalStep()-1;
 		return y;
 	}
 	

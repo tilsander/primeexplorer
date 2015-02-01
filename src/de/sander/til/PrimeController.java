@@ -209,6 +209,9 @@ public class PrimeController implements MouseMotionListener, MouseListener, KeyL
 		        	case 'b':
 						this.model.setRayBox(!this.model.isRayBox());
 						break;
+		        	case 'f':
+						this.model.setCheckedPattern(!this.model.isCheckedPattern());
+						break;
 		        	case 'p':
 						this.model.setChartProp(!this.model.isChartProp());
 						break;
@@ -217,6 +220,9 @@ public class PrimeController implements MouseMotionListener, MouseListener, KeyL
 						break;
 		        	case 'e':
 						this.model.setChartExpSum(!this.model.isChartExpSum());
+						break;
+		        	case 'm':
+						this.model.setPrimeMirror(!this.model.isPrimeMirror());
 						break;
 		        	case 'v':
 						this.model.setPmmode(PrimeModel.PMMode.VERTICAL_STEP);
@@ -232,6 +238,7 @@ public class PrimeController implements MouseMotionListener, MouseListener, KeyL
 						break;
 		        	case 'w':
 						this.model.setPmmode(PrimeModel.PMMode.HORIZONTAL_OFFSET);
+						break;
 		        	case 'q':
 						if (this.model.getPmmode()==PrimeModel.PMMode.POLY_SIZE) this.model.setPmmode(PrimeModel.PMMode.POLY_FACTOR);
 						else if (this.model.getPmmode()==PrimeModel.PMMode.POLY_FACTOR) this.model.setPmmode(PrimeModel.PMMode.POLY_DELTA);
