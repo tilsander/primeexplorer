@@ -14,6 +14,8 @@ public class Primes {
 	private Map<Integer,Map<Integer,Integer>> matches;
 	private Map<Integer,List<Integer>> voids;
 	private Map<String,Polynomial> polys;
+	private Map<Integer,Integer> calcPrimeCount;
+	private Map<Integer,Integer> calcMatchCount;
 	private int prime_offset = 0, prime_count=0;
 	private static Primes instance = null;
 	
@@ -52,6 +54,8 @@ public class Primes {
 		this.matches = new HashMap<Integer,Map<Integer,Integer>>();
 		this.voids = new HashMap<Integer,List<Integer>>();
 		this.polys = new HashMap<String,Polynomial>();
+		this.calcPrimeCount = new HashMap<Integer,Integer>();
+		this.calcMatchCount = new HashMap<Integer,Integer>();
 	}
 	
 	public static Primes getInstance() {
@@ -93,7 +97,8 @@ public class Primes {
 		this.exponents.put(num,entry);
 	}
 	
-	private void generateMatches(int n2) {
+	private void generateMatches(int number) {
+		int n2 = number*2;
 		if (n2 % 2 == 1) return;
 		Map<Integer,Integer> entry = new TreeMap<Integer,Integer>();
 		int m_count = 1;
@@ -105,7 +110,7 @@ public class Primes {
 				++m_count;
 			}
 		}
-		this.matches.put(n2,entry);
+		this.matches.put(number,entry);
 	}
 	
 	// query methods
@@ -196,26 +201,26 @@ public class Primes {
 		return ret;
 	}
 	
-	public boolean isMatch(int prime, int n2) {
-		if (prime > n2) return false;
-		Map<Integer,Integer> ret = this.getMatches(n2);
+	public boolean isMatch(int prime, int number) {
+		if (prime > number*2) return false;
+		Map<Integer,Integer> ret = this.getMatches(number);
 		if (ret == null) return false;
 		Integer mat = ret.get(prime);
 		if (mat == null) return false;
 		else return mat.intValue() > 0;
 	}
 	
-	public Map<Integer,Integer> getMatches(int n2) {
-		Map<Integer,Integer> ret = this.matches.get(n2);
+	public Map<Integer,Integer> getMatches(int number) {
+		Map<Integer,Integer> ret = this.matches.get(number);
 		if (ret == null) {
-			this.generateMatches(n2);
-			ret = this.matches.get(n2);
+			this.generateMatches(number);
+			ret = this.matches.get(number);
 		}
 		return ret;
 	}
 	
 	public int getMatchCount(int number) {
-		Map<Integer,Integer> ret = this.getMatches(number*2);
+		Map<Integer,Integer> ret = this.getMatches(number);
 		if (ret == null) return 0;
 		return ret.size();
 	}
@@ -230,7 +235,7 @@ public class Primes {
 	}
 	
 	public int getFirstMatch(int number) {
-		Map<Integer,Integer> ret = this.getMatches(number*2);
+		Map<Integer,Integer> ret = this.getMatches(number);
 		if (ret == null) return 0;
 		try {
 			return ret.keySet().iterator().next();
@@ -260,14 +265,14 @@ public class Primes {
 	}
 	
 	public int getFirstVoid(int number) {
-		if (this.isMatch(3, (number+1)*2)) return 0;
+		if (this.isMatch(3, (number+1))) return 0;
 		List<Integer> void_list = this.getVoids(number);
 		if (void_list != null && void_list.size() > 0) return void_list.get(0);
 		else return 0;
 	}
 	
 	public int getVoidCount(int number) {
-		if (this.isMatch(3, (number+1)*2)) return 0;
+		if (this.isMatch(3, (number+1))) return 0;
 		List<Integer> void_list = this.getVoids(number);
 		if (void_list != null) return void_list.size();
 		else return 0;
@@ -366,6 +371,41 @@ public class Primes {
 			++exp;
 		}
 		return exp;
+	}
+	
+	public int calculatePrimeCount(int number) {
+		if (this.calcPrimeCount.containsKey(number)) return this.calcPrimeCount.get(number);
+		int fac = 0;
+		int count = number;
+		while (fac*fac <= number) {
+			++fac;
+			if (!this.isPrime(fac)) continue;
+			int devide = 1;
+			for (int i = 2; i <= fac; ++i) if (this.isPrime(i)) devide *= i;
+			double dsub = (double)(number - fac*fac) / (double)devide;
+			int isub = (int)Math.ceil(dsub);
+			count -= isub;
+		}
+		count /= 2;
+		this.calcPrimeCount.put(number, count);
+		return count;
+	}
+	
+	public int getMaxPrimeCountCalc(int number) {
+		int ret = 0, temp;
+		for (int i = 1; i <= number; ++i) {
+			temp = this.calculatePrimeCount(number);
+			if (temp > ret) ret = temp;
+		}
+		return ret;
+	}
+	
+	public int calculateMatchCount(int number) {
+		return 0;
+	}
+	
+	public int getMaxMatchCountCalc(int number) {
+		return 1;
 	}
 
 }

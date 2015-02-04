@@ -16,14 +16,23 @@ public class PrimeModel {
 		POLY_FACTOR,
 		POLY_DELTA
 	}
+	
+	public enum PMView {
+		GOLDBACH,
+		FACTOR
+	}
 
-	private int blockSize = 12, xPos = 0, yPos = 0, mouseX = 0, mouseY = 0, verticalStep=1, horizontalStep=1, verticalOffset=0, horizontalOffset=0, window_width=1200, window_height=800, polySize=5, polyFactor=1, polyDelta=1;
+	private int blockSize = 12, xPos = 0, yPos = 0, mouseX = 0, mouseY = 0,
+				verticalStep=1, horizontalStep=1, verticalOffset=0, horizontalOffset=0,
+				window_width=1200, window_height=800, polySize=5, polyFactor=1, polyDelta=1,
+				factorX, factorY, factorZ;
 	private boolean xyTransform = false,
 			exponents = true, drawRect = true, helper = true,
-			rays = true, rayBox = true, chart = true, chartProp = true,
+			rays = true, rayBox = true, chart = true, chartProp = true, chartPrimeCountCalc=true, chartMatchCountCalc=true,
 			chartExp = true, chartPrimes = true, chartMatchCount = true, chartFirstMatch=true, chartFirstVoid=true, chartVoidCount=true,
-			chartExpSum = true, stats=true, primes=true, _changed=false, polynomials=true, checkedPattern=true, primeMirror=true;
+			chartExpSum = true, stats=true, primes=true, _changed=false, polynomials=true, checkedPattern=true, primeMirror=true, factorOnlyOuter=true, factorOnlyNeeded=true;
 	private PMMode pmmode=PMMode.NORMAL;
+	private PMView pmview=PMView.GOLDBACH;
 	private Color BACKGROUND=null,
 			TEXT_COLOR=null,
 			HIGHLIGHT_TEXT_COLOR=null,
@@ -58,6 +67,8 @@ public class PrimeModel {
 			CHART_FIRST_MATCH=null,
 			CHART_FIRST_VOID=null,
 			CHART_VOID_COUNT=null,
+			CHART_PRIME_COUNT_CALC=null,
+			CHART_MATCH_COUNT_CALC=null,
 			PRIME_MIRROR=null,
 			ALPHA=null;
 	
@@ -96,6 +107,8 @@ public class PrimeModel {
 		this.CHART_FIRST_MATCH = new Color(185,45,190);
 		this.CHART_FIRST_VOID = new Color(85,145,190);
 		this.CHART_VOID_COUNT = new Color(225,145,90);
+		this.CHART_PRIME_COUNT_CALC = new Color(225,145,90);
+		this.CHART_MATCH_COUNT_CALC = new Color(85,145,190);
 		this.PRIME_MIRROR = new Color(255,235,235);
 		this.ALPHA = new Color(0,0,0,0);
 	}
@@ -136,6 +149,8 @@ public class PrimeModel {
 		if (cname.equals("CHART_FIRST_MATCH")) return this.CHART_FIRST_MATCH;
 		if (cname.equals("CHART_FIRST_VOID")) return this.CHART_FIRST_VOID;
 		if (cname.equals("CHART_VOID_COUNT")) return this.CHART_VOID_COUNT;
+		if (cname.equals("CHART_PRIME_COUNT_CALC")) return this.CHART_PRIME_COUNT_CALC;
+		if (cname.equals("CHART_MATCH_COUNT_CALC")) return this.CHART_MATCH_COUNT_CALC;
 		if (cname.equals("PRIME_MIRROR")) return this.PRIME_MIRROR;
 		return this.ALPHA;
 	}
@@ -176,6 +191,8 @@ public class PrimeModel {
 		if (cname.equals("CHART_FIRST_MATCH")) this.CHART_FIRST_MATCH = color;
 		if (cname.equals("CHART_FIRST_VOID")) this.CHART_FIRST_VOID = color;
 		if (cname.equals("CHART_VOID_COUNT")) this.CHART_VOID_COUNT = color;
+		if (cname.equals("CHART_PRIME_COUNT_CALC")) this.CHART_PRIME_COUNT_CALC = color;
+		if (cname.equals("CHART_MATCH_COUNT_CALC")) this.CHART_MATCH_COUNT_CALC = color;
 		if (cname.equals("PRIME_MIRROR")) this.PRIME_MIRROR = color;
 		this.changed();
 	}
@@ -215,6 +232,8 @@ public class PrimeModel {
 		        "CHART_FIRST_MATCH",
 		        "CHART_FIRST_VOID",
 		        "CHART_VOID_COUNT",
+		        "CHART_PRIME_COUNT_CALC",
+		        "CHART_MATCH_COUNT_CALC",
 		        "PRIME_MIRROR"};
 	}
 	
@@ -497,19 +516,19 @@ public class PrimeModel {
 		this.changed();
 	}
 
-	public int getWindow_width() {
+	public int getWindowWidth() {
 		return window_width;
 	}
 
-	public void setWindow_width(int window_width) {
+	public void setWindowWidth(int window_width) {
 		this.window_width = window_width;
 	}
 
-	public int getWindow_height() {
+	public int getWindowHeight() {
 		return window_height;
 	}
 
-	public void setWindow_height(int window_height) {
+	public void setWindowHeight(int window_height) {
 		this.window_height = window_height;
 	}
 
@@ -560,6 +579,7 @@ public class PrimeModel {
 
 	public void setCheckedPattern(boolean checkedPattern) {
 		this.checkedPattern = checkedPattern;
+		this.changed();
 	}
 
 	public boolean isPrimeMirror() {
@@ -568,6 +588,77 @@ public class PrimeModel {
 
 	public void setPrimeMirror(boolean primeMirror) {
 		this.primeMirror = primeMirror;
+		this.changed();
+	}
+
+	public PMView getPmview() {
+		return pmview;
+	}
+
+	public void setPmview(PMView pmview) {
+		this.pmview = pmview;
+		this.changed();
+	}
+
+	public int getFactorX() {
+		return factorX;
+	}
+
+	public void setFactorX(int factorX) {
+		this.factorX = factorX;
+		this.changed();
+	}
+
+	public int getFactorY() {
+		return factorY;
+	}
+
+	public void setFactorY(int factorY) {
+		this.factorY = factorY;
+		this.changed();
+	}
+
+	public int getFactorZ() {
+		return factorZ;
+	}
+
+	public void setFactorZ(int factorZ) {
+		this.factorZ = factorZ;
+		this.changed();
+	}
+
+	public boolean isChartPrimeCountCalc() {
+		return chartPrimeCountCalc;
+	}
+
+	public void setChartPrimeCountCalc(boolean chartPrimeCountCalc) {
+		this.chartPrimeCountCalc = chartPrimeCountCalc;
+		this.changed();
+	}
+
+	public boolean isChartMatchCountCalc() {
+		return chartMatchCountCalc;
+	}
+
+	public void setChartMatchCountCalc(boolean chartMatchCountCalc) {
+		this.chartMatchCountCalc = chartMatchCountCalc;
+		this.changed();
+	}
+
+	public boolean isFactorOnlyOuter() {
+		return factorOnlyOuter;
+	}
+
+	public void setFactorOnlyOuter(boolean factorOnlyOuter) {
+		this.factorOnlyOuter = factorOnlyOuter;
+	}
+
+	public boolean isFactorOnlyNeeded() {
+		return factorOnlyNeeded;
+	}
+
+	public void setFactorOnlyNeeded(boolean factorOnlyNeeded) {
+		this.factorOnlyNeeded = factorOnlyNeeded;
 	}
 
 	public Map<String,String> getInfo() {
@@ -620,6 +711,8 @@ public class PrimeModel {
 		ret.put("__CHART_FIRST_MATCH [4]",""+this.isChartFirstMatch());
 		ret.put("__CHART_VOID_COUNT [5]",""+this.isChartVoidCount());
 		ret.put("__CHART_FIRST_VOID [6]",""+this.isChartFirstVoid());
+		ret.put("__CHART_PRIME_COUNT_CALC [7]",""+this.isChartPrimeCountCalc());
+		ret.put("__CHART_MATCH_COUNT_CALC [8]",""+this.isChartMatchCountCalc());
 		ret.put("POS_X",""+this.getXPos());
 		ret.put("POS_Y",""+this.getYPos());
 		ret.put("STEP_X",""+this.getHorizontalStep());

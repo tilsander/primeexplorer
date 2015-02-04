@@ -124,20 +124,52 @@ public class PrimeController implements MouseMotionListener, MouseListener, KeyL
 		char kc = e.getKeyChar();
 		int keyCode = e.getKeyCode();
 		if (kc != 0) {
-		    switch( keyCode ) { 
+		    switch(keyCode) { 
 		        case KeyEvent.VK_UP:
-		        	int y = this.model.getYPos();
-		            if (y > 0) this.model.setYPos(y-this.model.getDelta());
+		        	switch (this.model.getPmview()) {
+		        	case GOLDBACH:
+		        		int y = this.model.getYPos();
+			            if (y > 0) this.model.setYPos(y-this.model.getDelta());
+		        		break;
+		        	case FACTOR:
+		        		int fy = this.model.getFactorY();
+		        		if (fy > 0) this.model.setFactorY(fy-this.model.getDelta()*2);
+		        		break;
+		        	}
 		            break;
 		        case KeyEvent.VK_DOWN:
-		        	this.model.setYPos(this.model.getYPos()+this.model.getDelta());
+		        	switch (this.model.getPmview()) {
+		        	case GOLDBACH:
+		        		this.model.setYPos(this.model.getYPos()+this.model.getDelta());
+		        		break;
+		        	case FACTOR:
+		        		int fy = this.model.getFactorY();
+		        		this.model.setFactorY(fy+this.model.getDelta()*2);
+		        		break;
+		        	}
 		            break;
 		        case KeyEvent.VK_LEFT:
-		        	int x = this.model.getXPos();
-		            if (x > 0) this.model.setXPos(x-this.model.getDelta());
+		        	switch (this.model.getPmview()) {
+		        	case GOLDBACH:
+		        		int x = this.model.getXPos();
+			            if (x > 0) this.model.setXPos(x-this.model.getDelta());
+		        		break;
+		        	case FACTOR:
+		        		int fx = this.model.getFactorX();
+		        		this.model.setFactorX(fx-this.model.getDelta()*1);
+		        		break;
+		        	}
 		            break;
 		        case KeyEvent.VK_RIGHT :
-		        	this.model.setXPos(this.model.getXPos()+this.model.getDelta());
+		        	switch (this.model.getPmview()) {
+		        	case GOLDBACH:
+		        		this.model.setXPos(this.model.getXPos()+this.model.getDelta());
+		        		break;
+		        	case FACTOR:
+		        		int fx = this.model.getFactorX();
+		        		this.model.setFactorX(fx+this.model.getDelta()*1);
+		        		break;
+		        	}
 		            break;
 		        default:
 		        	switch (kc) {
@@ -206,6 +238,12 @@ public class PrimeController implements MouseMotionListener, MouseListener, KeyL
 		        	case 'l':
 						this.model.setRays(!this.model.isRays());
 						break;
+		        	case 'j':
+						this.model.setFactorOnlyOuter(!this.model.isFactorOnlyOuter());
+						break;
+		        	case 'k':
+						this.model.setFactorOnlyNeeded(!this.model.isFactorOnlyNeeded());
+						break;
 		        	case 'b':
 						this.model.setRayBox(!this.model.isRayBox());
 						break;
@@ -255,9 +293,21 @@ public class PrimeController implements MouseMotionListener, MouseListener, KeyL
 						this.model.setPolynomials(!this.model.isPolynomials());
 						break;
 		        	case 'o':
-						this.model.setXPos(0);
-						this.model.setYPos(0);
+		        		switch (this.model.getPmview()) {
+			        	case GOLDBACH:
+			        		this.model.setXPos(0);
+							this.model.setYPos(0);
+			        		break;
+			        	case FACTOR:
+			        		this.model.setFactorX(0);
+							this.model.setFactorY(0);
+			        		break;
+			        	}
 						break;
+		        	case 'y':
+		        		if (this.model.getPmview()==PrimeModel.PMView.GOLDBACH) this.model.setPmview(PrimeModel.PMView.FACTOR);
+		        		else if (this.model.getPmview()==PrimeModel.PMView.FACTOR) this.model.setPmview(PrimeModel.PMView.GOLDBACH);
+		        		break;
 		        	case 'x':
 						if (this.model.getXPos() < this.model.getYPos()) this.model.setXPos(this.model.getYPos()/this.model.getHorizontalStep());
 						else this.model.setYPos(this.model.getXPos()/this.model.getVerticalStep());
@@ -279,6 +329,12 @@ public class PrimeController implements MouseMotionListener, MouseListener, KeyL
 		        		break;
 		        	case '6':
 		        		this.model.setChartFirstVoid(!this.model.isChartFirstVoid());
+		        		break;
+		        	case '7':
+		        		this.model.setChartPrimeCountCalc(!this.model.isChartPrimeCountCalc());
+		        		break;
+		        	case '8':
+		        		this.model.setChartMatchCountCalc(!this.model.isChartMatchCountCalc());
 		        		break;
 					}
 		        	break;
