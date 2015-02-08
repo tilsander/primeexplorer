@@ -25,12 +25,13 @@ public class PrimeModel {
 	private int blockSize = 12, xPos = 0, yPos = 0, mouseX = 0, mouseY = 0,
 				verticalStep=1, horizontalStep=1, verticalOffset=0, horizontalOffset=0,
 				window_width=1200, window_height=800, polySize=5, polyFactor=1, polyDelta=1,
-				factorX, factorY, factorZ;
+				factorX=0, factorY=1, factorZ=1;
 	private boolean xyTransform = false,
 			exponents = true, drawRect = true, helper = true,
 			rays = true, rayBox = true, chart = true, chartProp = true, chartPrimeCountCalc=true, chartMatchCountCalc=true,
 			chartExp = true, chartPrimes = true, chartMatchCount = true, chartFirstMatch=true, chartFirstVoid=true, chartVoidCount=true,
-			chartExpSum = true, stats=true, primes=true, _changed=false, polynomials=true, checkedPattern=true, primeMirror=true, factorOnlyOuter=true, factorOnlyNeeded=true;
+			chartExpSum = true, stats=true, primes=true, _changed=false, polynomials=true, checkedPattern=true, primeMirror=true,
+			polarFactors=true, factorOnlyOuter=true, factorOnlyNeeded=true, polarBalance=true;
 	private PMMode pmmode=PMMode.NORMAL;
 	private PMView pmview=PMView.GOLDBACH;
 	private Color BACKGROUND=null,
@@ -70,6 +71,8 @@ public class PrimeModel {
 			CHART_PRIME_COUNT_CALC=null,
 			CHART_MATCH_COUNT_CALC=null,
 			PRIME_MIRROR=null,
+			POLAR_FACTOR_LEFT=null,
+			POLAR_FACTOR_RIGHT=null,
 			ALPHA=null;
 	
 	public PrimeModel() {
@@ -110,6 +113,8 @@ public class PrimeModel {
 		this.CHART_PRIME_COUNT_CALC = new Color(225,145,90);
 		this.CHART_MATCH_COUNT_CALC = new Color(85,145,190);
 		this.PRIME_MIRROR = new Color(255,235,235);
+		this.POLAR_FACTOR_LEFT = Color.RED;
+		this.POLAR_FACTOR_RIGHT = Color.GREEN;
 		this.ALPHA = new Color(0,0,0,0);
 	}
 	
@@ -152,6 +157,8 @@ public class PrimeModel {
 		if (cname.equals("CHART_PRIME_COUNT_CALC")) return this.CHART_PRIME_COUNT_CALC;
 		if (cname.equals("CHART_MATCH_COUNT_CALC")) return this.CHART_MATCH_COUNT_CALC;
 		if (cname.equals("PRIME_MIRROR")) return this.PRIME_MIRROR;
+		if (cname.equals("POLAR_FACTOR_LEFT")) return this.POLAR_FACTOR_LEFT;
+		if (cname.equals("POLAR_FACTOR_RIGHT")) return this.POLAR_FACTOR_RIGHT;
 		return this.ALPHA;
 	}
 	
@@ -194,6 +201,8 @@ public class PrimeModel {
 		if (cname.equals("CHART_PRIME_COUNT_CALC")) this.CHART_PRIME_COUNT_CALC = color;
 		if (cname.equals("CHART_MATCH_COUNT_CALC")) this.CHART_MATCH_COUNT_CALC = color;
 		if (cname.equals("PRIME_MIRROR")) this.PRIME_MIRROR = color;
+		if (cname.equals("POLAR_FACTOR_LEFT")) this.POLAR_FACTOR_LEFT = color;
+		if (cname.equals("POLAR_FACTOR_RIGHT")) this.POLAR_FACTOR_RIGHT = color;
 		this.changed();
 	}
 	
@@ -234,7 +243,9 @@ public class PrimeModel {
 		        "CHART_VOID_COUNT",
 		        "CHART_PRIME_COUNT_CALC",
 		        "CHART_MATCH_COUNT_CALC",
-		        "PRIME_MIRROR"};
+		        "PRIME_MIRROR",
+		        "POLAR_FACTOR_LEFT",
+		        "POLAR_FACTOR_RIGHT"};
 	}
 	
 	public boolean isChanged() {
@@ -605,7 +616,8 @@ public class PrimeModel {
 	}
 
 	public void setFactorX(int factorX) {
-		this.factorX = factorX;
+		if (factorX >= 0) this.factorX = factorX;
+		else this.factorX = 0;
 		this.changed();
 	}
 
@@ -614,7 +626,8 @@ public class PrimeModel {
 	}
 
 	public void setFactorY(int factorY) {
-		this.factorY = factorY;
+		if (factorY > 0) this.factorY = factorY;
+		else this.factorY = 1;
 		this.changed();
 	}
 
@@ -623,7 +636,8 @@ public class PrimeModel {
 	}
 
 	public void setFactorZ(int factorZ) {
-		this.factorZ = factorZ;
+		if (factorZ > 0) this.factorZ = factorZ;
+		else this.factorZ = 1;
 		this.changed();
 	}
 
@@ -651,6 +665,7 @@ public class PrimeModel {
 
 	public void setFactorOnlyOuter(boolean factorOnlyOuter) {
 		this.factorOnlyOuter = factorOnlyOuter;
+		this.changed();
 	}
 
 	public boolean isFactorOnlyNeeded() {
@@ -659,6 +674,24 @@ public class PrimeModel {
 
 	public void setFactorOnlyNeeded(boolean factorOnlyNeeded) {
 		this.factorOnlyNeeded = factorOnlyNeeded;
+		this.changed();
+	}
+
+	public boolean isPolarFactors() {
+		return polarFactors;
+	}
+
+	public void setPolarFactors(boolean polarFactors) {
+		this.polarFactors = polarFactors;
+		this.changed();
+	}
+
+	public boolean isPolarBalance() {
+		return polarBalance;
+	}
+
+	public void setPolarBalance(boolean polarBalance) {
+		this.polarBalance = polarBalance;
 	}
 
 	public Map<String,String> getInfo() {
@@ -702,6 +735,7 @@ public class PrimeModel {
 		ret.put("_SHOW_POLY [U]",""+this.isPolynomials());
 		ret.put("_SHOW_MIRROR [M]",""+this.isPrimeMirror());
 		ret.put("_SHOW_CHECKED_PAT [F]",""+this.isCheckedPattern());
+		ret.put("_SHOW_POLAR_FACTOR [D]",""+this.isPolarFactors());
 		ret.put("_POLY_SIZE",""+this.getPolySize());
 		ret.put("_POLY_FACTOR",""+this.getPolyFactor());
 		ret.put("_POLY_DELTA",""+this.getPolyDelta());
@@ -721,6 +755,9 @@ public class PrimeModel {
 		ret.put("OFFSET_Y",""+this.getVerticalOffset());
 		ret.put("MOUSE_X",""+this.getMouseX());
 		ret.put("MOUSE_Y",""+this.getMouseY());
+		ret.put("POLAR_X",""+this.getFactorX());
+		ret.put("POLAR_Y",""+this.getFactorY());
+		ret.put("POLAR_Z",""+this.getFactorZ());
 		return ret;
 	}
 

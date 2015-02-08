@@ -101,7 +101,10 @@ public class PrimeView extends JPanel {
 			Y_COUNT=0,
 			WIDTH=0,
 			HEIGHT=0,
-			Y_AXIS_DELTA=0;
+			Y_AXIS_DELTA=0,
+			POLAR_FACTOR_X=0,
+			POLAR_FACTOR_Y=0,
+			POLAR_FACTOR_Z=0;
 	private double STRING_HEIGHT=0.0;
 	private StringMetrics metric;
 	private Font FONT, SMALL_FONT;
@@ -160,15 +163,7 @@ public class PrimeView extends JPanel {
 	public void paintComponent(Graphics g) {
 		this.g2d = (Graphics2D) g;
 		this.initMetric(g2d);
-		switch (this.model.getPmview()) {
-		case GOLDBACH:
-			this.drawGoldbach();
-			break;
-		case FACTOR:
-			this.drawFactor();
-			break;
-		}
-		
+		this.drawGoldbach();
 	}
 	
 	private void drawGoldbach() {
@@ -179,6 +174,7 @@ public class PrimeView extends JPanel {
 		Map<Integer,Point2D> rays = this.drawRays();
 		this.drawText();
 		this.drawPolys();
+		if (this.model.isPolarFactors()) this.drawPolarFactors();
 		this.drawAxis();
 		this.drawBottomRight();
 		this.drawRayOrder(rays);
@@ -196,11 +192,9 @@ public class PrimeView extends JPanel {
 		if (this.model.isStats()) this.drawStats();
 	}
 	
-	private void drawFactor() {
-		this.setupFactorEnv();
-		this.drawBackground();
+	private void drawPolarFactors() {
+		this.drawPolarPolys();
 		this.drawFactorField();
-		this.drawFactorAxis();
 	}
 	
 	/**
@@ -235,26 +229,9 @@ public class PrimeView extends JPanel {
 		}
 		
 		this.X_LEFT = (int)this.metric.getWidth(""+(this.transformY(Y_COUNT))) + 9;
-	}
-	
-	private void setupFactorEnv() {
-		this.WIDTH = this.getWidth();
-		this.HEIGHT = this.getHeight();
-		this.BLOCK = this.model.getBlockSize();
-		this.X_POS = this.model.getFactorX();
-		this.Y_POS = this.model.getFactorY();
-		STRING_HEIGHT = this.metric.getHeight("1");
-		this.Y_AXIS_DELTA = (int)(STRING_HEIGHT/(double)BLOCK);
-		if (Y_AXIS_DELTA <= 0) Y_AXIS_DELTA = 1;
-		
-		{
-			double xc = ((double)WIDTH-this.X_LEFT)/((double)BLOCK);
-			this.X_COUNT = (int)Math.ceil(xc);
-			double yc = ((double)HEIGHT-this.Y_TOP)/((double)BLOCK);
-			this.Y_COUNT = (int)Math.ceil(yc);
-		}
-		
-		this.X_LEFT = (int)this.metric.getWidth(""+(this.transformY(Y_COUNT))) + 9;
+		this.POLAR_FACTOR_X = this.model.getFactorX();
+		this.POLAR_FACTOR_Y = this.model.getFactorY();
+		this.POLAR_FACTOR_Z = this.model.getFactorZ();
 	}
 	
 	private void drawBackground() {
@@ -329,7 +306,7 @@ public class PrimeView extends JPanel {
 		}
 	}
 	
-	private void drawFactorAxis() {
+	/*private void drawFactorAxis() {
 		int x, y;
 		g2d.setColor(this.getBackgroundColor());
 		g2d.fillRect(0, 0, X_LEFT-1, HEIGHT);
@@ -355,7 +332,7 @@ public class PrimeView extends JPanel {
 			if (x == Y_POS/2) g2d.setColor(this.getTextColor());
 		}
 		g2d.setTransform(orig);
-	}
+	}*/
 	
 	private void drawField() {
 		int x, y, cp=0;
@@ -404,46 +381,48 @@ public class PrimeView extends JPanel {
 	
 	private void drawFactorField() {
 		int x, y;
-		g2d.setColor(Color.RED);
-		for (int yp = 1; yp <= Y_COUNT; ++yp) {
-			y = yp;
-			for (int xp = 1; xp <= X_COUNT; ++xp) {
-				x = xp + X_POS;
-				if (this.model.isFactorOnlyOuter() && x > y*y) continue;
-				if (x > 0 && y > 1 && x/y != 1 && x%y==0) {
-					boolean match = false;
-					if (this.model.isFactorOnlyNeeded()) for (int i = y+1; i <= x/2; ++i) {
-						if (x%i==0) {
-							match = true;
-							break;
+		if (!this.model.isPolarBalance()) {
+			g2d.setColor(this.model.getColor("POLAR_FACTOR_LEFT"));
+			for (int yp = 1; yp <= Y_COUNT; ++yp) {
+				y = yp;
+				for (int xp = 1; xp <= X_COUNT; ++xp) {
+					x = xp + X_POS;
+					if (this.model.isFactorOnlyOuter() && x > y*y) continue;
+					if (x > 0 && y > 1 && x/y != 1 && x%y==0) {
+						boolean match = false;
+						if (this.model.isFactorOnlyNeeded()) for (int i = y+1; i <= x/2; ++i) {
+							if (x%i==0) {
+								match = true;
+								break;
+							}
 						}
+						if (match==false) g2d.drawOval((xp-1)*BLOCK+X_LEFT, (int)(yp-1)*POLAR_FACTOR_Y*BLOCK+Y_TOP, BLOCK, BLOCK);
 					}
-					if (match==false) g2d.drawOval((xp-1)*BLOCK+X_LEFT, (yp-1)*BLOCK+Y_TOP, BLOCK, BLOCK);
 				}
 			}
-		}
-		g2d.setColor(Color.GREEN);
-		for (int yp = 1; yp <= Y_COUNT; ++yp) {
-			y = yp;
-			for (int xp = 1; xp <= X_COUNT; ++xp) {
-				x = Y_POS - (xp + X_POS);
-				if (this.model.isFactorOnlyOuter() && x > y*y) continue;
-				if (x > 0 && y > 1 && x/y != 1 && x%y==0) {
-					boolean match = false;
-					if (this.model.isFactorOnlyNeeded()) for (int i = y+1; i <= x/2; ++i) {
-						if (x%i==0) {
-							match = true;
-							break;
+			g2d.setColor(this.model.getColor("POLAR_FACTOR_RIGHT"));
+			for (int yp = 1; yp <= Y_COUNT; ++yp) {
+				y = yp;
+				for (int xp = 1; xp <= X_COUNT; ++xp) {
+					x = POLAR_FACTOR_X - (xp + X_POS);
+					if (this.model.isFactorOnlyOuter() && x > y*y) continue;
+					if (x > 0 && y > 1 && x/y != 1 && x%y==0) {
+						boolean match = false;
+						if (this.model.isFactorOnlyNeeded()) for (int i = y+1; i <= x/2; ++i) {
+							if (x%i==0) {
+								match = true;
+								break;
+							}
 						}
+						if (match==false) g2d.drawOval((xp-1)*BLOCK+BLOCK/4+X_LEFT, (yp-1)*POLAR_FACTOR_Y*BLOCK+BLOCK/4+Y_TOP, BLOCK/2, BLOCK/2);
 					}
-					if (match==false) g2d.drawOval((xp-1)*BLOCK+BLOCK/4+X_LEFT, (yp-1)*BLOCK+BLOCK/4+Y_TOP, BLOCK/2, BLOCK/2);
 				}
 			}
 		}
 		g2d.setColor(new Color(255,255,255,100));
 		for (int xp = 1; xp <= X_COUNT; ++xp) {
 			x = xp + X_POS;
-			if (Primes._().isPrime(x) && Primes._().isPrime(Y_POS - (xp + X_POS))) {
+			if (Primes._().isPrime(x) && Primes._().isPrime(POLAR_FACTOR_X - (xp + X_POS))) {
 				g2d.drawLine((xp-1)*BLOCK+BLOCK/2+X_LEFT, Y_TOP, (xp-1)*BLOCK+BLOCK/2+X_LEFT, HEIGHT);
 			}
 		}
@@ -822,6 +801,53 @@ public class PrimeView extends JPanel {
 		}
 	}
 	
+	private void drawPolarPolys() {
+		double mid, low, half, last_x, last_y, cur_x, cur_y, bal;
+		for (int i = 2; i <= this.POLAR_FACTOR_X/2; ++i) {
+			mid = ((double)i+2.0)/2.0;
+			low =  mid*mid;
+			half = mid % 1.0;
+			last_x = last_y = cur_x = cur_y = 0.0;
+			bal = this.model.isPolarBalance() ? (double)POLAR_FACTOR_X/4.0 - ((double)i*0.5) : 0.0;
+			for (int b = 0; b < (i-2)/2+1; ++b) {
+				cur_x = ((double)b+half)*((double)b+half);
+				cur_y = (b+half);
+				g2d.setColor(this.model.getColor("POLAR_FACTOR_LEFT"));
+				g2d.drawLine((int)((low-cur_x-0.5)*BLOCK)+X_LEFT,
+							 (int)((mid+cur_y-0.5+bal)*POLAR_FACTOR_Y*BLOCK-0.5*(POLAR_FACTOR_Y-1.0)*BLOCK)+Y_TOP,
+							 (int)((low-last_x-0.5)*BLOCK)+X_LEFT,
+							 (int)((mid+last_y-0.5+bal)*POLAR_FACTOR_Y*BLOCK-0.5*(POLAR_FACTOR_Y-1.0)*BLOCK)+Y_TOP);
+				if (this.model.isPolarBalance()) {
+					g2d.drawOval((int)((low-cur_x-0.5)*BLOCK-0.5*BLOCK)+X_LEFT,
+							 	 (int)((mid+cur_y-0.5+bal)*POLAR_FACTOR_Y*BLOCK-0.5*(POLAR_FACTOR_Y-1.0)*BLOCK-0.5*BLOCK)+Y_TOP, BLOCK, BLOCK);
+					g2d.drawOval((int)((low-cur_x-0.5)*BLOCK-0.5*BLOCK)+X_LEFT,
+							 	 (int)((mid-cur_y-0.5+bal)*POLAR_FACTOR_Y*BLOCK-0.5*(POLAR_FACTOR_Y-1.0)*BLOCK-0.5*BLOCK)+Y_TOP, BLOCK, BLOCK);
+				}
+				g2d.drawLine((int)((low-cur_x-0.5)*BLOCK)+X_LEFT,
+							 (int)((mid-cur_y-0.5+bal)*POLAR_FACTOR_Y*BLOCK-0.5*(POLAR_FACTOR_Y-1.0)*BLOCK)+Y_TOP,
+							 (int)((low-last_x-0.5)*BLOCK)+X_LEFT,
+							 (int)((mid-last_y-0.5+bal)*POLAR_FACTOR_Y*BLOCK-0.5*(POLAR_FACTOR_Y-1.0)*BLOCK)+Y_TOP);
+				g2d.setColor(this.model.getColor("POLAR_FACTOR_RIGHT"));
+				g2d.drawLine((int)(((POLAR_FACTOR_X-1.0)-(low-cur_x-0.5))*BLOCK)+X_LEFT,
+							 (int)((mid+cur_y-0.5+bal)*POLAR_FACTOR_Y*BLOCK-0.5*(POLAR_FACTOR_Y-1.0)*BLOCK)+Y_TOP,
+							 (int)(((POLAR_FACTOR_X-1.0)-(low-last_x-0.5))*BLOCK)+X_LEFT,
+							 (int)((mid+last_y-0.5+bal)*POLAR_FACTOR_Y*BLOCK-0.5*(POLAR_FACTOR_Y-1.0)*BLOCK)+Y_TOP);
+				g2d.drawLine((int)(((POLAR_FACTOR_X-1.0)-(low-cur_x-0.5))*BLOCK)+X_LEFT,
+						 	 (int)((mid-cur_y-0.5+bal)*POLAR_FACTOR_Y*BLOCK-0.5*(POLAR_FACTOR_Y-1.0)*BLOCK)+Y_TOP,
+						 	 (int)(((POLAR_FACTOR_X-1.0)-(low-last_x-0.5))*BLOCK)+X_LEFT,
+						 	 (int)((mid-last_y-0.5+bal)*POLAR_FACTOR_Y*BLOCK-0.5*(POLAR_FACTOR_Y-1.0)*BLOCK)+Y_TOP);
+				if (this.model.isPolarBalance()) {
+					g2d.drawOval((int)(((POLAR_FACTOR_X-1.0)-(low-cur_x-0.5))*BLOCK-0.5*BLOCK)+X_LEFT,
+							 	 (int)((mid+cur_y-0.5+bal)*POLAR_FACTOR_Y*BLOCK-0.5*(POLAR_FACTOR_Y-1.0)*BLOCK-0.5*BLOCK)+Y_TOP, BLOCK, BLOCK);
+					g2d.drawOval((int)(((POLAR_FACTOR_X-1.0)-(low-cur_x-0.5))*BLOCK-0.5*BLOCK)+X_LEFT,
+						 	 	 (int)((mid-cur_y-0.5+bal)*POLAR_FACTOR_Y*BLOCK-0.5*(POLAR_FACTOR_Y-1.0)*BLOCK-0.5*BLOCK)+Y_TOP, BLOCK, BLOCK);
+				}
+				last_x = cur_x;
+				last_y = cur_y;
+			}
+		}
+	}
+	
 	private void changeFont(Font font) {
 		this.g2d.setFont(font);
 	}
@@ -841,7 +867,8 @@ public class PrimeView extends JPanel {
 			}
 		}
 		if (this.model.isHelper() && (x == this.model.getMouseX() || y == this.model.getMouseY() || y == this.model.getMouseX() || x == this.model.getMouseY()
-			|| this.isOnLine(x,y,this.model.getMouseX()) || this.isOnLine(x,y,this.model.getMouseY()))) {
+			|| this.isOnLine(x,y,this.model.getMouseX()) || this.isOnLine(x,y,this.model.getMouseY()))
+			|| (this.model.isPolarFactors() && y == POLAR_FACTOR_X/2)) {
 			switch (ct) {
 			case BORDER:
 				if (y%x==0 && this.model.isRayBox()) return this.model.getColor("RAY_BORDER");

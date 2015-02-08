@@ -133,7 +133,7 @@ public class PrimeController implements MouseMotionListener, MouseListener, KeyL
 		        		break;
 		        	case FACTOR:
 		        		int fy = this.model.getFactorY();
-		        		if (fy > 0) this.model.setFactorY(fy-this.model.getDelta()*2);
+		        		if (fy > 0) this.model.setFactorY(fy-this.model.getDelta()*1);
 		        		break;
 		        	}
 		            break;
@@ -144,7 +144,7 @@ public class PrimeController implements MouseMotionListener, MouseListener, KeyL
 		        		break;
 		        	case FACTOR:
 		        		int fy = this.model.getFactorY();
-		        		this.model.setFactorY(fy+this.model.getDelta()*2);
+		        		this.model.setFactorY(fy+this.model.getDelta()*1);
 		        		break;
 		        	}
 		            break;
@@ -156,7 +156,7 @@ public class PrimeController implements MouseMotionListener, MouseListener, KeyL
 		        		break;
 		        	case FACTOR:
 		        		int fx = this.model.getFactorX();
-		        		this.model.setFactorX(fx-this.model.getDelta()*1);
+		        		this.model.setFactorX(fx-this.model.getDelta()*2);
 		        		break;
 		        	}
 		            break;
@@ -167,7 +167,7 @@ public class PrimeController implements MouseMotionListener, MouseListener, KeyL
 		        		break;
 		        	case FACTOR:
 		        		int fx = this.model.getFactorX();
-		        		this.model.setFactorX(fx+this.model.getDelta()*1);
+		        		this.model.setFactorX(fx+this.model.getDelta()*2);
 		        		break;
 		        	}
 		            break;
@@ -237,6 +237,12 @@ public class PrimeController implements MouseMotionListener, MouseListener, KeyL
 						break;
 		        	case 'l':
 						this.model.setRays(!this.model.isRays());
+						break;
+		        	case 'd':
+						this.model.setPolarFactors(!this.model.isPolarFactors());
+						break;
+		        	case 'i':
+						this.model.setPolarBalance(!this.model.isPolarBalance());
 						break;
 		        	case 'j':
 						this.model.setFactorOnlyOuter(!this.model.isFactorOnlyOuter());
