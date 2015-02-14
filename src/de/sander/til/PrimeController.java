@@ -124,6 +124,22 @@ public class PrimeController implements MouseMotionListener, MouseListener, KeyL
 		char kc = e.getKeyChar();
 		int keyCode = e.getKeyCode();
 		if (kc != 0) {
+			if (this.model.isRotateView()) {
+				switch(keyCode) { 
+		        case KeyEvent.VK_UP:
+		        	keyCode = KeyEvent.VK_LEFT;
+		        	break;
+		        case KeyEvent.VK_DOWN:
+		        	keyCode = KeyEvent.VK_RIGHT;
+		        	break;
+		        case KeyEvent.VK_LEFT:
+		        	keyCode = KeyEvent.VK_DOWN;
+		        	break;
+		        case KeyEvent.VK_RIGHT:
+		        	keyCode = KeyEvent.VK_UP;
+		        	break;
+				}
+			}
 		    switch(keyCode) { 
 		        case KeyEvent.VK_UP:
 		        	switch (this.model.getPmview()) {
@@ -317,6 +333,9 @@ public class PrimeController implements MouseMotionListener, MouseListener, KeyL
 		        	case 'x':
 						if (this.model.getXPos() < this.model.getYPos()) this.model.setXPos(this.model.getYPos()/this.model.getHorizontalStep());
 						else this.model.setYPos(this.model.getXPos()/this.model.getVerticalStep());
+						break;
+		        	case 'z':
+						this.model.setRotateView(!this.model.isRotateView());
 						break;
 		        	case '1':
 		        		this.model.setChartPrimes(!this.model.isChartPrimes());

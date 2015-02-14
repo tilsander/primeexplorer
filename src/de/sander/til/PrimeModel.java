@@ -31,7 +31,7 @@ public class PrimeModel {
 			rays = true, rayBox = true, chart = true, chartProp = true, chartPrimeCountCalc=true, chartMatchCountCalc=true,
 			chartExp = true, chartPrimes = true, chartMatchCount = true, chartFirstMatch=true, chartFirstVoid=true, chartVoidCount=true,
 			chartExpSum = true, stats=true, primes=true, _changed=false, polynomials=true, checkedPattern=true, primeMirror=true,
-			polarFactors=true, factorOnlyOuter=true, factorOnlyNeeded=true, polarBalance=true;
+			polarFactors=true, factorOnlyOuter=true, factorOnlyNeeded=true, polarBalance=true, rotateView=true;
 	private PMMode pmmode=PMMode.NORMAL;
 	private PMView pmview=PMView.GOLDBACH;
 	private Color BACKGROUND=null,
@@ -692,6 +692,15 @@ public class PrimeModel {
 
 	public void setPolarBalance(boolean polarBalance) {
 		this.polarBalance = polarBalance;
+	}
+
+	public boolean isRotateView() {
+		return rotateView;
+	}
+
+	public void setRotateView(boolean rotateView) {
+		this.rotateView = rotateView;
+		this.changed();
 	}
 
 	public Map<String,String> getInfo() {

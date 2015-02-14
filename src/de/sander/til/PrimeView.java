@@ -201,8 +201,15 @@ public class PrimeView extends JPanel {
 	 * initialize all environment variables
 	 */
 	private void setupEnv() {
-		this.WIDTH = this.getWidth();
-		this.HEIGHT = this.getHeight();
+		if (this.model.isRotateView()) {
+			this.HEIGHT = this.getWidth();
+			this.WIDTH = this.getHeight();
+			g2d.rotate(Math.PI/2);
+			g2d.translate(0, -HEIGHT);
+		} else {
+			this.WIDTH = this.getWidth();
+			this.HEIGHT = this.getHeight();
+		}
 		this.BLOCK = this.model.getBlockSize();
 		this.Y_STEP = this.model.getVerticalStep();
 		this.X_STEP = this.model.getHorizontalStep();
@@ -802,7 +809,8 @@ public class PrimeView extends JPanel {
 	}
 	
 	private void drawPolarPolys() {
-		double mid, low, half, last_x, last_y, cur_x, cur_y, bal;
+		double mid, low, half, last_x, last_y, cur_x, cur_y, bal, shift;
+		shift = (double)X_POS;
 		for (int i = 2; i <= this.POLAR_FACTOR_X/2; ++i) {
 			mid = ((double)i+2.0)/2.0;
 			low =  mid*mid;
@@ -813,33 +821,34 @@ public class PrimeView extends JPanel {
 				cur_x = ((double)b+half)*((double)b+half);
 				cur_y = (b+half);
 				g2d.setColor(this.model.getColor("POLAR_FACTOR_LEFT"));
-				g2d.drawLine((int)((low-cur_x-0.5)*BLOCK)+X_LEFT,
+				g2d.drawLine((int)((low-cur_x-0.5-shift)*BLOCK)+X_LEFT,
 							 (int)((mid+cur_y-0.5+bal)*POLAR_FACTOR_Y*BLOCK-0.5*(POLAR_FACTOR_Y-1.0)*BLOCK)+Y_TOP,
-							 (int)((low-last_x-0.5)*BLOCK)+X_LEFT,
+							 (int)((low-last_x-0.5-shift)*BLOCK)+X_LEFT,
 							 (int)((mid+last_y-0.5+bal)*POLAR_FACTOR_Y*BLOCK-0.5*(POLAR_FACTOR_Y-1.0)*BLOCK)+Y_TOP);
+				g2d.drawLine((int)((low-cur_x-0.5-shift)*BLOCK)+X_LEFT,
+						 (int)((mid-cur_y-0.5+bal)*POLAR_FACTOR_Y*BLOCK-0.5*(POLAR_FACTOR_Y-1.0)*BLOCK)+Y_TOP,
+						 (int)((low-last_x-0.5-shift)*BLOCK)+X_LEFT,
+						 (int)((mid-last_y-0.5+bal)*POLAR_FACTOR_Y*BLOCK-0.5*(POLAR_FACTOR_Y-1.0)*BLOCK)+Y_TOP);
 				if (this.model.isPolarBalance()) {
-					g2d.drawOval((int)((low-cur_x-0.5)*BLOCK-0.5*BLOCK)+X_LEFT,
+					g2d.drawOval((int)((low-cur_x-0.5-shift)*BLOCK-0.5*BLOCK)+X_LEFT,
 							 	 (int)((mid+cur_y-0.5+bal)*POLAR_FACTOR_Y*BLOCK-0.5*(POLAR_FACTOR_Y-1.0)*BLOCK-0.5*BLOCK)+Y_TOP, BLOCK, BLOCK);
-					g2d.drawOval((int)((low-cur_x-0.5)*BLOCK-0.5*BLOCK)+X_LEFT,
+					g2d.drawOval((int)((low-cur_x-0.5-shift)*BLOCK-0.5*BLOCK)+X_LEFT,
 							 	 (int)((mid-cur_y-0.5+bal)*POLAR_FACTOR_Y*BLOCK-0.5*(POLAR_FACTOR_Y-1.0)*BLOCK-0.5*BLOCK)+Y_TOP, BLOCK, BLOCK);
 				}
-				g2d.drawLine((int)((low-cur_x-0.5)*BLOCK)+X_LEFT,
-							 (int)((mid-cur_y-0.5+bal)*POLAR_FACTOR_Y*BLOCK-0.5*(POLAR_FACTOR_Y-1.0)*BLOCK)+Y_TOP,
-							 (int)((low-last_x-0.5)*BLOCK)+X_LEFT,
-							 (int)((mid-last_y-0.5+bal)*POLAR_FACTOR_Y*BLOCK-0.5*(POLAR_FACTOR_Y-1.0)*BLOCK)+Y_TOP);
+
 				g2d.setColor(this.model.getColor("POLAR_FACTOR_RIGHT"));
-				g2d.drawLine((int)(((POLAR_FACTOR_X-1.0)-(low-cur_x-0.5))*BLOCK)+X_LEFT,
+				g2d.drawLine((int)(((POLAR_FACTOR_X-1.0-shift)-(low-cur_x-0.5))*BLOCK)+X_LEFT,
 							 (int)((mid+cur_y-0.5+bal)*POLAR_FACTOR_Y*BLOCK-0.5*(POLAR_FACTOR_Y-1.0)*BLOCK)+Y_TOP,
-							 (int)(((POLAR_FACTOR_X-1.0)-(low-last_x-0.5))*BLOCK)+X_LEFT,
+							 (int)(((POLAR_FACTOR_X-1.0-shift)-(low-last_x-0.5))*BLOCK)+X_LEFT,
 							 (int)((mid+last_y-0.5+bal)*POLAR_FACTOR_Y*BLOCK-0.5*(POLAR_FACTOR_Y-1.0)*BLOCK)+Y_TOP);
-				g2d.drawLine((int)(((POLAR_FACTOR_X-1.0)-(low-cur_x-0.5))*BLOCK)+X_LEFT,
+				g2d.drawLine((int)(((POLAR_FACTOR_X-1.0-shift)-(low-cur_x-0.5))*BLOCK)+X_LEFT,
 						 	 (int)((mid-cur_y-0.5+bal)*POLAR_FACTOR_Y*BLOCK-0.5*(POLAR_FACTOR_Y-1.0)*BLOCK)+Y_TOP,
-						 	 (int)(((POLAR_FACTOR_X-1.0)-(low-last_x-0.5))*BLOCK)+X_LEFT,
+						 	 (int)(((POLAR_FACTOR_X-1.0-shift)-(low-last_x-0.5))*BLOCK)+X_LEFT,
 						 	 (int)((mid-last_y-0.5+bal)*POLAR_FACTOR_Y*BLOCK-0.5*(POLAR_FACTOR_Y-1.0)*BLOCK)+Y_TOP);
 				if (this.model.isPolarBalance()) {
-					g2d.drawOval((int)(((POLAR_FACTOR_X-1.0)-(low-cur_x-0.5))*BLOCK-0.5*BLOCK)+X_LEFT,
+					g2d.drawOval((int)(((POLAR_FACTOR_X-1.0-shift)-(low-cur_x-0.5))*BLOCK-0.5*BLOCK)+X_LEFT,
 							 	 (int)((mid+cur_y-0.5+bal)*POLAR_FACTOR_Y*BLOCK-0.5*(POLAR_FACTOR_Y-1.0)*BLOCK-0.5*BLOCK)+Y_TOP, BLOCK, BLOCK);
-					g2d.drawOval((int)(((POLAR_FACTOR_X-1.0)-(low-cur_x-0.5))*BLOCK-0.5*BLOCK)+X_LEFT,
+					g2d.drawOval((int)(((POLAR_FACTOR_X-1.0-shift)-(low-cur_x-0.5))*BLOCK-0.5*BLOCK)+X_LEFT,
 						 	 	 (int)((mid-cur_y-0.5+bal)*POLAR_FACTOR_Y*BLOCK-0.5*(POLAR_FACTOR_Y-1.0)*BLOCK-0.5*BLOCK)+Y_TOP, BLOCK, BLOCK);
 				}
 				last_x = cur_x;
