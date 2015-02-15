@@ -2,6 +2,7 @@ package de.sander.til;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.Iterator;
@@ -121,6 +122,7 @@ public class Primes {
 	}
 	
 	public int primesUntil(int number) {
+		if (number <= 1) return 0;
 		int p;
 		if (this.isPrime(number)) p = number;
 		else p = this.getPrevPrime(number);
@@ -222,7 +224,8 @@ public class Primes {
 	public int getMatchCount(int number) {
 		Map<Integer,Integer> ret = this.getMatches(number);
 		if (ret == null) return 0;
-		return ret.size();
+		int count = ret.size();
+		return (count+count%2)/2;
 	}
 	
 	public int getMaxMatchCount(int number) {
@@ -374,19 +377,14 @@ public class Primes {
 	}
 	
 	public int calculatePrimeCount(int number) {
+		if (number <= 0) return 0;
 		if (this.calcPrimeCount.containsKey(number)) return this.calcPrimeCount.get(number);
-		int fac = 0;
-		int count = number;
-		while (fac*fac <= number) {
-			++fac;
-			if (!this.isPrime(fac)) continue;
-			int devide = 1;
-			for (int i = 2; i <= fac; ++i) if (this.isPrime(i)) devide *= i;
-			double dsub = (double)(number - fac*fac) / (double)devide;
-			int isub = (int)Math.ceil(dsub);
-			count -= isub;
-		}
-		count /= 2;
+		
+		int count=0, n = number;
+		HashSet<Integer> comps = this.A(n);
+		
+		count = (n-1)-comps.size();
+		
 		this.calcPrimeCount.put(number, count);
 		return count;
 	}
@@ -397,15 +395,62 @@ public class Primes {
 			temp = this.calculatePrimeCount(number);
 			if (temp > ret) ret = temp;
 		}
-		return ret;
+		return ret+1;
 	}
 	
 	public int calculateMatchCount(int number) {
-		return 0;
+		if (number <= 2) return 0;
+		if (this.calcMatchCount.containsKey(number)) return this.calcMatchCount.get(number);
+		
+		int count=0, n = number;
+		HashSet<Integer> comps = this.A(n);
+		comps.addAll(this.U(n));
+		
+		count = (n-1)-comps.size();
+		
+		this.calcMatchCount.put(number, count);
+		return count;
 	}
 	
 	public int getMaxMatchCountCalc(int number) {
-		return 1;
+		int ret = 0, temp;
+		for (int i = 1; i <= number; ++i) {
+			temp = this.calculateMatchCount(number);
+			if (temp > ret) ret = temp;
+		}
+		return ret+1;
+	}
+	
+	private HashSet<Integer> A(int n) {
+		int comp=0;
+		HashSet<Integer> comps = new HashSet<Integer>();
+		for (int i = 3; i <= n; ++i) {
+			for (int k = 2; k <= i-1; ++k) {
+				comp = Ti(i,k);
+				if (comp >= 2 && comp <= n) comps.add(comp);
+			}
+		}
+		return comps;
+	}
+	
+	private int Ti(int i, int k) {
+		return k*(i+1-k);
+	}
+	
+	private HashSet<Integer> U(int n) {
+		int comp=0;
+		HashSet<Integer> comps = new HashSet<Integer>();
+		for (int i = 3; i <= n; ++i) {
+			for (int k = 2; k <= i-1; ++k) {
+				comp = Li(n,i,k);
+				if (comp >= 2 && comp <= n) comps.add(comp);
+			}
+		}
+		return comps;
+	}
+	
+	private int Li(int n, int i, int k) {
+		return 2*n - Ti(i,k);
 	}
 
 }

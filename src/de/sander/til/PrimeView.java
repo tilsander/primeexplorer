@@ -566,7 +566,7 @@ public class PrimeView extends JPanel {
 				xc_val = 2 + X_CHART_LEFT + (int)((double)Primes._().calculatePrimeCount(y)*chart_px);
 				break;
 			case MATCH_COUNT_CALC:
-				xc_val = X_CHART_LEFT + (int)((double)Primes._().calculateMatchCount(y)*chart_px);
+				xc_val = 2 + X_CHART_LEFT + (int)((double)Primes._().calculateMatchCount(y)*chart_px);
 				break;
 			}
 			g2d.drawLine(xc_val, (yp-1)*BLOCK+Y_TOP, xc_val, yp*BLOCK+Y_TOP);
