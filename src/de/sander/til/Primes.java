@@ -424,7 +424,7 @@ public class Primes {
 	private HashSet<Integer> A(int n) {
 		int comp=0;
 		HashSet<Integer> comps = new HashSet<Integer>();
-		for (int i = 3; i <= n; ++i) {
+		for (int i = 3; i < n; ++i) {
 			for (int k = 2; k <= i-1; ++k) {
 				comp = Ti(i,k);
 				if (comp >= 2 && comp <= n) comps.add(comp);
