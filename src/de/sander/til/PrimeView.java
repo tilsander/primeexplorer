@@ -36,7 +36,9 @@ public class PrimeView extends JPanel {
 		VOID_COUNT,
 		FIRST_VOID,
 		PRIME_COUNT_CALC,
-		MATCH_COUNT_CALC
+		MATCH_COUNT_CALC,
+		DIVISOR_SUM,
+		EULER_TOTIENT
 	}
 	
 	class Point2D {
@@ -187,6 +189,8 @@ public class PrimeView extends JPanel {
 			if (this.model.isChartFirstVoid()) this.drawChart(ChartType.FIRST_VOID);
 			if (this.model.isChartPrimeCountCalc()) this.drawChart(ChartType.PRIME_COUNT_CALC);
 			if (this.model.isChartMatchCountCalc()) this.drawChart(ChartType.MATCH_COUNT_CALC);
+			if (this.model.isChartDivisorSum()) this.drawChart(ChartType.DIVISOR_SUM);
+			if (this.model.isChartEulerTotient()) this.drawChart(ChartType.EULER_TOTIENT);
 			this.drawChartDesc();
 		}
 		if (this.model.isStats()) this.drawStats();
@@ -485,6 +489,12 @@ public class PrimeView extends JPanel {
 		case MATCH_COUNT_CALC:
 			this.g2d.setColor(this.model.getColor("CHART_MATCH_COUNT_CALC"));
 			break;
+		case DIVISOR_SUM:
+			this.g2d.setColor(this.model.getColor("CHART_DIVISOR_SUM"));
+			break;
+		case EULER_TOTIENT:
+			this.g2d.setColor(this.model.getColor("CHART_EULER_TOTIENT"));
+			break;
 		default:
 			return;
 		}
@@ -506,6 +516,8 @@ public class PrimeView extends JPanel {
 			if (this.model.isChartVoidCount()) devs.add((double)(Primes._().getMaxVoidCount(Y_MAX)));
 			if (this.model.isChartPrimeCountCalc()) devs.add((double)(Primes._().getMaxPrimeCountCalc(Y_MAX)));
 			if (this.model.isChartMatchCountCalc()) devs.add((double)(Primes._().getMaxMatchCountCalc(Y_MAX)));
+			if (this.model.isChartDivisorSum()) devs.add((double)(Primes._().getMaxDivisorSum(Y_MAX, this.model.getDivisorSumExponent())));
+			if (this.model.isChartEulerTotient()) devs.add((double)(Primes._().getMaxEulerTotient(Y_MAX)));
 			cpx_dev = Collections.max(devs);
 		} else {
 			switch (type) {
@@ -533,6 +545,12 @@ public class PrimeView extends JPanel {
 				break;
 			case MATCH_COUNT_CALC:
 				cpx_dev = (double)(Primes._().getMaxMatchCountCalc(Y_MAX));
+				break;
+			case DIVISOR_SUM:
+				cpx_dev = (double)(Primes._().getMaxDivisorSum(Y_MAX, this.model.getDivisorSumExponent()));
+				break;
+			case EULER_TOTIENT:
+				cpx_dev = (double)(Primes._().getMaxEulerTotient(Y_MAX));
 				break;
 			default:
 				return;
@@ -567,6 +585,12 @@ public class PrimeView extends JPanel {
 				break;
 			case MATCH_COUNT_CALC:
 				xc_val = 2 + X_CHART_LEFT + (int)((double)Primes._().calculateMatchCount(y)*chart_px);
+				break;
+			case DIVISOR_SUM:
+				xc_val = X_CHART_LEFT + (int)((double)Primes._().getDivisorSum(y, this.model.getDivisorSumExponent())*chart_px);
+				break;
+			case EULER_TOTIENT:
+				xc_val = X_CHART_LEFT + (int)((double)Primes._().getEulerTotient(y)*chart_px);
 				break;
 			}
 			g2d.drawLine(xc_val, (yp-1)*BLOCK+Y_TOP, xc_val, yp*BLOCK+Y_TOP);
@@ -628,6 +652,18 @@ public class PrimeView extends JPanel {
 			if (this.model.isChartMatchCountCalc()) {
 				this.g2d.setColor(this.model.getColor("CHART_MATCH_COUNT_CALC"));
 				str = "" + Primes._().calculateMatchCount(y);
+				g2d.drawString(str, WIDTH-X_RIGHT+10, yp*BLOCK+((int)STRING_HEIGHT+2)*chartCount);
+				chartCount++;
+			}
+			if (this.model.isChartDivisorSum()) {
+				this.g2d.setColor(this.model.getColor("CHART_DIVISOR_SUM"));
+				str = "" + Primes._().getDivisorSum(y, this.model.getDivisorSumExponent());
+				g2d.drawString(str, WIDTH-X_RIGHT+10, yp*BLOCK+((int)STRING_HEIGHT+2)*chartCount);
+				chartCount++;
+			}
+			if (this.model.isChartEulerTotient()) {
+				this.g2d.setColor(this.model.getColor("CHART_EULER_TOTIENT"));
+				str = "" + Primes._().getEulerTotient(y);
 				g2d.drawString(str, WIDTH-X_RIGHT+10, yp*BLOCK+((int)STRING_HEIGHT+2)*chartCount);
 				chartCount++;
 			}

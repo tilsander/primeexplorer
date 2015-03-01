@@ -25,13 +25,14 @@ public class PrimeModel {
 	private int blockSize = 12, xPos = 0, yPos = 0, mouseX = 0, mouseY = 0,
 				verticalStep=1, horizontalStep=1, verticalOffset=0, horizontalOffset=0,
 				window_width=1200, window_height=800, polySize=5, polyFactor=1, polyDelta=1,
-				factorX=0, factorY=1, factorZ=1;
+				factorX=0, factorY=1, factorZ=1, divisorSumExponent=1;
 	private boolean xyTransform = false,
 			exponents = true, drawRect = true, helper = true,
 			rays = true, rayBox = true, chart = true, chartProp = true, chartPrimeCountCalc=true, chartMatchCountCalc=true,
 			chartExp = true, chartPrimes = true, chartMatchCount = true, chartFirstMatch=true, chartFirstVoid=true, chartVoidCount=true,
 			chartExpSum = true, stats=true, primes=true, _changed=false, polynomials=true, checkedPattern=true, primeMirror=true,
-			polarFactors=true, factorOnlyOuter=true, factorOnlyNeeded=true, polarBalance=true, rotateView=true;
+			polarFactors=true, factorOnlyOuter=true, factorOnlyNeeded=true, polarBalance=true, rotateView=true,
+			chartDivisorSum=true, chartEulerTotient=true;
 	private PMMode pmmode=PMMode.NORMAL;
 	private PMView pmview=PMView.GOLDBACH;
 	private Color BACKGROUND=null,
@@ -70,6 +71,8 @@ public class PrimeModel {
 			CHART_VOID_COUNT=null,
 			CHART_PRIME_COUNT_CALC=null,
 			CHART_MATCH_COUNT_CALC=null,
+			CHART_DIVISOR_SUM=null,
+			CHART_EULER_TOTIENT=null,
 			PRIME_MIRROR=null,
 			POLAR_FACTOR_LEFT=null,
 			POLAR_FACTOR_RIGHT=null,
@@ -112,6 +115,8 @@ public class PrimeModel {
 		this.CHART_VOID_COUNT = new Color(225,145,90);
 		this.CHART_PRIME_COUNT_CALC = new Color(225,145,90);
 		this.CHART_MATCH_COUNT_CALC = new Color(85,145,190);
+		this.CHART_DIVISOR_SUM = new Color(180,205,170);
+		this.CHART_EULER_TOTIENT = new Color(225,190,140);
 		this.PRIME_MIRROR = new Color(255,235,235);
 		this.POLAR_FACTOR_LEFT = Color.RED;
 		this.POLAR_FACTOR_RIGHT = Color.GREEN;
@@ -156,6 +161,8 @@ public class PrimeModel {
 		if (cname.equals("CHART_VOID_COUNT")) return this.CHART_VOID_COUNT;
 		if (cname.equals("CHART_PRIME_COUNT_CALC")) return this.CHART_PRIME_COUNT_CALC;
 		if (cname.equals("CHART_MATCH_COUNT_CALC")) return this.CHART_MATCH_COUNT_CALC;
+		if (cname.equals("CHART_DIVISOR_SUM")) return this.CHART_DIVISOR_SUM;
+		if (cname.equals("CHART_EULER_TOTIENT")) return this.CHART_EULER_TOTIENT;
 		if (cname.equals("PRIME_MIRROR")) return this.PRIME_MIRROR;
 		if (cname.equals("POLAR_FACTOR_LEFT")) return this.POLAR_FACTOR_LEFT;
 		if (cname.equals("POLAR_FACTOR_RIGHT")) return this.POLAR_FACTOR_RIGHT;
@@ -200,6 +207,8 @@ public class PrimeModel {
 		if (cname.equals("CHART_VOID_COUNT")) this.CHART_VOID_COUNT = color;
 		if (cname.equals("CHART_PRIME_COUNT_CALC")) this.CHART_PRIME_COUNT_CALC = color;
 		if (cname.equals("CHART_MATCH_COUNT_CALC")) this.CHART_MATCH_COUNT_CALC = color;
+		if (cname.equals("CHART_DIVISOR_SUM")) this.CHART_DIVISOR_SUM = color;
+		if (cname.equals("CHART_EULER_TOTIENT")) this.CHART_EULER_TOTIENT = color;
 		if (cname.equals("PRIME_MIRROR")) this.PRIME_MIRROR = color;
 		if (cname.equals("POLAR_FACTOR_LEFT")) this.POLAR_FACTOR_LEFT = color;
 		if (cname.equals("POLAR_FACTOR_RIGHT")) this.POLAR_FACTOR_RIGHT = color;
@@ -243,6 +252,8 @@ public class PrimeModel {
 		        "CHART_VOID_COUNT",
 		        "CHART_PRIME_COUNT_CALC",
 		        "CHART_MATCH_COUNT_CALC",
+		        "CHART_DIVISOR_SUM",
+		        "CHART_EULER_TOTIENT",
 		        "PRIME_MIRROR",
 		        "POLAR_FACTOR_LEFT",
 		        "POLAR_FACTOR_RIGHT"};
@@ -659,6 +670,22 @@ public class PrimeModel {
 		this.changed();
 	}
 
+	public boolean isChartDivisorSum() {
+		return chartDivisorSum;
+	}
+
+	public void setChartDivisorSum(boolean chartDivisorSum) {
+		this.chartDivisorSum = chartDivisorSum;
+	}
+
+	public boolean isChartEulerTotient() {
+		return chartEulerTotient;
+	}
+
+	public void setChartEulerTotient(boolean chartEulerTotient) {
+		this.chartEulerTotient = chartEulerTotient;
+	}
+
 	public boolean isFactorOnlyOuter() {
 		return factorOnlyOuter;
 	}
@@ -703,6 +730,16 @@ public class PrimeModel {
 		this.changed();
 	}
 
+	public int getDivisorSumExponent() {
+		return divisorSumExponent;
+	}
+
+	public void setDivisorSumExponent(int divisorSumExponent) {
+		if (divisorSumExponent < 0) divisorSumExponent = 0;
+		this.divisorSumExponent = divisorSumExponent;
+		this.changed();
+	}
+
 	public Map<String,String> getInfo() {
 		Map<String,String> ret = new TreeMap<String,String>();
 		String str = "";
@@ -735,6 +772,7 @@ public class PrimeModel {
 		ret.put("_MODE",str);
 		ret.put("_BLOCK_SIZE",""+this.getBlockSize());
 		ret.put("_EXP_SUM [E]",""+this.isChartExpSum());
+		ret.put("_DIVISOR_EXP [<>]",""+this.getDivisorSumExponent());
 		ret.put("_CHART_PROP [P]",""+this.isChartProp());
 		ret.put("_SHOW_PRIMES [T]",""+this.isPrimes());
 		ret.put("_SHOW_FACTORS [B]",""+this.isRayBox());
@@ -756,6 +794,8 @@ public class PrimeModel {
 		ret.put("__CHART_FIRST_VOID [6]",""+this.isChartFirstVoid());
 		ret.put("__CHART_PRIME_COUNT_CALC [7]",""+this.isChartPrimeCountCalc());
 		ret.put("__CHART_MATCH_COUNT_CALC [8]",""+this.isChartMatchCountCalc());
+		ret.put("__CHART_DIVISOR_SUM [9]",""+this.isChartDivisorSum());
+		ret.put("__CHART_EULER_TOTIENT [0]",""+this.isChartEulerTotient());
 		ret.put("POS_X",""+this.getXPos());
 		ret.put("POS_Y",""+this.getYPos());
 		ret.put("STEP_X",""+this.getHorizontalStep());

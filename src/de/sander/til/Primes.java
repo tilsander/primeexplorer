@@ -13,11 +13,14 @@ public class Primes {
 	private Map<Integer,Integer> primes;
 	private Map<Integer,Map<Integer,Integer>> exponents; // (number, (prime_factor, exponent)) 
 	private Map<Integer,Map<Integer,Integer>> matches;
+	private Map<Integer,List<Integer>> divisors;
 	private Map<Integer,List<Integer>> voids;
 	private Map<String,Polynomial> polys;
 	private Map<Integer,Integer> calcPrimeCount;
 	private Map<Integer,Integer> calcMatchCount;
-	private int prime_offset = 0, prime_count=0;
+	private Map<Integer, Long> divisorSums;
+	private Map<Integer, Integer> totients;
+	private int prime_offset = 0, prime_count=0, divisor_offset=0;
 	private static Primes instance = null;
 	
 	class Polynomial {
@@ -53,10 +56,13 @@ public class Primes {
 		this.primes = new HashMap<Integer,Integer>();
 		this.exponents = new HashMap<Integer,Map<Integer,Integer>>();
 		this.matches = new HashMap<Integer,Map<Integer,Integer>>();
+		this.divisors = new HashMap<Integer,List<Integer>>();
 		this.voids = new HashMap<Integer,List<Integer>>();
 		this.polys = new HashMap<String,Polynomial>();
 		this.calcPrimeCount = new HashMap<Integer,Integer>();
 		this.calcMatchCount = new HashMap<Integer,Integer>();
+		this.divisorSums = new HashMap<Integer,Long>();
+		this.totients = new HashMap<Integer,Integer>();
 	}
 	
 	public static Primes getInstance() {
@@ -86,16 +92,16 @@ public class Primes {
 		}
 	}
 	
-	private void generateExponents(int num) {
+	private void generateExponents(int number) {
 		Map<Integer,Integer> entry = new TreeMap<Integer,Integer>();
-		this.generatePrimes(num);
-		for (int i = 2; i <= num; ++i) {
+		this.generatePrimes(number);
+		for (int i = 2; i <= number; ++i) {
 			if (this.isPrime(i)) {
-				int exp = this.getExp(i, num);
+				int exp = this.getExp(i, number);
 				if (exp > 0) entry.put(i,exp);
 			}
 		}
-		this.exponents.put(num,entry);
+		this.exponents.put(number,entry);
 	}
 	
 	private void generateMatches(int number) {
@@ -112,6 +118,13 @@ public class Primes {
 			}
 		}
 		this.matches.put(number,entry);
+	}
+	
+	private void generateDivisors(int number) {
+		if (this.divisors.containsKey(number)) return;
+		ArrayList<Integer> divs = new ArrayList<Integer>(); 
+		for (int d = 1; d <= number; ++d) if (number%d == 0) divs.add(d);
+		this.divisors.put(number, divs);
 	}
 	
 	// query methods
@@ -336,6 +349,58 @@ public class Primes {
 	public void cancelPoly(int xp, int yp) {
 		String pos_key = ""+xp+"."+yp;
 		this.polys.put(pos_key, null);
+	}
+	
+	public long getDivisorSum(int number, int exponent) {
+		if (this.divisorSums.containsKey(number)) return this.divisorSums.get(number);
+		this.generateDivisors(number);
+		List<Integer> divs = this.divisors.get(number);
+		if (divs == null) return 0;
+		long sum = 0;
+		for (Integer div : divs) sum += Math.pow(div, exponent);
+		this.divisorSums.put(number, sum);
+		return sum;
+	}
+	
+	public long getMaxDivisorSum(int number, int exponent) {
+		long max = 0, temp = 0;
+		for (int i = 1; i <= number; ++i) {
+			temp = this.getDivisorSum(i,exponent);
+			if (temp > max) max = temp;
+		}
+		return max;
+	}
+	
+	public int getEulerTotient(int number) {
+		if (this.totients.containsKey(number)) return this.totients.get(number);
+		int tot = 1;
+		this.generateDivisors(number);
+		List<Integer> ndivs = this.divisors.get(number);
+		for (int t = 2; t < number; ++t) {
+			this.generateDivisors(t);
+			boolean share = false;
+			for (Integer td : this.divisors.get(t)) {
+				if (td != 1) {
+					if (ndivs.contains(td)) share = true;
+				}
+			}
+			if (!share) ++tot;
+		}
+		this.totients.put(number, tot);
+		return tot;
+	}
+	
+	public int getMaxEulerTotient(int number) {
+		int max = 0, temp = 0;
+		for (int i = 1; i <= number; ++i) {
+			temp = this.getEulerTotient(i);
+			if (temp > max) max = temp;
+		}
+		return max;
+	}
+	
+	public void resetDivisorSum() {
+		this.divisorSums.clear();
 	}
 	
 	// algorithms

@@ -13,7 +13,7 @@ public class PrimeExplorer {
 	
 	public PrimeExplorer() {
 		
-		PrimeTest.test();
+		//PrimeTest.test();
 		
 		this.model = new StateLoader().loadModel();
 		this.controller = new PrimeController(this.model,new PrimeView(model));

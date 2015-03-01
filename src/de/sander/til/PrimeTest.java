@@ -17,6 +17,7 @@ public class PrimeTest {
 	}
 	
 	public static void test() {
+		
 		/*
 		int temp;
 		for (int n = 4; n <= 200; ++n) {

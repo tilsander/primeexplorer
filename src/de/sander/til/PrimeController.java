@@ -361,6 +361,20 @@ public class PrimeController implements MouseMotionListener, MouseListener, KeyL
 		        	case '8':
 		        		this.model.setChartMatchCountCalc(!this.model.isChartMatchCountCalc());
 		        		break;
+		        	case '9':
+		        		this.model.setChartDivisorSum(!this.model.isChartDivisorSum());
+		        		break;
+		        	case '0':
+		        		this.model.setChartEulerTotient(!this.model.isChartEulerTotient());
+		        		break;
+		        	case '<':
+		        		this.model.setDivisorSumExponent(this.model.getDivisorSumExponent()-1);
+		        		Primes._().resetDivisorSum();
+		        		break;
+		        	case '>':
+		        		this.model.setDivisorSumExponent(this.model.getDivisorSumExponent()+1);
+		        		Primes._().resetDivisorSum();
+		        		break;
 					}
 		        	break;
 		     }
