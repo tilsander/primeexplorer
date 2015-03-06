@@ -14,12 +14,13 @@ public class PrimeApplication implements SettingsListener {
 
 	public PrimeApplication() {
 		this.settings = new StateLoader().loadSettings();
+		this.settings.setListener(this);
 		this.controller = new HashMap<PrimeModel,PrimeController>();
 		Iterator<Entry<String, PrimeModel>> iter = this.settings.getOpenModels().entrySet().iterator();
 		while (iter.hasNext()) {
 			Map.Entry<String, PrimeModel> entry = (Map.Entry<String, PrimeModel>) iter.next();
 			PrimeModel model = (PrimeModel) entry.getValue();
-			this.controller.put(model,new PrimeController(model));
+			this.controller.put(model,new PrimeController(model,this.settings));
 		}
 		Runtime.getRuntime().addShutdownHook(new Thread(){
             public void run(){
@@ -56,9 +57,14 @@ public class PrimeApplication implements SettingsListener {
 	}
 
 	@Override
+	public void modelCreated(PrimeModel model) {
+
+	}
+
+	@Override
 	public void modelOpened(PrimeModel model) {
 		PrimeController pcon = this.controller.get(model);
-		if (pcon == null) this.controller.put(model, new PrimeController(model));
+		if (pcon == null) this.controller.put(model, new PrimeController(model,this.settings));
 	}
 
 	@Override
@@ -74,6 +80,11 @@ public class PrimeApplication implements SettingsListener {
 			pcon.focusView();
 			this.colorer.setModel(model);
 		}
+	}
+
+	@Override
+	public void closeApp() {
+		this.stopApp();
 	}
 	
 }

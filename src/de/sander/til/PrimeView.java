@@ -16,6 +16,7 @@ import java.awt.Dimension;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.KeyListener;
+import java.awt.event.WindowListener;
 
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
@@ -122,8 +123,7 @@ public class PrimeView extends JPanel {
 	public PrimeView(PrimeModel mod) {
 		this.setModel(mod);
 		this.viewFrame = new JFrame();
-		this.viewFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.viewFrame.setTitle("PrimeExplorer");
+		this.viewFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		this.typingArea = new JTextField(1);
 		this.typingArea.setPreferredSize(new Dimension(3, 2));
 		this.typingArea.setOpaque(true);
@@ -133,6 +133,7 @@ public class PrimeView extends JPanel {
 		this.add(this.typingArea, BorderLayout.PAGE_END);
 		this.viewFrame.getContentPane().add(this);
 		this.viewFrame.setSize(this.model.getWindowWidth(), this.model.getWindowHeight());
+		this.viewFrame.setTitle(this.model.getTitle());
 		this.viewFrame.addComponentListener(new ComponentListener() {
 			public void componentResized(ComponentEvent e) {
 				model.setWindowWidth(viewFrame.getWidth());
@@ -146,6 +147,11 @@ public class PrimeView extends JPanel {
 	
 	public void focus() {
 		this.viewFrame.setVisible(true);
+	}
+	
+	public void close() {
+		this.viewFrame.setVisible(false);
+		this.viewFrame = null;
 	}
 	
 	public void setMenuBar(JMenuBar menu) {
@@ -1068,6 +1074,10 @@ public class PrimeView extends JPanel {
 	
 	public void addKeyListener(KeyListener keyl) {
 		this.typingArea.addKeyListener(keyl);
+	}
+	
+	public void addWindowListener(WindowListener wl) {
+		this.viewFrame.addWindowListener(wl);
 	}
 
 }

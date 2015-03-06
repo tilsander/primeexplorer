@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public class StateLoader {
 	
@@ -95,7 +96,7 @@ public class StateLoader {
 					while ((sCurrentLine = br.readLine()) != null) {
 						json += sCurrentLine;
 					}
-					return new Settings(new Gson().fromJson(json,Settings.State.class));
+					return new Settings(new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create().fromJson(json,Settings.State.class));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -127,7 +128,7 @@ public class StateLoader {
 		try {
 			fw = new FileWriter(setting_file.getAbsoluteFile());
 			BufferedWriter bw = new BufferedWriter(fw);
-			bw.write(new Gson().toJson(settings.getState()));
+			bw.write(new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create().toJson(settings.getState()));
 			bw.close();
 		} catch (IOException e) {
 			e.printStackTrace();

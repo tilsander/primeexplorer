@@ -1,6 +1,7 @@
 package de.sander.til;
 
 import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -54,15 +55,15 @@ public class PrimeTest {
 			polys.put(i,poly);
 		}
 		
-		Iterator iter = points.entrySet().iterator();
+		Iterator<Entry<Integer, TreeMap<Integer, Integer>>> iter = points.entrySet().iterator();
 		System.out.println("n	i	k");
 		while (iter.hasNext()) {
-			Map.Entry entry = (Map.Entry)iter.next();
+			Map.Entry<Integer, TreeMap<Integer, Integer>> entry = (Map.Entry<Integer, TreeMap<Integer, Integer>>)iter.next();
 			Integer nk = (Integer)entry.getKey();
 			TreeMap<Integer,Integer> np = (TreeMap<Integer,Integer>)entry.getValue();
-			Iterator inner = np.entrySet().iterator();
+			Iterator<Entry<Integer, Integer>> inner = np.entrySet().iterator();
 			while (inner.hasNext()) {
-				Map.Entry ie = (Map.Entry)inner.next();
+				Map.Entry<Integer, Integer> ie = (Map.Entry<Integer, Integer>)inner.next();
 				Integer i = (Integer)ie.getKey();
 				Integer k = (Integer)ie.getValue();
 				System.out.println(""+nk+"	"+i+"	"+(((i/2+1)-k)*(-1)));

@@ -1,16 +1,21 @@
 package de.sander.til;
 
-import javax.swing.JMenuBar;
+import java.awt.FileDialog;
+import java.awt.Frame;
+import java.io.File;
 
+import javax.swing.JMenuBar;
 
 public class MenuController implements MenuListener {
 	
 	private PrimeModel model;
 	private MenuView view;
+	private Settings settings;
 	
-	public MenuController(PrimeModel model, MenuView view) {
+	public MenuController(PrimeModel model, Settings settings) {
 		this.model = model;
-		this.view = view;
+		this.settings = settings;
+		this.view = new MenuView(this.model);
 		this.view.setListener(this);
 	}
 	
@@ -58,6 +63,7 @@ public class MenuController implements MenuListener {
 			this.model.setChartVoidCount(!this.model.isChartVoidCount());
 			break;
 		case CLOSE_FILE:
+			this.settings.closeModel(this.model);
 			break;
 		case DIVISOR_EXP:
 			this.model.setPmmode(PrimeModel.PMMode.DIVISOR_EXP);
@@ -96,8 +102,10 @@ public class MenuController implements MenuListener {
 			this.model.setPrimeMirror(!this.model.isPrimeMirror());
 			break;
 		case NEW_FILE:
+			this.createModel();
 			break;
 		case OPEN_FILE:
+			this.openModel();
 			break;
 		case ORIGIN:
 			this.model.setXPos(0);
@@ -221,11 +229,29 @@ public class MenuController implements MenuListener {
 		}
 	}
 	
-	public void openDocumentation() {
+	private void openModel() {
+		FileDialog dialog = new FileDialog((Frame)null);
+		dialog.setVisible(true);
+		String file = dialog.getFile();
+		String dir = dialog.getDirectory();
+		if (file != null) this.settings.openModel(new File(dir,file).getPath());
+	}
+	
+	private void createModel() {
+		FileDialog dialog = new FileDialog((Frame)null, "New File", FileDialog.SAVE);
+		dialog.setVisible(true);
+		String file = dialog.getFile();
+		String dir = dialog.getDirectory();
+		if (file != null) {
+			this.settings.createModel(new File(dir,file).getPath());
+		}
+	}
+	
+	private void openDocumentation() {
 		
 	}
 	
-	public void openAbout() {
+	private void openAbout() {
 		PrimeUtil.openWebpage("http://www.til-sander.de/");
 	}
 

@@ -4,10 +4,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.Iterator;
 import java.util.Map;
 
+/**
+ * @todo group divisor sums by exponents
+ * @author sandtil
+ *
+ */
 public class Primes {
 
 	private Map<Integer,Integer> primes;
@@ -20,7 +26,7 @@ public class Primes {
 	private Map<Integer,Integer> calcMatchCount;
 	private Map<Integer, Long> divisorSums;
 	private Map<Integer, Integer> totients;
-	private int prime_offset = 0, prime_count=0, divisor_offset=0;
+	private int prime_offset = 0, prime_count=0;
 	private static Primes instance = null;
 	
 	class Polynomial {
@@ -188,9 +194,9 @@ public class Primes {
 		Map<Integer,Integer> m = this.getExponents(number);
 		if (m != null) {
 			int ret = 0;
-			Iterator iter = m.entrySet().iterator();
+			Iterator<Entry<Integer, Integer>> iter = m.entrySet().iterator();
 			while (iter.hasNext()) {
-				Map.Entry entry = (Map.Entry)iter.next();
+				Map.Entry<Integer, Integer> entry = (Map.Entry<Integer, Integer>)iter.next();
 				ret += (Integer)entry.getValue();
 			}
 			return ret;
@@ -406,26 +412,12 @@ public class Primes {
 	// algorithms
 	
 	private boolean checkPrime(int n) {
-		boolean cb = this.cPrime(n);
-		return cb;
-	}
-	
-	private boolean cPrime(int n) {
 		if(n < 2) return false;
 	    if(n == 2 || n == 3) return true;
 	    if(n%2 == 0 || n%3 == 0) return false;
 	    int sqrtN = (int)Math.sqrt(n)+1;
 	    for(int i = 6; i <= sqrtN; i += 6) {
 	        if(n%(i-1) == 0 || n%(i+1) == 0) return false;
-	    }
-	    return true;
-	}
-	
-	private boolean bPrime(int n) {
-		if(n < 2) return false;
-	    if(n == 2 || n == 3) return true;
-	    for(int i = 2; i <= (n/2+1); ++i) {
-	        if (n%i==0) return false;
 	    }
 	    return true;
 	}

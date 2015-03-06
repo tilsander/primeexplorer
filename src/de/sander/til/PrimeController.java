@@ -2,29 +2,37 @@ package de.sander.til;
 
 import java.awt.MouseInfo;
 import java.awt.Point;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 import javax.swing.SwingUtilities;
 
-public class PrimeController implements MouseMotionListener, MouseListener, KeyListener {
+public class PrimeController implements MouseMotionListener, MouseListener, KeyListener, FocusListener, WindowListener {
 	
 	private PrimeModel model;
 	private PrimeView view;
 	private MenuController menu;
+	private Settings settings;
 	private boolean REFRESH=true;
 	
-	public PrimeController(PrimeModel mod) {
+	public PrimeController(PrimeModel mod, Settings settings) {
 		this.model = mod;
+		this.settings = settings;
 		this.view = new PrimeView(this.model);
+		this.menu = new MenuController(this.model, this.settings);
+		this.view.setMenuBar(this.menu.getMenuBar());
 		this.view.addMouseMotionListener(this);
 		this.view.addMouseListener(this);
 		this.view.addKeyListener(this);
-		this.menu = new MenuController(this.model, new MenuView(this.model));
-		this.view.setMenuBar(this.menu.getMenuBar());
+		this.view.addFocusListener(this);
+		this.view.addWindowListener(this);
 		this.focusView();
 	}
 	
@@ -33,7 +41,7 @@ public class PrimeController implements MouseMotionListener, MouseListener, KeyL
 	}
 	
 	public void closeView() {
-		
+		this.view.close();
 	}
 	
 	public void updateView() {
@@ -105,6 +113,8 @@ public class PrimeController implements MouseMotionListener, MouseListener, KeyL
 	@Override
 	public void mouseExited(MouseEvent e) {}
 
+	// KeyListener
+	
 	@Override
 	public void keyTyped(KeyEvent e) {}
 
@@ -185,5 +195,40 @@ public class PrimeController implements MouseMotionListener, MouseListener, KeyL
 
 	@Override
 	public void keyReleased(KeyEvent e) {}
+
+	// FocusListener
+	
+	@Override
+	public void focusGained(FocusEvent e) {
+		this.settings.setCurrentModel(this.model);
+	}
+
+	@Override
+	public void focusLost(FocusEvent e) {}
+	
+	// WindowListener
+	
+	@Override
+	public void windowOpened(WindowEvent e) {}
+
+	@Override
+	public void windowClosing(WindowEvent e) {
+		this.settings.closeModel(this.model);
+	}
+
+	@Override
+	public void windowClosed(WindowEvent e) {}
+
+	@Override
+	public void windowIconified(WindowEvent e) {}
+
+	@Override
+	public void windowDeiconified(WindowEvent e) {}
+
+	@Override
+	public void windowActivated(WindowEvent e) {}
+
+	@Override
+	public void windowDeactivated(WindowEvent e) {}
 
 }

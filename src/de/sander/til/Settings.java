@@ -1,10 +1,12 @@
 package de.sander.til;
 
+import java.io.File;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.TreeMap;
 
 public class Settings {
 	
@@ -14,12 +16,13 @@ public class Settings {
 	
 	static class State {
 		
-		private Set<String> open_models, recently_opened;
+		private Set<String> open_models;
+		private Map<Long,String> recently_opened;
 		private String current_model;
 		
 		public State() {
 			this.open_models = new HashSet<String>();
-			this.recently_opened = new HashSet<String>();
+			this.recently_opened = new TreeMap<Long,String>();
 		}
 		
 	}
@@ -34,7 +37,10 @@ public class Settings {
 		this.open_models = sl.loadModels(this);
 		if (this.open_models.isEmpty()) {
 			String model_file = PrimeUtil.getNewFile(sl.getHomeDirectory(), "primes.json").getPath();
-			this.open_models.put(model_file,new PrimeModel());
+			PrimeModel model = new PrimeModel();
+			model.setTitle(new File(model_file).getName());
+			this.open_models.put(model_file,model);
+			this.state.current_model = model_file;
 		}
 		this.setCurrentModel(this.state.current_model);
 	}
@@ -55,7 +61,7 @@ public class Settings {
 		return this.state.open_models;
 	}
 	
-	public Set<String> getRecentlyOpened() {
+	public Map<Long,String> getRecentlyOpened() {
 		return this.state.recently_opened;
 	}
 	
@@ -78,16 +84,32 @@ public class Settings {
 		this.setCurrentModel(this.getFileName(cur_mod));
 	}
 	
-	public void openModel(String model) {
-		this.state.open_models.add(model);
-		this.state.recently_opened.remove(model);
-		if (this.listener != null) this.listener.modelOpened(this.open_models.get(model));
+	public void createModel(String fileName) {
+		PrimeModel model = new PrimeModel();
+		model.setTitle(new File(fileName).getName());
+		this.open_models.put(fileName,model);
+		if (this.listener != null) this.listener.modelCreated(model);
+		this.openModel(fileName);
+		this.setCurrentModel(model);
+	}
+	
+	public void openModel(String fileName) {
+		this.state.open_models.add(fileName);
+		this.state.recently_opened.values().remove(fileName);
+		if (this.open_models.get(fileName) == null) this.open_models.put(fileName, new StateLoader().loadModel(fileName));
+		if (this.listener != null) this.listener.modelOpened(this.open_models.get(fileName));
 	}
 	
 	public void closeModel(String model) {
 		if (this.listener != null) this.listener.modelClosed(this.open_models.get(model));
 		this.state.open_models.remove(model);
-		this.state.recently_opened.add(model);
+		this.state.recently_opened.put(System.currentTimeMillis(),model);
+		this.open_models.remove(model);
+		if (this.open_models.size() == 0) if (this.listener != null) this.listener.closeApp();
+	}
+	
+	public void closeModel(PrimeModel model) {
+		this.closeModel(this.getFileName(model));
 	}
 	
 	private String getFileName(PrimeModel model) {
