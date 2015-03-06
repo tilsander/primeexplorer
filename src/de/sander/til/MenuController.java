@@ -6,12 +6,20 @@ import java.io.File;
 
 import javax.swing.JMenuBar;
 
+/**
+ * This class controls the menu bar and listens for menu actions
+ */
 public class MenuController implements MenuListener {
 	
 	private PrimeModel model;
 	private MenuView view;
 	private Settings settings;
 	
+	/**
+	 * 
+	 * @param model
+	 * @param settings
+	 */
 	public MenuController(PrimeModel model, Settings settings) {
 		this.model = model;
 		this.settings = settings;
@@ -19,10 +27,18 @@ public class MenuController implements MenuListener {
 		this.view.setListener(this);
 	}
 	
+	/**
+	 *
+	 * @return the menu bar of the menu view
+	 */
 	public JMenuBar getMenuBar() {
 		return this.view.getMenuBar();
 	}
-
+	
+	/**
+	 * react to the action
+	 * @param act a menu action
+	 */
 	@Override
 	public void handle(MenuListener.MenuAction act) {
 		switch (act) {
@@ -229,6 +245,9 @@ public class MenuController implements MenuListener {
 		}
 	}
 	
+	/**
+	 * create a open dialog
+	 */
 	private void openModel() {
 		FileDialog dialog = new FileDialog((Frame)null);
 		dialog.setVisible(true);
@@ -237,6 +256,9 @@ public class MenuController implements MenuListener {
 		if (file != null) this.settings.openModel(new File(dir,file).getPath());
 	}
 	
+	/**
+	 * create a file dialog 
+	 */
 	private void createModel() {
 		FileDialog dialog = new FileDialog((Frame)null, "New File", FileDialog.SAVE);
 		dialog.setVisible(true);
@@ -247,10 +269,16 @@ public class MenuController implements MenuListener {
 		}
 	}
 	
+	/**
+	 * open javadoc documentation
+	 */
 	private void openDocumentation() {
 		
 	}
 	
+	/**
+	 * open about webpage
+	 */
 	private void openAbout() {
 		PrimeUtil.openWebpage("http://www.til-sander.de/");
 	}

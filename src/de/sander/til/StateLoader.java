@@ -15,8 +15,16 @@ import java.util.Map.Entry;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+/**
+ * A StateLoader is used to load settings and models from json files
+ */
 public class StateLoader {
 	
+	/**
+	 * load all models that are open in the setting
+	 * @param settings
+	 * @return all open models stored by file name
+	 */
 	public Map<String,PrimeModel> loadModels(Settings settings) {
 		HashMap<String,PrimeModel> models = new HashMap<String,PrimeModel>(); 
 		for (String model : settings.getOpenModelNames()) {
@@ -25,6 +33,10 @@ public class StateLoader {
 		return models;
 	}
 	
+	/**
+	 * save all prime models
+	 * @param models the prime models stored by file name
+	 */
 	public void saveModels(Map<String,PrimeModel> models) {
 		Iterator<Entry<String, PrimeModel>> iter = models.entrySet().iterator();
 		while (iter.hasNext()) {
@@ -35,6 +47,11 @@ public class StateLoader {
 		}
 	}
 
+	/**
+	 * load a prime model from file
+	 * @param file_name the file name of the model
+	 * @return the prime model
+	 */
 	public PrimeModel loadModel(String file_name) {
 		File saved_model = new File(file_name);
 		if (saved_model.exists()) {
@@ -63,6 +80,11 @@ public class StateLoader {
 		return new PrimeModel();
 	}
 	
+	/**
+	 * save the model to file
+	 * @param model a prime model
+	 * @param file_name a file name
+	 */
 	public void saveModel(PrimeModel model, String file_name) {
 		File saved_model = new File(file_name);
     	if (!saved_model.exists()) {
@@ -85,8 +107,12 @@ public class StateLoader {
 		}
 	}
 	
+	/**
+	 * load the local settings
+	 * @return a settings instance
+	 */
 	public Settings loadSettings() {
-		File setting_file = new File(this.getHomeDirectory(),"settings.json");
+		File setting_file = new File(PrimeUtil.getContentDir(),"settings.json");
 		if (setting_file.exists()) {
 			BufferedReader br=null;
 			try {
@@ -113,8 +139,12 @@ public class StateLoader {
 		return new Settings();
 	}
 	
+	/**
+	 * save the settings to the local settings.json file
+	 * @param settings
+	 */
 	public void saveSettings(Settings settings) {
-		File setting_file = new File(this.getHomeDirectory(),"settings.json");
+		File setting_file = new File(PrimeUtil.getContentDir(),"settings.json");
     	if (!setting_file.exists()) {
     		try {
     			setting_file.createNewFile();
@@ -133,10 +163,6 @@ public class StateLoader {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-	
-	public String getHomeDirectory() {
-		return this.getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
 	}
 	
 }

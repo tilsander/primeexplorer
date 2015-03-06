@@ -7,8 +7,17 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+/**
+ * This class provides some static auxiliary functions
+ */
 public class PrimeUtil {
 	
+	/**
+	 * Create a unused filename. The path and file_name are used as a base.
+	 * @param path a file path
+	 * @param file_name a file name
+	 * @return a file which does not exist in the file system.
+	 */
 	public static File getNewFile(String path, String file_name) {
 		File file = new File(path,file_name);
 		int suffix = 2, last_index;
@@ -22,6 +31,10 @@ public class PrimeUtil {
 		return file;
 	}
 	
+	/**
+	 * open a webpage with the given uri
+	 * @param uri
+	 */
 	public static void openWebpage(URI uri) {
 	    Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
 	    if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
@@ -32,7 +45,11 @@ public class PrimeUtil {
 	        }
 	    }
 	}
-
+	
+	/**
+	 * open a webpage with the given url
+	 * @param uri
+	 */
 	public static void openWebpage(URL url) {
 	    try {
 	        openWebpage(url.toURI());
@@ -41,12 +58,27 @@ public class PrimeUtil {
 	    }
 	}
 	
+	/**
+	 * open a webpage with the given url
+	 * @param site
+	 */
 	public static void openWebpage(String site) {
 		try {
 			PrimeUtil.openWebpage(new URL(site));
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * @return the home directory name of the PrimeExplorer
+	 */
+	public static String getRootDir() {
+		return new File(new PrimeUtil().getClass().getProtectionDomain().getCodeSource().getLocation().getPath()).getParent();
+	}
+	
+	public static String getContentDir() {
+		return new File(PrimeUtil.getRootDir(),"content").getPath();
 	}
 
 }

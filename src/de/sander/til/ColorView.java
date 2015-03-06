@@ -32,20 +32,35 @@ public class ColorView extends JPanel {
 		this.viewFrame.setVisible(true);
 	}
 	
+	/**
+	 * sets the controller of this view and adds it as a listener
+	 * @param controller a color view controller
+	 */
 	public void setController(ColorController controller) {
 		this.controller = controller;
 		this.colors.addActionListener(this.controller);
 		this.chooser.getSelectionModel().addChangeListener(this.controller);
 	}
 	
+	/**
+	 * sets the color of the chooser
+	 * @param col the color to display
+	 */
 	public void setColor(Color col) {
 		this.chooser.setColor(col);
 	}
 	
+	/**
+	 * @return the current color
+	 */
 	public Color getColor() {
 		return this.chooser.getColor();
 	}
 	
+	/**
+	 * 
+	 * @return the selected color name
+	 */
 	public String getSelectedColorName() {
 		return (String)this.colors.getSelectedItem();
 	}

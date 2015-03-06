@@ -26,7 +26,9 @@ import javax.swing.border.EmptyBorder;
 
 import de.sander.til.PrimeModel.InfoEntry;
 
-
+/**
+ * A PrimeView renders the content of a prime model.
+ */
 public class PrimeView extends JPanel {
 	
 	private enum ColorType {
@@ -145,32 +147,57 @@ public class PrimeView extends JPanel {
         });
 	}
 	
+	/**
+	 * set the focus to the view frame
+	 */
 	public void focus() {
 		this.viewFrame.setVisible(true);
 	}
 	
+	/**
+	 * close the window
+	 */
 	public void close() {
 		this.viewFrame.setVisible(false);
 		this.viewFrame = null;
 	}
 	
+	/**
+	 * set the menu bar of this view
+	 * @param menu
+	 */
 	public void setMenuBar(JMenuBar menu) {
 		this.viewFrame.setJMenuBar(menu);
 	}
 	
+	/**
+	 * 
+	 * @return the prime model
+	 */
 	public PrimeModel getModel() {
 		return model;
 	}
 
+	/**
+	 * set the model of this view
+	 * @param model
+	 */
 	public void setModel(PrimeModel model) {
 		this.model = model;
 	}
 
+	/**
+	 * draw the view
+	 */
 	public void draw() {
 		this.setModel(model);
 		this.repaint();
 	}
 	
+	/**
+	 * initialize the view metric
+	 * @param g2d
+	 */
 	private void initMetric(Graphics2D g2d) {
 		if (this.metric == null) {
 			this.FONT = g2d.getFont();
@@ -179,12 +206,18 @@ public class PrimeView extends JPanel {
 		}
 	}
 
+	/**
+	 * paint the view
+	 */
 	public void paintComponent(Graphics g) {
 		this.g2d = (Graphics2D) g;
 		this.initMetric(g2d);
 		this.drawGoldbach();
 	}
 	
+	/**
+	 * draw the primes, exonents, rays, axis etc.
+	 */
 	private void drawGoldbach() {
 		this.setupEnv();
 		// draw view
@@ -213,6 +246,9 @@ public class PrimeView extends JPanel {
 		if (this.model.isStats()) this.drawStats();
 	}
 	
+	/**
+	 * draw the polar factors at the top
+	 */
 	private void drawPolarFactors() {
 		this.drawPolarPolys();
 		this.drawFactorField();
@@ -262,12 +298,18 @@ public class PrimeView extends JPanel {
 		this.POLAR_FACTOR_Z = this.model.getFactorZ();
 	}
 	
+	/**
+	 * draw the views background
+	 */
 	private void drawBackground() {
 		// clear background
 		g2d.setBackground(this.getBackgroundColor());
 		g2d.clearRect(0, 0, WIDTH, HEIGHT);
 	}
 	
+	/**
+	 * draws lines at the bottom right
+	 */
 	private void drawBottomRight() {
 		// right-bottom-border
 		g2d.setColor(this.getBackgroundColor());
@@ -278,6 +320,9 @@ public class PrimeView extends JPanel {
 		g2d.drawLine(WIDTH-this.X_RIGHT,this.Y_TOP,WIDTH-this.X_RIGHT,HEIGHT-this.Y_BOTTOM);
 	}
 	
+	/**
+	 * draws the x and y axis
+	 */
 	private void drawAxis() {
 		int x, y, y_str;
 		g2d.setColor(this.getBackgroundColor());
@@ -334,34 +379,9 @@ public class PrimeView extends JPanel {
 		}
 	}
 	
-	/*private void drawFactorAxis() {
-		int x, y;
-		g2d.setColor(this.getBackgroundColor());
-		g2d.fillRect(0, 0, X_LEFT-1, HEIGHT);
-		g2d.fillRect(0, 0, WIDTH, Y_TOP-1);
-		// draw view rect
-		g2d.setColor(this.model.getColor("LIGHT_WHITE"));
-		g2d.drawLine(X_LEFT-1, Y_TOP-1, X_LEFT-1, HEIGHT-1);
-		g2d.drawLine(X_LEFT-1, Y_TOP-1, WIDTH-1, Y_TOP-1);
-		g2d.setColor(this.getTextColor());
-		for (int yp = 1; yp <= Y_COUNT; ++yp) {
-			if (yp%Y_AXIS_DELTA!=0) continue;
-			y = yp;
-			g2d.drawString(""+y, 2, yp*BLOCK+Y_TOP);
-		}
-		
-		AffineTransform orig = g2d.getTransform();
-		g2d.rotate(-Math.PI/2);
-		for (int xp = 1; xp <= X_COUNT; ++xp) {
-			if (xp%Y_AXIS_DELTA!=0) continue;
-			x = xp + X_POS;
-			if (x == Y_POS/2) g2d.setColor(this.getHightlightTextColor());
-			g2d.drawString(""+x,-Y_TOP+4,xp*BLOCK+X_LEFT);
-			if (x == Y_POS/2) g2d.setColor(this.getTextColor());
-		}
-		g2d.setTransform(orig);
-	}*/
-	
+	/**
+	 * draw the number field
+	 */
 	private void drawField() {
 		int x, y, cp=0;
 		// blocks
@@ -407,6 +427,9 @@ public class PrimeView extends JPanel {
 		}
 	}
 	
+	/**
+	 * draw the factor field
+	 */
 	private void drawFactorField() {
 		int x, y;
 		if (!this.model.isPolarBalance()) {
@@ -456,6 +479,9 @@ public class PrimeView extends JPanel {
 		}
 	}
 	
+	/**
+	 * draw text
+	 */
 	private void drawText() {
 		int x, y, cp=0;
 		// text
@@ -479,6 +505,10 @@ public class PrimeView extends JPanel {
 		}
 	}
 	
+	/**
+	 * draw the chart with the specified type
+	 * @param type
+	 */
 	private void drawChart(ChartType type) {
 		
 		switch (type) {
@@ -614,6 +644,9 @@ public class PrimeView extends JPanel {
 		}
 	}
 	
+	/**
+	 * draw the chart description
+	 */
 	private void drawChartDesc() {
 		if (MOUSE_Y > Y_POS) {
 			int y = MOUSE_Y;
@@ -687,6 +720,10 @@ public class PrimeView extends JPanel {
 		}
 	}
 	
+	/**
+	 * draw the rays, i.e. the lines along the factors of order n
+	 * @return
+	 */
 	private Map<Integer,Point2D> drawRays() {
 		int x, y;
 		TreeMap<Integer,Point2D> rays = new TreeMap<Integer,Point2D>();
@@ -737,6 +774,10 @@ public class PrimeView extends JPanel {
 		return rays;
 	}
 	
+	/**
+	 * draw the order of the selected rays
+	 * @param rays
+	 */
 	private void drawRayOrder(Map<Integer,Point2D> rays) {
 		g2d.setColor(this.getHightlightTextColor());
 		Iterator<Entry<Integer, Point2D>> iter = rays.entrySet().iterator();
@@ -762,6 +803,9 @@ public class PrimeView extends JPanel {
 		}
 	}
 	
+	/**
+	 * draw the stats at the bottom
+	 */
 	private void drawStats() {
 		int start_y = HEIGHT - Y_BOTTOM + 40,
 			start_x = X_LEFT + 10;
@@ -800,6 +844,13 @@ public class PrimeView extends JPanel {
 		}
 	}
 	
+	/**
+	 * draw a composite as as product of primes, e.g. 12 = 2^2 * 3^1
+	 * @param product
+	 * @param x
+	 * @param y
+	 * @return the new postion
+	 */
 	private int drawPrimeProduct(Map<Integer,Integer> product, int x, int y) {
 		if (product == null) return 0;
 		int cur_x = x,
@@ -819,11 +870,21 @@ public class PrimeView extends JPanel {
 		return cur_x-x;
 	}
 	
+	/**
+	 * draw a box at the specified xy-position with the given width and height
+	 * @param x
+	 * @param y
+	 * @param width
+	 * @param height
+	 */
 	private void drawBox(int x, int y, int width, int height) {
 		if (this.model.isDrawRect() || (width == 1 && height == 1)) this.g2d.fillRect(x, y, width, height);
 		else this.g2d.fillOval(x, y, width, height);
 	}
 	
+	/**
+	 * draw all recognized polynomials within the view rect
+	 */
 	private void drawPolys() {
 		if (!this.model.isPolynomials() || this.model.isCheckedPattern() || this.model.getVerticalStep() > 1 || this.model.getHorizontalStep() > 1) return;
 		int x, y, y_sub=0,step=0,base=0,cur_x=0,cur_y=0,last_x=0,last_y=0, polySize=this.model.getPolySize();
@@ -863,6 +924,9 @@ public class PrimeView extends JPanel {
 		}
 	}
 	
+	/**
+	 * draw the polar polynomials at the top of the view
+	 */
 	private void drawPolarPolys() {
 		double mid, low, half, last_x, last_y, cur_x, cur_y, bal, shift;
 		shift = (double)X_POS;
@@ -912,10 +976,20 @@ public class PrimeView extends JPanel {
 		}
 	}
 	
+	/**
+	 * change the font
+	 * @param font
+	 */
 	private void changeFont(Font font) {
 		this.g2d.setFont(font);
 	}
 	
+	/**
+	 * 
+	 * @param x
+	 * @param y
+	 * @return the text at the position (x|y)
+	 */
 	private String getText(int x, int y) {
 		if (Primes._().isPrime(x)) {
 			int exp = Primes._().getExponent(x, y);
@@ -924,6 +998,13 @@ public class PrimeView extends JPanel {
 		return null;
 	}
 	
+	/**
+	 * 
+	 * @param x
+	 * @param y
+	 * @param ct
+	 * @return the color at the position (x|y)
+	 */
 	private Color getColor(int x, int y, ColorType ct) {
 		if (this.model.isPrimeMirror() && MOUSE_Y == y) {
 			if (Primes._().isPrime(MOUSE_Y*2-x) && ct == ColorType.BOX) {
@@ -1015,6 +1096,13 @@ public class PrimeView extends JPanel {
 		return null;
 	}
 	
+	/**
+	 * 
+	 * @param x
+	 * @param y
+	 * @param fix
+	 * @return true if the point is on a helper line
+	 */
 	private boolean isOnLine(int x, int y, int fix) {
 		if (x%2==0 && fix%2==1 || x%2==1 && fix%2==0) return false;
 		int x_d = x-fix;
@@ -1023,26 +1111,54 @@ public class PrimeView extends JPanel {
 		return false;
 	}
 	
+	/**
+	 * 
+	 * @return the background color of the view
+	 */
 	private Color getBackgroundColor() {
 		return this.model.getColor("BACKGROUND");
 	}
 	
+	/**
+	 * 
+	 * @return the text color of the view
+	 */
 	private Color getTextColor() {
 		return this.model.getColor("TEXT_COLOR");
 	}
 	
+	/**
+	 * 
+	 * @return the highlight text color of the view
+	 */
 	private Color getHightlightTextColor() {
 		return this.model.getColor("HIGHLIGHT_TEXT_COLOR");
 	}
 	
+	/**
+	 * 
+	 * @param x
+	 * @return the transformed x postion of the mouse pointer
+	 */
 	public int transformMouseX(int x) {
 		return this.transform(x, 0);
 	}
 
+	/**
+	 * 
+	 * @param y
+	 * @return the transformed y postion of the mouse pointer
+	 */
 	public int transformMouseY(int y) {
 		return this.transform(y, 1);
 	}
 	
+	/**
+	 * 
+	 * @param c
+	 * @param i 
+	 * @return
+	 */
 	private int transform(int c, int i) {
 		double temp = 0.0;
 		if (i == 0) {
@@ -1072,10 +1188,17 @@ public class PrimeView extends JPanel {
 		return y;
 	}
 	
+	/**
+	 * add a listener for key events in the typing area
+	 */
 	public void addKeyListener(KeyListener keyl) {
 		this.typingArea.addKeyListener(keyl);
 	}
 	
+	/**
+	 * add a listener for window events of the views frame
+	 * @param wl
+	 */
 	public void addWindowListener(WindowListener wl) {
 		this.viewFrame.addWindowListener(wl);
 	}

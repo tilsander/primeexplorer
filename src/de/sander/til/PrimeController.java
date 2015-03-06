@@ -14,6 +14,10 @@ import java.awt.event.WindowListener;
 
 import javax.swing.SwingUtilities;
 
+/**
+ * The PrimeController controls a PrimeView.
+ * It listens for Mouse-, Key-, Focus- and Windowevents.
+ */
 public class PrimeController implements MouseMotionListener, MouseListener, KeyListener, FocusListener, WindowListener {
 	
 	private PrimeModel model;
@@ -22,6 +26,11 @@ public class PrimeController implements MouseMotionListener, MouseListener, KeyL
 	private Settings settings;
 	private boolean REFRESH=true;
 	
+	/**
+	 * 
+	 * @param mod
+	 * @param settings
+	 */
 	public PrimeController(PrimeModel mod, Settings settings) {
 		this.model = mod;
 		this.settings = settings;
@@ -36,14 +45,23 @@ public class PrimeController implements MouseMotionListener, MouseListener, KeyL
 		this.focusView();
 	}
 	
+	/**
+	 * focus the prime view
+	 */
 	public void focusView() {
 		this.view.focus();		
 	}
 	
+	/**
+	 * close the prime view
+	 */
 	public void closeView() {
 		this.view.close();
 	}
 	
+	/**
+	 * update the prime view
+	 */
 	public void updateView() {
 		if (this.REFRESH || this.model.isChanged()) {
 			this.REFRESH = false;
@@ -51,6 +69,9 @@ public class PrimeController implements MouseMotionListener, MouseListener, KeyL
 		}
 	}
 	
+	/**
+	 * refresh the the mouse pointer position
+	 */
 	public void refreshMouse() {
 		Point b = null;
 		try {
@@ -64,10 +85,18 @@ public class PrimeController implements MouseMotionListener, MouseListener, KeyL
 		this.setXY(x, y);
 	}
 	
+	/**
+	 * set the refresh flag
+	 */
 	public void refreshScreen() {
 		this.REFRESH = true;
 	}
 	
+	/**
+	 * set the current mouse pointer position
+	 * @param x
+	 * @param y
+	 */
 	public void setXY(int x, int y) {
 		x = this.view.transformMouseX(x);
 		y = this.view.transformMouseY(y);

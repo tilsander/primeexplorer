@@ -2,6 +2,9 @@ package de.sander.til;
 
 public interface MenuListener {
 
+	/**
+	 * this enum defines all actions of a menu
+	 */
 	public enum MenuAction {
 		NEW_FILE,
 		OPEN_FILE,
@@ -51,6 +54,10 @@ public interface MenuListener {
 		ABOUT
 	}
 	
+	/**
+	 * handle the given menu action
+	 * @param act
+	 */
 	public void handle(MenuListener.MenuAction act);
 
 }

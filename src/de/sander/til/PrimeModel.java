@@ -4,8 +4,14 @@ import java.awt.Color;
 import java.util.TreeMap;
 import java.util.Map;
 
+/**
+ * This class stores the state of a PrimeView
+ */
 public class PrimeModel {
 	
+	/**
+	 * a enumeration of control modes (+/-)
+	 */
 	public enum PMMode {
 		VERTICAL_STEP,
 		HORIZONTAL_STEP,
@@ -18,11 +24,14 @@ public class PrimeModel {
 		DIVISOR_EXP
 	}
 	
+	/**
+	 * a enumeration of view modes (keys: up/down/left/right)
+	 */
 	public enum PMView {
 		GOLDBACH,
 		FACTOR
 	}
-	
+
 	public class InfoEntry {
 		
 		private String key;
@@ -47,8 +56,7 @@ public class PrimeModel {
 			verticalStep=1, horizontalStep=1, verticalOffset=0, horizontalOffset=0,
 			window_width=1200, window_height=800, polySize=5, polyFactor=1, polyDelta=1,
 			factorX=0, factorY=1, factorZ=1, divisorSumExponent=1;
-	private boolean xyTransform = false,
-			exponents = true, drawRect = true, helper = true,
+	private boolean	drawRect = true, helper = true,
 			rays = false, factors = true, chart = true, chartProp = true, chartPrimeCountCalc=false, chartMatchCountCalc=false,
 			chartExp = false, chartPrimes = true, chartMatchCount = true, chartFirstMatch=false, chartFirstVoid=false, chartVoidCount=false,
 			chartExpSum = true, stats=false, primes=true, _changed=false, polynomials=false, checkedPattern=false, primeMirror=true,
@@ -145,15 +153,28 @@ public class PrimeModel {
 		this.title = "PrimeExplorer";
 	}
 	
+	/**
+	 * 
+	 * @return the title of the model
+	 */
 	public String getTitle() {
 		return title;
 	}
-
+	
+	/**
+	 * set the models title
+	 * @param title
+	 */
 	public void setTitle(String title) {
 		this.title = title;
 		this.changed();
 	}
-
+	
+	/**
+	 * 
+	 * @param cname a color name
+	 * @return the color specified by cname
+	 */
 	public Color getColor(String cname) {
 		if (cname == null) return this.ALPHA;
 		if (cname.equals("BACKGROUND")) return this.BACKGROUND;
@@ -200,6 +221,11 @@ public class PrimeModel {
 		return this.ALPHA;
 	}
 	
+	/**
+	 * set the color with the name cnam
+	 * @param cname
+	 * @param color
+	 */
 	public void setColor(String cname, Color color) {
 		if (color == null) return;
 		if (cname.equals("BACKGROUND")) this.BACKGROUND = color;
@@ -246,6 +272,10 @@ public class PrimeModel {
 		this.changed();
 	}
 	
+	/**
+	 * 
+	 * @return all known color names
+	 */
 	public String[] getColors() {
 		return new String[] {"BACKGROUND",
 		        "TEXT_COLOR",
@@ -290,6 +320,10 @@ public class PrimeModel {
 		        "POLAR_FACTOR_RIGHT"};
 	}
 	
+	/**
+	 * 
+	 * @return true if the model has changed
+	 */
 	public boolean isChanged() {
 		if (this._changed) {
 			this._changed = false;
@@ -298,10 +332,17 @@ public class PrimeModel {
 		return false;
 	}
 	
+	/**
+	 * sets the changed flag
+	 */
 	private void changed() {
 		this._changed = true;
 	}
 
+	/**
+	 * 
+	 * @return a delta, inversely proportional to the block size
+	 */
 	public int getDelta() {
 		int d = (int) (20.0F / (double) this.blockSize);
 		if (d < 1)
@@ -309,19 +350,35 @@ public class PrimeModel {
 		return d;
 	}
 
+	/**
+	 * 
+	 * @return the size of the blocks
+	 */
 	public int getBlockSize() {
 		return blockSize;
 	}
 
+	/**
+	 * set the size of the blocks
+	 * @param blockSize
+	 */
 	public void setBlockSize(int blockSize) {
 		if (blockSize > 0) this.blockSize = blockSize;
 		this.changed();
 	}
 
+	/**
+	 * 
+	 * @return the current x position
+	 */
 	public int getXPos() {
 		return xPos;
 	}
 
+	/**
+	 * set the x position
+	 * @param xPos
+	 */
 	public void setXPos(int xPos) {
 		if (xPos < 0)
 			xPos = 0;
@@ -329,10 +386,18 @@ public class PrimeModel {
 		this.changed();
 	}
 
+	/**
+	 * 
+	 * @return the current y position
+	 */
 	public int getYPos() {
 		return yPos;
 	}
 
+	/**
+	 * set the y position
+	 * @param yPos
+	 */
 	public void setYPos(int yPos) {
 		if (yPos < 0)
 			yPos = 0;
@@ -340,160 +405,270 @@ public class PrimeModel {
 		this.changed();
 	}
 
+	/**
+	 * 
+	 * @return the x position of the mouse pointer
+	 */
 	public int getMouseX() {
 		return mouseX;
 	}
 
+	/**
+	 * set the x position of the mouse pointer
+	 * @param mouseX
+	 */
 	public void setMouseX(int mouseX) {
 		this.mouseX = mouseX;
 		this.changed();
 	}
 
+	/**
+	 * 
+	 * @return the y position of the mouse pointer
+	 */
 	public int getMouseY() {
 		return mouseY;
 	}
 
+	/**
+	 * set the y position of the mouse pointer
+	 * @param mouseY
+	 */
 	public void setMouseY(int mouseY) {
 		this.mouseY = mouseY;
 		this.changed();
 	}
 
-	public boolean isXYTransform() {
-		return xyTransform;
-	}
-
-	public void setXyTransform(boolean xyTransform) {
-		this.xyTransform = xyTransform;
-		this.changed();
-	}
-
-	public boolean isExponents() {
-		return exponents;
-	}
-
-	public void setExponents(boolean exponents) {
-		this.exponents = exponents;
-		this.changed();
-	}
-
+	/**
+	 * 
+	 * @return true if the blocks should be drawed as rectangles rather than circles
+	 */
 	public boolean isDrawRect() {
 		return drawRect;
 	}
 
+	/**
+	 * set drawRect
+	 * @param drawRect
+	 */
 	public void setDrawRect(boolean drawRect) {
 		this.drawRect = drawRect;
 		this.changed();
 	}
 
+	/**
+	 * 
+	 * @return true if helper is enabled
+	 */
 	public boolean isHelper() {
 		return helper;
 	}
 
+	/**
+	 * set helper
+	 * @param helper
+	 */
 	public void setHelper(boolean helper) {
 		this.helper = helper;
 		this.changed();
 	}
 
+	/**
+	 * 
+	 * @return true if the rays are enabled
+	 */
 	public boolean isRays() {
 		return rays;
 	}
 
+	/**
+	 * set rays
+	 * @param rays
+	 */
 	public void setRays(boolean rays) {
 		this.rays = rays;
 		this.changed();
 	}
 
+	/**
+	 * 
+	 * @return true if the factors should be showed
+	 */
 	public boolean isFactors() {
 		return factors;
 	}
 
+	/**
+	 * set factors
+	 * @param factors
+	 */
 	public void setFactors(boolean factors) {
 		this.factors = factors;
 		this.changed();
 	}
 
+	/**
+	 * 
+	 * @return true if the charts should be displayed
+	 */
 	public boolean isChart() {
 		return chart;
 	}
 
+	/**
+	 * set chart
+	 * @param chart
+	 */
 	public void setChart(boolean chart) {
 		this.chart = chart;
 		this.changed();
 	}
 
+	/**
+	 * 
+	 * @return true if the charts should be proportional
+	 */
 	public boolean isChartProp() {
 		return chartProp;
 	}
 
+	/**
+	 * set chartProp
+	 * @param chartProp
+	 */
 	public void setChartProp(boolean chartProp) {
 		this.chartProp = chartProp;
 		this.changed();
 	}
 
+	/**
+	 * 
+	 * @return true if the Exponent Chart should be displayed
+	 */
 	public boolean isChartExp() {
 		return chartExp;
 	}
 
+	/**
+	 * 
+	 * @param chartExp
+	 */
 	public void setChartExp(boolean chartExp) {
 		this.chartExp = chartExp;
 		this.changed();
 	}
 
+	/**
+	 * 
+	 * @return true if the Prime Count Chart should be displayed
+	 */
 	public boolean isChartPrimes() {
 		return chartPrimes;
 	}
 
+	/**
+	 * 
+	 * @param chartPrimes
+	 */
 	public void setChartPrimes(boolean chartPrimes) {
 		this.chartPrimes = chartPrimes;
 		this.changed();
 	}
 
+	/**
+	 * 
+	 * @return true if the Goldbach Number Count Chart should be displayed
+	 */
 	public boolean isChartMatchCount() {
 		return chartMatchCount;
 	}
 
+	/**
+	 * 
+	 * @param chartMatch
+	 */
 	public void setChartMatchCount(boolean chartMatch) {
 		this.chartMatchCount = chartMatch;
 		this.changed();
 	}
 
+	/**
+	 * 
+	 * @return true if the First Match Chart should be displayed
+	 */
 	public boolean isChartFirstMatch() {
 		return chartFirstMatch;
 	}
 
+	/**
+	 * 
+	 * @param chartFirstMatch
+	 */
 	public void setChartFirstMatch(boolean chartFirstMatch) {
 		this.chartFirstMatch = chartFirstMatch;
 	}
 
+	/**
+	 * 
+	 * @return true if the First Void Chart should be displayed
+	 */
 	public boolean isChartFirstVoid() {
 		return chartFirstVoid;
 	}
 
+	/**
+	 * 
+	 * @param chartFirstVoid
+	 */
 	public void setChartFirstVoid(boolean chartFirstVoid) {
 		this.chartFirstVoid = chartFirstVoid;
 	}
 
+	/**
+	 * 
+	 * @return true if the Void Count Chart should be displayed
+	 */
 	public boolean isChartVoidCount() {
 		return chartVoidCount;
 	}
 
+	/**
+	 * 
+	 * @param chartVoidCount
+	 */
 	public void setChartVoidCount(boolean chartVoidCount) {
 		this.chartVoidCount = chartVoidCount;
 	}
 
+	/**
+	 * 
+	 * @return true if the Exponent Chart should show the sum of the exponents
+	 */
 	public boolean isChartExpSum() {
 		return chartExpSum;
 	}
 
+	/**
+	 * 
+	 * @param chartExpSum
+	 */
 	public void setChartExpSum(boolean chartExpSum) {
 		this.chartExpSum = chartExpSum;
 		this.changed();
 	}
 
+	/**
+	 * 
+	 * @return the vertical step of numbers
+	 */
 	public int getVerticalStep() {
 		return verticalStep;
 	}
 
+	/**
+	 * set the vertical step
+	 * @param verticalStep
+	 */
 	public void setVerticalStep(int verticalStep) {
 		if (verticalStep > 0) {
 			this.verticalStep = verticalStep;
@@ -502,10 +677,18 @@ public class PrimeModel {
 		}
 	}
 
+	/**
+	 * 
+	 * @return the horizontal step of numbers
+	 */
 	public int getHorizontalStep() {
 		return horizontalStep;
 	}
 
+	/**
+	 * set the horizontal step
+	 * @param horizontalStep
+	 */
 	public void setHorizontalStep(int horizontalStep) {
 		if (horizontalStep > 0) {
 			this.horizontalStep = horizontalStep;
@@ -514,19 +697,35 @@ public class PrimeModel {
 		}
 	}
 
+	/**
+	 * 
+	 * @return the mode for zooming with +/-
+	 */
 	public PMMode getPmmode() {
 		return pmmode;
 	}
 
+	/**
+	 * 
+	 * @param pmmode
+	 */
 	public void setPmmode(PMMode pmmode) {
 		this.pmmode = pmmode;
 		this.changed();
 	}
 
+	/**
+	 * 
+	 * @return the vertical offset of numbers within a step
+	 */
 	public int getVerticalOffset() {
 		return verticalOffset;
 	}
 
+	/**
+	 * 
+	 * @param verticalOffset
+	 */
 	public void setVerticalOffset(int verticalOffset) {
 		if (verticalOffset >= 0) {
 			this.verticalOffset = verticalOffset%this.getVerticalStep();
@@ -534,10 +733,18 @@ public class PrimeModel {
 		}
 	}
 
+	/**
+	 * 
+	 * @return the horizontal offset of numbers within a step
+	 */
 	public int getHorizontalOffset() {
 		return horizontalOffset;
 	}
 
+	/**
+	 * 
+	 * @param horizontalOffset
+	 */
 	public void setHorizontalOffset(int horizontalOffset) {
 		if (horizontalOffset >= 0) {
 			this.horizontalOffset = horizontalOffset%this.getHorizontalStep();
@@ -545,50 +752,82 @@ public class PrimeModel {
 		}
 	}
 	
+	/**
+	 * 
+	 * @return true if the stats should be displayed below the prime view
+	 */
 	public boolean isStats() {
 		return stats;
 	}
 
+	/**
+	 * 
+	 * @param stats
+	 */
 	public void setStats(boolean stats) {
 		this.stats = stats;
 		this.changed();
 	}
 
 	/**
-	 * @return the primes
+	 * @return true if the prime numbers should be displayed
 	 */
 	public boolean isPrimes() {
 		return primes;
 	}
 
 	/**
-	 * @param primes the primes to set
+	 * @param primes
 	 */
 	public void setPrimes(boolean primes) {
 		this.primes = primes;
 		this.changed();
 	}
 
+	/**
+	 * 
+	 * @return the width of the prime view's window
+	 */
 	public int getWindowWidth() {
 		return window_width;
 	}
 
+	/**
+	 * set the width of the window
+	 * @param window_width
+	 */
 	public void setWindowWidth(int window_width) {
 		this.window_width = window_width;
 	}
 
+	/**
+	 * 
+	 * @return the height of the prime view's window
+	 */
 	public int getWindowHeight() {
 		return window_height;
 	}
 
+	/**
+	 * set the height of the window
+	 * @param window_height
+	 */
 	public void setWindowHeight(int window_height) {
 		this.window_height = window_height;
 	}
 
+	/**
+	 * 
+	 * @return the size of diplayed polynomials
+	 */
 	public int getPolySize() {
 		return polySize;
 	}
 
+	/**
+	 * set the size of displayed polynomials
+	 * @param polySize
+	 */
 	public void setPolySize(int polySize) {
 		if (polySize > 0) {
 			this.polySize = polySize;
@@ -596,18 +835,34 @@ public class PrimeModel {
 		}
 	}
 
+	/**
+	 * 
+	 * @return true if polynomials should be displayed
+	 */
 	public boolean isPolynomials() {
 		return polynomials;
 	}
 
+	/**
+	 * 
+	 * @param polynomials
+	 */
 	public void setPolynomials(boolean polynomials) {
 		this.polynomials = polynomials;
 	}
 
+	/**
+	 * 
+	 * @return the factor of displayed polynomials
+	 */
 	public int getPolyFactor() {
 		return polyFactor;
 	}
 
+	/**
+	 * set the factor of displayed polynomials
+	 * @param polyFactor
+	 */
 	public void setPolyFactor(int polyFactor) {
 		if (polyFactor > 0) {
 			this.polyFactor = polyFactor;
@@ -615,10 +870,18 @@ public class PrimeModel {
 		}
 	}
 
+	/**
+	 * 
+	 * @return the horizontal step between the points of displayed polynomials
+	 */
 	public int getPolyDelta() {
 		return polyDelta;
 	}
 
+	/**
+	 * the horizontal step between the points of displayed polynomials
+	 * @param polyDelta
+	 */
 	public void setPolyDelta(int polyDelta) {
 		if (polyDelta > 0) {
 			this.polyDelta = polyDelta;
@@ -626,151 +889,283 @@ public class PrimeModel {
 		}
 	}
 
+	/**
+	 * 
+	 * @return true if the view should be transformed so that a checked pattern is shown
+	 */
 	public boolean isCheckedPattern() {
 		return checkedPattern;
 	}
 
+	/**
+	 * 
+	 * @param checkedPattern
+	 */
 	public void setCheckedPattern(boolean checkedPattern) {
 		this.checkedPattern = checkedPattern;
 		this.changed();
 	}
 
+	/**
+	 * 
+	 * @return true if a mirror of primes should be displayed
+	 */
 	public boolean isPrimeMirror() {
 		return primeMirror;
 	}
 
+	/**
+	 * 
+	 * @param primeMirror
+	 */
 	public void setPrimeMirror(boolean primeMirror) {
 		this.primeMirror = primeMirror;
 		this.changed();
 	}
 
+	/**
+	 * 
+	 * @return the view mode (key: up/down/left/right)
+	 */
 	public PMView getPmview() {
 		return pmview;
 	}
 
+	/**
+	 * 
+	 * @param pmview
+	 */
 	public void setPmview(PMView pmview) {
 		this.pmview = pmview;
 		this.changed();
 	}
 
+	/**
+	 * 
+	 * @return the x factor of the polar polynomials
+	 */
 	public int getFactorX() {
 		return factorX;
 	}
 
+	/**
+	 * set the x factor of the polar polynomials
+	 * @param factorX
+	 */
 	public void setFactorX(int factorX) {
 		if (factorX >= 0) this.factorX = factorX;
 		else this.factorX = 0;
 		this.changed();
 	}
 
+	/**
+	 * 
+	 * @return the y factor of the polar polynomials
+	 */
 	public int getFactorY() {
 		return factorY;
 	}
 
+	/**
+	 * set the y factor of the polar polynomials
+	 * @param factorY
+	 */
 	public void setFactorY(int factorY) {
 		if (factorY > 0) this.factorY = factorY;
 		else this.factorY = 1;
 		this.changed();
 	}
 
+	/**
+	 * 
+	 * @return the z factor of the polar polynomials
+	 */
 	public int getFactorZ() {
 		return factorZ;
 	}
 
+	/**
+	 * set the z factor of the polar polynomials
+	 * @param factorZ
+	 */
 	public void setFactorZ(int factorZ) {
 		if (factorZ > 0) this.factorZ = factorZ;
 		else this.factorZ = 1;
 		this.changed();
 	}
 
+	/**
+	 * 
+	 * @return true if the calculated prime count chart should be displayed
+	 */
 	public boolean isChartPrimeCountCalc() {
 		return chartPrimeCountCalc;
 	}
 
+	/**
+	 * 
+	 * @param chartPrimeCountCalc
+	 */
 	public void setChartPrimeCountCalc(boolean chartPrimeCountCalc) {
 		this.chartPrimeCountCalc = chartPrimeCountCalc;
 		this.changed();
 	}
 
+	/**
+	 * 
+	 * @return true if the calculated goldbach number count chart should be displayed
+	 */
 	public boolean isChartMatchCountCalc() {
 		return chartMatchCountCalc;
 	}
 
+	/**
+	 * 
+	 * @param chartMatchCountCalc
+	 */
 	public void setChartMatchCountCalc(boolean chartMatchCountCalc) {
 		this.chartMatchCountCalc = chartMatchCountCalc;
 		this.changed();
 	}
 
+	/**
+	 * 
+	 * @return true if the divisor function chart should be displayed
+	 */
 	public boolean isChartDivisorSum() {
 		return chartDivisorSum;
 	}
 
+	/**
+	 * 
+	 * @param chartDivisorSum
+	 */
 	public void setChartDivisorSum(boolean chartDivisorSum) {
 		this.chartDivisorSum = chartDivisorSum;
 	}
 
+	/**
+	 * true if the euler's totient chart should be displayed
+	 * @return
+	 */
 	public boolean isChartEulerTotient() {
 		return chartEulerTotient;
 	}
 
+	/**
+	 * 
+	 * @param chartEulerTotient
+	 */
 	public void setChartEulerTotient(boolean chartEulerTotient) {
 		this.chartEulerTotient = chartEulerTotient;
 	}
 
+	/**
+	 * 
+	 * @return true if only the outer factors in the polar polynomials should be displayed
+	 */
 	public boolean isFactorOnlyOuter() {
 		return factorOnlyOuter;
 	}
 
+	/**
+	 * 
+	 * @param factorOnlyOuter
+	 */
 	public void setFactorOnlyOuter(boolean factorOnlyOuter) {
 		this.factorOnlyOuter = factorOnlyOuter;
 		this.changed();
 	}
 
+	/**
+	 * Factors are needed if they are the first to prevent a number from being prime
+	 * @return true if only the outer factors in the polar polynomials should be displayed
+	 */
 	public boolean isFactorOnlyNeeded() {
 		return factorOnlyNeeded;
 	}
 
+	/**
+	 * 
+	 * @param factorOnlyNeeded
+	 */
 	public void setFactorOnlyNeeded(boolean factorOnlyNeeded) {
 		this.factorOnlyNeeded = factorOnlyNeeded;
 		this.changed();
 	}
 
+	/**
+	 * 
+	 * @return true if the polar factors should be displayed
+	 */
 	public boolean isPolarFactors() {
 		return polarFactors;
 	}
 
+	/**
+	 * 
+	 * @param polarFactors
+	 */
 	public void setPolarFactors(boolean polarFactors) {
 		this.polarFactors = polarFactors;
 		this.changed();
 	}
 
+	/**
+	 * 
+	 * @return true if the polar factors should be displayed balanced
+	 */
 	public boolean isPolarBalance() {
 		return polarBalance;
 	}
 
+	/**
+	 * 
+	 * @param polarBalance
+	 */
 	public void setPolarBalance(boolean polarBalance) {
 		this.polarBalance = polarBalance;
 	}
 
+	/**
+	 * 
+	 * @return true if the view should be rotated by 90 degree
+	 */
 	public boolean isRotateView() {
 		return rotateView;
 	}
 
+	/**
+	 * 
+	 * @param rotateView
+	 */
 	public void setRotateView(boolean rotateView) {
 		this.rotateView = rotateView;
 		this.changed();
 	}
 
+	/**
+	 * 
+	 * @return the exponent of the divisor function
+	 */
 	public int getDivisorSumExponent() {
 		return divisorSumExponent;
 	}
 
+	/**
+	 * 
+	 * @param divisorSumExponent
+	 */
 	public void setDivisorSumExponent(int divisorSumExponent) {
 		if (divisorSumExponent < 0) divisorSumExponent = 0;
 		this.divisorSumExponent = divisorSumExponent;
 		this.changed();
 	}
 
+	/**
+	 * 
+	 * @return the stats, stored by occurrence
+	 */
 	public Map<Integer,InfoEntry> getInfo() {
 		Map<Integer,InfoEntry> ret = new TreeMap<Integer,InfoEntry>();
 		String str = "";

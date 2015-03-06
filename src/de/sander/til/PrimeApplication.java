@@ -5,6 +5,11 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+/**
+ * This class loads the settings and models and creates a view controller for every model.
+ * The controllers are updated in a continuous update cycle. 
+ * It listens for changes in the settings.
+ */
 public class PrimeApplication implements SettingsListener {
 	
 	private Settings settings;
@@ -12,6 +17,9 @@ public class PrimeApplication implements SettingsListener {
 	private boolean EXIT=false;
 	private ColorController colorer;
 
+	/**
+	 * 
+	 */
 	public PrimeApplication() {
 		this.settings = new StateLoader().loadSettings();
 		this.settings.setListener(this);
@@ -33,6 +41,9 @@ public class PrimeApplication implements SettingsListener {
 		this.colorer = new ColorController(this.settings.getCurrentModel());
 	}
 	
+	/**
+	 * run the application
+	 */
 	public void run() {
 		while (true) {
 			if (EXIT) return;
@@ -46,10 +57,17 @@ public class PrimeApplication implements SettingsListener {
 		}
 	}
 	
+	/**
+	 * set the exit flag to stop the run cycle
+	 */
 	public void stopApp() {
 		this.EXIT = true;
 	}
 	
+	/**
+	 * sleep for the specified milliseconds
+	 * @param milis
+	 */
 	public void sleep(long milis) {
 		try {
 			Thread.sleep(milis);

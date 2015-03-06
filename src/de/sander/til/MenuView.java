@@ -16,6 +16,10 @@ import javax.swing.KeyStroke;
 
 import de.sander.til.MenuListener.MenuAction;;
 
+/**
+ * A MenuView builds a menu bar from a PrimeModel.
+ * Menu actions are delegated to a MenuListener.
+ */
 public class MenuView {
 	
 	private PrimeModel model;
@@ -35,19 +39,34 @@ public class MenuView {
 			goldbachMode, factorMode;
 	private MenuListener listener;
 
+	/**
+	 * 
+	 * @param model a prime model
+	 */
 	public MenuView(PrimeModel model) {
 		this.model = model;
 		this.buildMenu();
 	}
 	
+	/**
+	 * set the menu listener
+	 * @param ml
+	 */
 	public void setListener(MenuListener ml) {
 		this.listener = ml;
 	}
 	
+	/**
+	 * 
+	 * @return the menu bar
+	 */
 	public JMenuBar getMenuBar() {
 		return this.menuBar;
 	}
 	
+	/**
+	 * Create the menu structure
+	 */
 	private void buildMenu() {
 		int CTRL = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 		int CTRL_SHIFT = CTRL + InputEvent.SHIFT_DOWN_MASK;
@@ -142,6 +161,11 @@ public class MenuView {
 		menuBar.add(helpMenu);
 	}
 	
+	/**
+	 * create a action listener with the given menu action
+	 * @param act a menu action
+	 * @return a action listener that calls the action <code>act</code> on the listener
+	 */
 	private ActionListener createActionListener(final MenuAction act) {
 		return new ActionListener() {
 
@@ -152,11 +176,25 @@ public class MenuView {
 		};
 	}
 	
+	/**
+	 * connect a menu item with a menu action
+	 * @param item a menu item
+	 * @param act the menu action, which should be called if the item is clicked 
+	 * @return the connected menu item
+	 */
 	private JMenuItem connect(JMenuItem item, MenuAction act) {
 		item.addActionListener(this.createActionListener(act));
 		return item;
 	}
 	
+	/**
+	 * connect a menu item with a menu action and add a shortcut
+	 * @param item a menu item
+	 * @param act
+	 * @param key a keyboard character
+	 * @param modifier a modifier (ctrl/alt/shift)
+	 * @return the connected menu item
+	 */
 	private JMenuItem connect(JMenuItem item, MenuAction act, int key, int modifier) {
 		item.setAccelerator(KeyStroke.getKeyStroke(key,modifier));
 		item.addActionListener(this.createActionListener(act));
