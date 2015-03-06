@@ -99,12 +99,12 @@ public class MenuView {
 		
 		viewMenu.add(this.connect(zoomIn = new JMenuItem("Zoom In"),	MenuAction.ZOOM_IN,KeyEvent.VK_PLUS,CTRL));
 		viewMenu.add(this.connect(zoomOut = new JMenuItem("Zoom Out"),	MenuAction.ZOOM_OUT,KeyEvent.VK_MINUS,CTRL));
-		viewMenu.add(this.connect(origin = new JMenuItem("Origin"),		MenuAction.ORIGIN,KeyEvent.VK_X,CTRL));
+		viewMenu.add(this.connect(origin = new JMenuItem("Origin"),		MenuAction.ORIGIN,KeyEvent.VK_X,CTRL_SHIFT));
 		viewMenu.addSeparator();
 		viewMenu.add(this.connect(primes = new JCheckBoxMenuItem("Primes",this.model.isPrimes()),					MenuAction.PRIMES,KeyEvent.VK_P,CTRL));
 		viewMenu.add(this.connect(factors = new JCheckBoxMenuItem("Factors",this.model.isFactors()),				MenuAction.FACTORS,KeyEvent.VK_F,CTRL));
 		viewMenu.add(this.connect(rectangles = new JCheckBoxMenuItem("Rectangles",this.model.isDrawRect()),			MenuAction.RECTANGLES,KeyEvent.VK_R,CTRL));
-		viewMenu.add(this.connect(helper = new JCheckBoxMenuItem("Helper",this.model.isHelper()),					MenuAction.HELPER,KeyEvent.VK_H,CTRL));
+		viewMenu.add(this.connect(helper = new JCheckBoxMenuItem("Helper",this.model.isHelper()),					MenuAction.HELPER,KeyEvent.VK_I,CTRL));
 		viewMenu.add(this.connect(rays = new JCheckBoxMenuItem("Rays",this.model.isRays()),							MenuAction.RAYS,KeyEvent.VK_L,CTRL));
 		viewMenu.add(this.connect(polys = new JCheckBoxMenuItem("Polys",this.model.isPolynomials()),				MenuAction.POLYS,KeyEvent.VK_U,CTRL));
 		viewMenu.add(this.connect(mirror = new JCheckBoxMenuItem("Mirror",this.model.isPrimeMirror()),				MenuAction.MIRROR,KeyEvent.VK_M,CTRL));
@@ -133,8 +133,8 @@ public class MenuView {
 		chartMenu.add(this.connect(showCharts = new JCheckBoxMenuItem("Show Charts",this.model.isChart()),		MenuAction.SHOW_CHARTS,KeyEvent.VK_C,CTRL_SHIFT));
 		
 		// help menu
-		helpMenu.add(documentation = new JMenuItem("Documentation"));
-		helpMenu.add(online = new JMenuItem("About PrimeExplorer"));
+		helpMenu.add(this.connect(documentation = new JMenuItem("Documentation"), MenuAction.DOCUMENTATION));
+		helpMenu.add(this.connect(online = new JMenuItem("About PrimeExplorer"), MenuAction.ABOUT));
 		
 		menuBar.add(fileMenu);
 		menuBar.add(viewMenu);
@@ -150,6 +150,11 @@ public class MenuView {
 			}
 			
 		};
+	}
+	
+	private JMenuItem connect(JMenuItem item, MenuAction act) {
+		item.addActionListener(this.createActionListener(act));
+		return item;
 	}
 	
 	private JMenuItem connect(JMenuItem item, MenuAction act, int key, int modifier) {

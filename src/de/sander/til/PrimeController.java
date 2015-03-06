@@ -14,20 +14,26 @@ public class PrimeController implements MouseMotionListener, MouseListener, KeyL
 	
 	private PrimeModel model;
 	private PrimeView view;
-	private ColorController colorer;
 	private MenuController menu;
 	private boolean REFRESH=true;
 	
-	public PrimeController(PrimeModel mod, PrimeView view) {
+	public PrimeController(PrimeModel mod) {
 		this.model = mod;
-		this.view = view;
+		this.view = new PrimeView(this.model);
 		this.view.addMouseMotionListener(this);
 		this.view.addMouseListener(this);
 		this.view.addKeyListener(this);
-		this.colorer = new ColorController(this.model, new ColorView(this.model));
 		this.menu = new MenuController(this.model, new MenuView(this.model));
 		this.view.setMenuBar(this.menu.getMenuBar());
-		this.view.focus();
+		this.focusView();
+	}
+	
+	public void focusView() {
+		this.view.focus();		
+	}
+	
+	public void closeView() {
+		
 	}
 	
 	public void updateView() {
@@ -66,7 +72,7 @@ public class PrimeController implements MouseMotionListener, MouseListener, KeyL
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		
+		System.out.println("drag");
 	}
 
 	@Override
@@ -79,13 +85,19 @@ public class PrimeController implements MouseMotionListener, MouseListener, KeyL
 	// MouseListener
 
 	@Override
-	public void mouseClicked(MouseEvent e) {}
+	public void mouseClicked(MouseEvent e) {
+		System.out.println("click");
+	}
 
 	@Override
-	public void mousePressed(MouseEvent e) {}
+	public void mousePressed(MouseEvent e) {
+		System.out.println("press");
+	}
 
 	@Override
-	public void mouseReleased(MouseEvent e) {}
+	public void mouseReleased(MouseEvent e) {
+		System.out.println("release");
+	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {}

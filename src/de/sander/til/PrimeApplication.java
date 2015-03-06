@@ -1,50 +1,47 @@
 package de.sander.til;
 
-import java.io.File;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
-public class PrimeApplication {
+public class PrimeApplication implements SettingsListener {
 	
-	private Map<String,PrimeModel> open_models;
 	private Settings settings;
-	private List<PrimeController> controller;
+	private Map<PrimeModel,PrimeController> controller;
 	private boolean EXIT=false;
+	private ColorController colorer;
 
 	public PrimeApplication() {
-		StateLoader sl = new StateLoader(); 
-		this.settings = sl.loadSettings();
-		this.open_models = sl.loadModels(this.settings);
-		if (this.open_models.isEmpty()) {
-			String model_file = PrimeUtil.getNewFile(sl.getHomeDirectory(), "primes.json").getPath();
-			this.open_models.put(model_file,new PrimeModel());
-			this.settings.setCurrentModel(model_file);
-		}
-		this.controller = new ArrayList<PrimeController>();
-		Iterator iter = open_models.entrySet().iterator();
+		this.settings = new StateLoader().loadSettings();
+		this.controller = new HashMap<PrimeModel,PrimeController>();
+		Iterator<Entry<String, PrimeModel>> iter = this.settings.getOpenModels().entrySet().iterator();
 		while (iter.hasNext()) {
-			Map.Entry entry = (Map.Entry) iter.next();
-			String file_name = (String) entry.getKey();
+			Map.Entry<String, PrimeModel> entry = (Map.Entry<String, PrimeModel>) iter.next();
 			PrimeModel model = (PrimeModel) entry.getValue();
-			this.controller.add(new PrimeController(model,new PrimeView(model)));
+			this.controller.put(model,new PrimeController(model));
 		}
 		Runtime.getRuntime().addShutdownHook(new Thread(){
             public void run(){
             	StateLoader sl = new StateLoader();
-            	sl.saveModels(open_models);
+            	sl.saveModels(settings.getOpenModels());
             	sl.saveSettings(settings);
             	stopApp();
             }
         });
+		this.colorer = new ColorController(this.settings.getCurrentModel());
 	}
 	
 	public void run() {
 		while (true) {
 			if (EXIT) return;
-			for (PrimeController pcon : this.controller) pcon.updateView();
-			this.sleep(60);
+			Iterator<Entry<PrimeModel, PrimeController>> iter = this.controller.entrySet().iterator();
+			while (iter.hasNext()) {
+				Map.Entry<PrimeModel,PrimeController> entry = (Map.Entry<PrimeModel,PrimeController>) iter.next();
+				PrimeController pcon = (PrimeController) entry.getValue();
+				if (pcon != null) pcon.updateView();
+			}
+			this.sleep(100);
 		}
 	}
 	
@@ -56,6 +53,27 @@ public class PrimeApplication {
 		try {
 			Thread.sleep(milis);
 		} catch(Exception e) {}
+	}
+
+	@Override
+	public void modelOpened(PrimeModel model) {
+		PrimeController pcon = this.controller.get(model);
+		if (pcon == null) this.controller.put(model, new PrimeController(model));
+	}
+
+	@Override
+	public void modelClosed(PrimeModel model) {
+		PrimeController pcon = this.controller.get(model);
+		if (pcon != null) pcon.closeView();
+	}
+
+	@Override
+	public void modelChanged(PrimeModel model) {
+		PrimeController pcon = this.controller.get(model);
+		if (pcon != null) {
+			pcon.focusView();
+			this.colorer.setModel(model);
+		}
 	}
 	
 }

@@ -11,9 +11,9 @@ public class ColorController implements ActionListener, ChangeListener {
 	private PrimeModel model;
 	private ColorView view;
 	
-	public ColorController(PrimeModel pmod, ColorView cview) {
+	public ColorController(PrimeModel pmod) {
 		this.model = pmod;
-		this.view = cview;
+		this.view = new ColorView(this.model);
 		this.view.setController(this);
 	}
 

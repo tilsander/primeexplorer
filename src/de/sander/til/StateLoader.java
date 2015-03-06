@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import com.google.gson.Gson;
 
@@ -17,16 +18,16 @@ public class StateLoader {
 	
 	public Map<String,PrimeModel> loadModels(Settings settings) {
 		HashMap<String,PrimeModel> models = new HashMap<String,PrimeModel>(); 
-		for (String model : settings.getOpenModels()) {
+		for (String model : settings.getOpenModelNames()) {
 			models.put(model,this.loadModel(model));
 		}
 		return models;
 	}
 	
 	public void saveModels(Map<String,PrimeModel> models) {
-		Iterator iter = models.entrySet().iterator();
+		Iterator<Entry<String, PrimeModel>> iter = models.entrySet().iterator();
 		while (iter.hasNext()) {
-			Map.Entry entry = (Map.Entry) iter.next();
+			Map.Entry<String, PrimeModel> entry = (Map.Entry<String, PrimeModel>) iter.next();
 			String file_name = (String) entry.getKey();
 			PrimeModel model = (PrimeModel) entry.getValue();
 			this.saveModel(model, file_name);
@@ -94,7 +95,7 @@ public class StateLoader {
 					while ((sCurrentLine = br.readLine()) != null) {
 						json += sCurrentLine;
 					}
-					return (new Gson().fromJson(json,Settings.class));
+					return new Settings(new Gson().fromJson(json,Settings.State.class));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -126,7 +127,7 @@ public class StateLoader {
 		try {
 			fw = new FileWriter(setting_file.getAbsoluteFile());
 			BufferedWriter bw = new BufferedWriter(fw);
-			bw.write(new Gson().toJson(settings));
+			bw.write(new Gson().toJson(settings.getState()));
 			bw.close();
 		} catch (IOException e) {
 			e.printStackTrace();

@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -21,6 +22,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+
+import de.sander.til.PrimeModel.InfoEntry;
 
 
 public class PrimeView extends JPanel {
@@ -730,10 +733,10 @@ public class PrimeView extends JPanel {
 	
 	private void drawRayOrder(Map<Integer,Point2D> rays) {
 		g2d.setColor(this.getHightlightTextColor());
-		Iterator iter = rays.entrySet().iterator();
+		Iterator<Entry<Integer, Point2D>> iter = rays.entrySet().iterator();
 		int last_x=WIDTH+300, px;
 		while (iter.hasNext()) {
-			Map.Entry entry = (Map.Entry)iter.next();
+			Map.Entry<Integer, Point2D> entry = (Map.Entry<Integer, Point2D>)iter.next();
 			int ray = (Integer)entry.getKey();
 			Point2D point = (Point2D)entry.getValue();
 			if (point.b) {
@@ -760,9 +763,9 @@ public class PrimeView extends JPanel {
 		row_count -= row_count%2;
 		Map<Integer,PrimeModel.InfoEntry> infos = this.model.getInfo();
 		List<PairMetric> pairs = new ArrayList<PairMetric>();
-		Iterator iter = infos.entrySet().iterator();
+		Iterator<Entry<Integer, InfoEntry>> iter = infos.entrySet().iterator();
 		while (iter.hasNext()) {
-			Map.Entry entry = (Map.Entry)iter.next();
+			Map.Entry<Integer, InfoEntry> entry = (Map.Entry<Integer, InfoEntry>)iter.next();
 			int index = (Integer)entry.getKey();
 			PrimeModel.InfoEntry info = (PrimeModel.InfoEntry)entry.getValue(); 
 			String key = info.getKey();
@@ -795,9 +798,9 @@ public class PrimeView extends JPanel {
 		if (product == null) return 0;
 		int cur_x = x,
 		prime, exp;
-		Iterator iter = product.entrySet().iterator();
+		Iterator<Entry<Integer, Integer>> iter = product.entrySet().iterator();
 		while (iter.hasNext()) {
-			Map.Entry entry = (Map.Entry)iter.next();
+			Map.Entry<Integer, Integer> entry = (Map.Entry<Integer, Integer>)iter.next();
 			prime = (Integer)entry.getKey();
 			exp = (Integer)entry.getValue();
 			this.g2d.drawString(""+prime, cur_x, y);
