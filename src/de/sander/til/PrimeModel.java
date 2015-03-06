@@ -11,15 +11,35 @@ public class PrimeModel {
 		HORIZONTAL_STEP,
 		VERTICAL_OFFSET,
 		HORIZONTAL_OFFSET,
-		NORMAL,
+		ZOOM,
 		POLY_SIZE,
 		POLY_FACTOR,
-		POLY_DELTA
+		POLY_DELTA,
+		DIVISOR_EXP
 	}
 	
 	public enum PMView {
 		GOLDBACH,
 		FACTOR
+	}
+	
+	public class InfoEntry {
+		
+		private String key;
+		private String val;
+		
+		public InfoEntry(String key, String val) {
+			this.key = key;
+			this.val = val;
+		}
+		
+		public String getKey() {
+			return this.key;
+		}
+		
+		public String getValue() {
+			return this.val;
+		}
 	}
 
 	private int blockSize = 12, xPos = 0, yPos = 0, mouseX = 0, mouseY = 0,
@@ -28,12 +48,12 @@ public class PrimeModel {
 				factorX=0, factorY=1, factorZ=1, divisorSumExponent=1;
 	private boolean xyTransform = false,
 			exponents = true, drawRect = true, helper = true,
-			rays = true, rayBox = true, chart = true, chartProp = true, chartPrimeCountCalc=true, chartMatchCountCalc=true,
+			rays = true, factors = true, chart = true, chartProp = true, chartPrimeCountCalc=true, chartMatchCountCalc=true,
 			chartExp = true, chartPrimes = true, chartMatchCount = true, chartFirstMatch=true, chartFirstVoid=true, chartVoidCount=true,
 			chartExpSum = true, stats=true, primes=true, _changed=false, polynomials=true, checkedPattern=true, primeMirror=true,
 			polarFactors=true, factorOnlyOuter=true, factorOnlyNeeded=true, polarBalance=true, rotateView=true,
 			chartDivisorSum=true, chartEulerTotient=true;
-	private PMMode pmmode=PMMode.NORMAL;
+	private PMMode pmmode=PMMode.ZOOM;
 	private PMView pmview=PMView.GOLDBACH;
 	private Color BACKGROUND=null,
 			TEXT_COLOR=null,
@@ -372,12 +392,12 @@ public class PrimeModel {
 		this.changed();
 	}
 
-	public boolean isRayBox() {
-		return rayBox;
+	public boolean isFactors() {
+		return factors;
 	}
 
-	public void setRayBox(boolean rayBox) {
-		this.rayBox = rayBox;
+	public void setFactors(boolean factors) {
+		this.factors = factors;
 		this.changed();
 	}
 
@@ -740,8 +760,8 @@ public class PrimeModel {
 		this.changed();
 	}
 
-	public Map<String,String> getInfo() {
-		Map<String,String> ret = new TreeMap<String,String>();
+	public Map<Integer,InfoEntry> getInfo() {
+		Map<Integer,InfoEntry> ret = new TreeMap<Integer,InfoEntry>();
 		String str = "";
 		switch (this.getPmmode()) {
 		case VERTICAL_STEP:
@@ -756,7 +776,7 @@ public class PrimeModel {
 		case HORIZONTAL_OFFSET:
 			str = "HORIZONTAL_OFFSET";
 			break;
-		case NORMAL:
+		case ZOOM:
 			str = "NORMAL";
 			break;
 		case POLY_SIZE:
@@ -768,45 +788,48 @@ public class PrimeModel {
 		case POLY_DELTA:
 			str = "POLY_DELTA";
 			break;
+		case DIVISOR_EXP:
+			str = "DIVISOR_EXP";
+			break;
 		}
-		ret.put("_MODE",str);
-		ret.put("_BLOCK_SIZE",""+this.getBlockSize());
-		ret.put("_EXP_SUM [E]",""+this.isChartExpSum());
-		ret.put("_DIVISOR_EXP [<>]",""+this.getDivisorSumExponent());
-		ret.put("_CHART_PROP [P]",""+this.isChartProp());
-		ret.put("_SHOW_PRIMES [T]",""+this.isPrimes());
-		ret.put("_SHOW_FACTORS [B]",""+this.isRayBox());
-		ret.put("_RECTANGLES [R]",""+this.isDrawRect());
-		ret.put("_SHOW_HELPER [H]",""+this.isHelper());
-		ret.put("_SHOW_RAYS [L]",""+this.isRays());
-		ret.put("_SHOW_POLY [U]",""+this.isPolynomials());
-		ret.put("_SHOW_MIRROR [M]",""+this.isPrimeMirror());
-		ret.put("_SHOW_CHECKED_PAT [F]",""+this.isCheckedPattern());
-		ret.put("_SHOW_POLAR_FACTOR [D]",""+this.isPolarFactors());
-		ret.put("_POLY_SIZE",""+this.getPolySize());
-		ret.put("_POLY_FACTOR",""+this.getPolyFactor());
-		ret.put("_POLY_DELTA",""+this.getPolyDelta());
-		ret.put("__CHART_PRIMES [1]",""+this.isChartPrimes());
-		ret.put("__CHART_EXP [2]",""+this.isChartExp());
-		ret.put("__CHART_MATCH_COUNT [3]",""+this.isChartMatchCount());
-		ret.put("__CHART_FIRST_MATCH [4]",""+this.isChartFirstMatch());
-		ret.put("__CHART_VOID_COUNT [5]",""+this.isChartVoidCount());
-		ret.put("__CHART_FIRST_VOID [6]",""+this.isChartFirstVoid());
-		ret.put("__CHART_PRIME_COUNT_CALC [7]",""+this.isChartPrimeCountCalc());
-		ret.put("__CHART_MATCH_COUNT_CALC [8]",""+this.isChartMatchCountCalc());
-		ret.put("__CHART_DIVISOR_SUM [9]",""+this.isChartDivisorSum());
-		ret.put("__CHART_EULER_TOTIENT [0]",""+this.isChartEulerTotient());
-		ret.put("POS_X",""+this.getXPos());
-		ret.put("POS_Y",""+this.getYPos());
-		ret.put("STEP_X",""+this.getHorizontalStep());
-		ret.put("STEP_Y",""+this.getVerticalStep());
-		ret.put("OFFSET_X",""+this.getHorizontalOffset());
-		ret.put("OFFSET_Y",""+this.getVerticalOffset());
-		ret.put("MOUSE_X",""+this.getMouseX());
-		ret.put("MOUSE_Y",""+this.getMouseY());
-		ret.put("POLAR_X",""+this.getFactorX());
-		ret.put("POLAR_Y",""+this.getFactorY());
-		ret.put("POLAR_Z",""+this.getFactorZ());
+		ret.put(1,new InfoEntry("POS_X",""+this.getXPos()));
+		ret.put(2,new InfoEntry("POS_Y",""+this.getYPos()));
+		ret.put(3,new InfoEntry("STEP_X",""+this.getHorizontalStep()));
+		ret.put(4,new InfoEntry("STEP_Y",""+this.getVerticalStep()));
+		ret.put(5,new InfoEntry("OFFSET_X",""+this.getHorizontalOffset()));
+		ret.put(6,new InfoEntry("OFFSET_Y",""+this.getVerticalOffset()));
+		ret.put(7,new InfoEntry("MOUSE_X",""+this.getMouseX()));
+		ret.put(8,new InfoEntry("MOUSE_Y",""+this.getMouseY()));
+		ret.put(9,new InfoEntry("POLAR_X",""+this.getFactorX()));
+		ret.put(10,new InfoEntry("POLAR_Y",""+this.getFactorY()));
+		ret.put(11,new InfoEntry("POLAR_Z",""+this.getFactorZ()));
+		ret.put(12,new InfoEntry("MODE",str));
+		ret.put(13,new InfoEntry("BLOCK_SIZE",""+this.getBlockSize()));
+		ret.put(14,new InfoEntry("EXP_SUM",""+this.isChartExpSum()));
+		ret.put(15,new InfoEntry("DIVISOR_EXP",""+this.getDivisorSumExponent()));
+		ret.put(16,new InfoEntry("CHART_PROP",""+this.isChartProp()));
+		ret.put(17,new InfoEntry("SHOW_PRIMES",""+this.isPrimes()));
+		ret.put(18,new InfoEntry("SHOW_FACTORS",""+this.isFactors()));
+		ret.put(19,new InfoEntry("RECTANGLES",""+this.isDrawRect()));
+		ret.put(20,new InfoEntry("SHOW_HELPER",""+this.isHelper()));
+		ret.put(21,new InfoEntry("SHOW_RAYS",""+this.isRays()));
+		ret.put(22,new InfoEntry("SHOW_POLY",""+this.isPolynomials()));
+		ret.put(23,new InfoEntry("SHOW_MIRROR",""+this.isPrimeMirror()));
+		ret.put(24,new InfoEntry("SHOW_CHECKED_PAT",""+this.isCheckedPattern()));
+		ret.put(25,new InfoEntry("SHOW_POLAR_FACTOR",""+this.isPolarFactors()));
+		ret.put(26,new InfoEntry("POLY_SIZE",""+this.getPolySize()));
+		ret.put(27,new InfoEntry("POLY_FACTOR",""+this.getPolyFactor()));
+		ret.put(28,new InfoEntry("POLY_DELTA",""+this.getPolyDelta()));
+		ret.put(29,new InfoEntry("CHART_PRIMES",""+this.isChartPrimes()));
+		ret.put(30,new InfoEntry("CHART_EXP",""+this.isChartExp()));
+		ret.put(31,new InfoEntry("CHART_MATCH_COUNT",""+this.isChartMatchCount()));
+		ret.put(32,new InfoEntry("CHART_FIRST_MATCH",""+this.isChartFirstMatch()));
+		ret.put(33,new InfoEntry("CHART_VOID_COUNT",""+this.isChartVoidCount()));
+		ret.put(34,new InfoEntry("CHART_FIRST_VOID",""+this.isChartFirstVoid()));
+		ret.put(35,new InfoEntry("CHART_PRIME_COUNT_CALC",""+this.isChartPrimeCountCalc()));
+		ret.put(36,new InfoEntry("CHART_MATCH_COUNT_CALC",""+this.isChartMatchCountCalc()));
+		ret.put(37,new InfoEntry("CHART_DIVISOR_SUM",""+this.isChartDivisorSum()));
+		ret.put(38,new InfoEntry("CHART_EULER_TOTIENT",""+this.isChartEulerTotient()));
 		return ret;
 	}
 

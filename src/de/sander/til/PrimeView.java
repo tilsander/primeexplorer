@@ -15,9 +15,12 @@ import java.awt.Dimension;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.KeyListener;
-import java.awt.geom.AffineTransform;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JMenuBar;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
 
 
 public class PrimeView extends JPanel {
@@ -41,7 +44,7 @@ public class PrimeView extends JPanel {
 		EULER_TOTIENT
 	}
 	
-	class Point2D {
+	private class Point2D {
 		
 		public int x=0,y=0;
 		public boolean b=false;
@@ -53,7 +56,7 @@ public class PrimeView extends JPanel {
 		}
 	}
 	
-	class PairMetric {
+	private class PairMetric {
 		
 		private String key, value;
 		private int key_width, value_width;
@@ -63,7 +66,6 @@ public class PrimeView extends JPanel {
 			this.value = v;
 			this.key_width = kw;
 			this.value_width = vw;
-			while (this.key.startsWith("_")) this.key = this.key.substring(1);
 		}
 
 		public String getKey() {
@@ -122,6 +124,9 @@ public class PrimeView extends JPanel {
 		this.typingArea = new JTextField(1);
 		this.typingArea.setPreferredSize(new Dimension(3, 2));
 		this.typingArea.setOpaque(true);
+		this.typingArea.setBorder(new EmptyBorder(0,0,0,0));
+		this.typingArea.setBackground(this.getBackgroundColor());
+		this.typingArea.setForeground(this.getBackgroundColor());
 		this.add(this.typingArea, BorderLayout.PAGE_END);
 		this.viewFrame.getContentPane().add(this);
 		this.viewFrame.setSize(this.model.getWindowWidth(), this.model.getWindowHeight());
@@ -134,11 +139,14 @@ public class PrimeView extends JPanel {
 			public void componentShown(ComponentEvent e) {}
 			public void componentHidden(ComponentEvent e) {}
         });
-		
 	}
 	
 	public void focus() {
 		this.viewFrame.setVisible(true);
+	}
+	
+	public void setMenuBar(JMenuBar menu) {
+		this.viewFrame.setJMenuBar(menu);
 	}
 	
 	public PrimeModel getModel() {
@@ -225,7 +233,7 @@ public class PrimeView extends JPanel {
 		this.Y_POS = this.model.getYPos();
 		if (this.model.isChart()) X_RIGHT=300;
 		else X_RIGHT=30;
-		if (this.model.isStats()) Y_BOTTOM=150;
+		if (this.model.isStats()) Y_BOTTOM=200;
 		else Y_BOTTOM=30;
 		if (X_RIGHT > WIDTH - X_LEFT) X_RIGHT = WIDTH - X_LEFT;
 		STRING_HEIGHT = this.metric.getHeight("1");
@@ -374,13 +382,13 @@ public class PrimeView extends JPanel {
 						g2d.setColor(bor);
 						if (this.model.isDrawRect()) {
 							g2d.drawLine((xp-1)*BLOCK+X_LEFT, yp *BLOCK+Y_TOP, xp*BLOCK+X_LEFT, yp*BLOCK+Y_TOP); // bottom
-							if ((y+cp)%x==0 && this.model.isRayBox()) {
+							if ((y+cp)%x==0 && this.model.isFactors()) {
 								g2d.drawLine((xp-1)*BLOCK+X_LEFT, (yp-1)  *BLOCK+Y_TOP, xp*BLOCK+X_LEFT, (yp-1)*BLOCK+Y_TOP); // top
 								g2d.drawLine((xp-1)*BLOCK+X_LEFT, (yp-1)  *BLOCK+Y_TOP, (xp-1)*BLOCK+X_LEFT, yp*BLOCK+Y_TOP); // left
 								g2d.drawLine(xp*BLOCK+X_LEFT, (yp-1)  *BLOCK+Y_TOP, xp*BLOCK+X_LEFT, yp*BLOCK+Y_TOP); // right
 							}
 						} else {
-							if ((y+cp)%x==0 && this.model.isRayBox()) {
+							if ((y+cp)%x==0 && this.model.isFactors()) {
 								g2d.drawOval((xp-1)*BLOCK+X_LEFT, (yp-1)*BLOCK+Y_TOP, BLOCK, BLOCK);
 							}
 						}
@@ -750,13 +758,15 @@ public class PrimeView extends JPanel {
 			start_x = X_LEFT + 10;
 		int row_count = (int)(((double)HEIGHT - (double)start_y)/(STRING_HEIGHT+3.0))+1;
 		row_count -= row_count%2;
-		Map<String,String> info = this.model.getInfo();
+		Map<Integer,PrimeModel.InfoEntry> infos = this.model.getInfo();
 		List<PairMetric> pairs = new ArrayList<PairMetric>();
-		Iterator iter = info.entrySet().iterator();
+		Iterator iter = infos.entrySet().iterator();
 		while (iter.hasNext()) {
 			Map.Entry entry = (Map.Entry)iter.next();
-			String key = (String)entry.getKey();
-			String value = (String)entry.getValue();
+			int index = (Integer)entry.getKey();
+			PrimeModel.InfoEntry info = (PrimeModel.InfoEntry)entry.getValue(); 
+			String key = info.getKey();
+			String value = info.getValue();
 			pairs.add(new PairMetric(key,value,(int)this.metric.getWidth(key),(int)this.metric.getWidth(value)));
 		}
 		int column_width = 0, max = 0, temp = 0;
@@ -916,7 +926,7 @@ public class PrimeView extends JPanel {
 			|| (this.model.isPolarFactors() && y == POLAR_FACTOR_X/2)) {
 			switch (ct) {
 			case BORDER:
-				if (y%x==0 && this.model.isRayBox()) return this.model.getColor("RAY_BORDER");
+				if (y%x==0 && this.model.isFactors()) return this.model.getColor("RAY_BORDER");
 				else return this.model.getColor("HELPER_BORDER");
 			case BOX:
 				if (Primes._().isMatch(x, y)) return this.model.getColor("HELPER_BOX_LIGHT");
@@ -951,7 +961,7 @@ public class PrimeView extends JPanel {
 						if (x%2==0) {
 							switch (ct) {
 							case BORDER:
-								if (y%x==0 && this.model.isRayBox()) return this.model.getColor("RAY_BORDER");
+								if (y%x==0 && this.model.isFactors()) return this.model.getColor("RAY_BORDER");
 								else return this.model.getColor("EVEN_BORDER");
 							case BOX: return this.model.getColor("EVEN_BOX");
 							case TEXT: return this.model.getColor("EVEN_TEXT");
@@ -959,7 +969,7 @@ public class PrimeView extends JPanel {
 						} else {
 							switch (ct) {
 							case BORDER:
-								if (y%x==0 && this.model.isRayBox()) return this.model.getColor("RAY_BORDER");
+								if (y%x==0 && this.model.isFactors()) return this.model.getColor("RAY_BORDER");
 								else return this.model.getColor("ODD_BORDER");
 							case BOX: return this.model.getColor("ODD_BOX");
 							case TEXT: return this.model.getColor("ODD_TEXT");
@@ -979,7 +989,7 @@ public class PrimeView extends JPanel {
 		if (x%2==0) {
 			switch (ct) {
 			case BORDER:
-				if (y%x==0 && this.model.isRayBox()) return this.model.getColor("RAY_BORDER");
+				if (y%x==0 && this.model.isFactors()) return this.model.getColor("RAY_BORDER");
 				else return this.model.getColor("EVEN_BORDER");
 			case BOX: return this.model.getColor("EVEN_BOX");
 			case TEXT: return this.model.getColor("EVEN_TEXT");
@@ -987,7 +997,7 @@ public class PrimeView extends JPanel {
 		} else {
 			switch (ct) {
 			case BORDER:
-				if (y%x==0 && this.model.isRayBox()) return this.model.getColor("RAY_BORDER");
+				if (y%x==0 && this.model.isFactors()) return this.model.getColor("RAY_BORDER");
 				else return this.model.getColor("ODD_BORDER");
 			case BOX: return this.model.getColor("ODD_BOX");
 			case TEXT: return this.model.getColor("ODD_TEXT");

@@ -18,11 +18,20 @@ public class ColorController implements ActionListener, ChangeListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		this.view.setColor(this.model.getColor(this.view.getSelectedColorName()));
+		this.updateView();
 	}
 
 	public void stateChanged(ChangeEvent e) {
 		this.model.setColor(this.view.getSelectedColorName(), this.view.getColor());
+	}
+	
+	public void setModel(PrimeModel model) {
+		this.model = model;
+		this.updateView();
+	}
+	
+	private void updateView() {
+		this.view.setColor(this.model.getColor(this.view.getSelectedColorName()));
 	}
 
 }
