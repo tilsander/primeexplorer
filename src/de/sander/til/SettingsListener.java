@@ -26,5 +26,9 @@ public interface SettingsListener {
 	 * there are no mode open, close the app
 	 */
 	public void closeApp();
+	/**
+	 * this list of recently opened files has changed
+	 */
+	public void recentlyOpenedChanged();
 	
 }

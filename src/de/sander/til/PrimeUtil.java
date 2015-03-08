@@ -77,8 +77,34 @@ public class PrimeUtil {
 		return new File(new PrimeUtil().getClass().getProtectionDomain().getCodeSource().getLocation().getPath()).getParent();
 	}
 	
+	/**
+	 * 
+	 * @return the content directory
+	 */
 	public static String getContentDir() {
 		return new File(PrimeUtil.getRootDir(),"content").getPath();
+	}
+	
+	/**
+	 * 
+	 * @return the documentation directory
+	 */
+	public static String getDocDir() {
+		File doc = new File(PrimeUtil.getRootDir(),"doc");
+		if (doc.exists()) return doc.getPath();
+		return null; 
+	}
+	
+	/**
+	 * 
+	 * @return the path to the documentation index.html file
+	 */
+	public static String getDocIndex() {
+		String doc = PrimeUtil.getDocDir();
+		if (doc == null) return null;
+		File index = new File(doc,"index.html");
+		if (index.exists()) return index.getPath();
+		return null;
 	}
 
 }

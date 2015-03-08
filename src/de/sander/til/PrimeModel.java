@@ -61,7 +61,7 @@ public class PrimeModel {
 			chartExp = false, chartPrimes = true, chartMatchCount = true, chartFirstMatch=false, chartFirstVoid=false, chartVoidCount=false,
 			chartExpSum = true, stats=false, primes=true, _changed=false, polynomials=false, checkedPattern=false, primeMirror=true,
 			polarFactors=true, factorOnlyOuter=true, factorOnlyNeeded=true, polarBalance=true, rotateView=false,
-			chartDivisorSum=false, chartEulerTotient=false;
+			chartDivisorSum=false, chartEulerTotient=false, polarOverlap=true, showHCN=false;
 	private PMMode pmmode=PMMode.ZOOM;
 	private PMView pmview=PMView.GOLDBACH;
 	private Color BACKGROUND=null,
@@ -1042,6 +1042,7 @@ public class PrimeModel {
 	 */
 	public void setChartDivisorSum(boolean chartDivisorSum) {
 		this.chartDivisorSum = chartDivisorSum;
+		this.changed();
 	}
 
 	/**
@@ -1058,6 +1059,7 @@ public class PrimeModel {
 	 */
 	public void setChartEulerTotient(boolean chartEulerTotient) {
 		this.chartEulerTotient = chartEulerTotient;
+		this.changed();
 	}
 
 	/**
@@ -1163,6 +1165,36 @@ public class PrimeModel {
 	}
 
 	/**
+	 * @return true if the polar factors should overlap
+	 */
+	public boolean isPolarOverlap() {
+		return polarOverlap;
+	}
+
+	/**
+	 * @param polarOverlap
+	 */
+	public void setPolarOverlap(boolean polarOverlap) {
+		this.polarOverlap = polarOverlap;
+		this.changed();
+	}
+
+	/**
+	 * @return true if high composite numbers should be displayed
+	 */
+	public boolean isShowHCN() {
+		return showHCN;
+	}
+
+	/**
+	 * @param showHCN
+	 */
+	public void setShowHCN(boolean showHCN) {
+		this.showHCN = showHCN;
+		this.changed();
+	}
+
+	/**
 	 * 
 	 * @return the stats, stored by occurrence
 	 */
@@ -1183,7 +1215,7 @@ public class PrimeModel {
 			str = "HORIZONTAL_OFFSET";
 			break;
 		case ZOOM:
-			str = "NORMAL";
+			str = "ZOOM";
 			break;
 		case POLY_SIZE:
 			str = "POLY_SIZE";

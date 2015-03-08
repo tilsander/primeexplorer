@@ -42,6 +42,7 @@ public interface MenuListener {
 		CHART_PROP,
 		EXPONENT_SUM,
 		ROTATE_VIEW,
+		HIGHLY_COMPOSITE_NUMBERS,
 		SHOW_CHARTS,
 		SHOW_STATS,
 		POLAR_BALANCE,
@@ -59,5 +60,11 @@ public interface MenuListener {
 	 * @param act
 	 */
 	public void handle(MenuListener.MenuAction act);
+	
+	/**
+	 * open the file
+	 * @param file a file name
+	 */
+	public void openRecently(String file);
 
 }

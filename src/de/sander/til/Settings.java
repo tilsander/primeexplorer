@@ -111,6 +111,10 @@ public class Settings {
 		return this.state.current_model;
 	}
 	
+	/**
+	 * sets the currently focused model
+	 * @param cur_mod
+	 */
 	public void setCurrentModel(String cur_mod) {
 		if (cur_mod == null) return;
 		this.state.current_model = cur_mod;
@@ -118,6 +122,10 @@ public class Settings {
 		if (this.listener != null) this.listener.modelChanged(this.open_models.get(cur_mod));
 	}
 	
+	/**
+	 * sets the currently focused model
+	 * @param cur_mod
+	 */
 	public void setCurrentModel(PrimeModel cur_mod) {
 		this.setCurrentModel(this.getFileName(cur_mod));
 	}
@@ -144,6 +152,7 @@ public class Settings {
 		this.state.recently_opened.values().remove(fileName);
 		if (this.open_models.get(fileName) == null) this.open_models.put(fileName, new StateLoader().loadModel(fileName));
 		if (this.listener != null) this.listener.modelOpened(this.open_models.get(fileName));
+		if (this.listener != null) this.listener.recentlyOpenedChanged();
 	}
 	
 	/**
@@ -151,11 +160,19 @@ public class Settings {
 	 * @param model a prime model
 	 */
 	public void closeModel(String model) {
+		new StateLoader().saveModel(this.open_models.get(model), model);
 		if (this.listener != null) this.listener.modelClosed(this.open_models.get(model));
 		this.state.open_models.remove(model);
 		this.state.recently_opened.put(System.currentTimeMillis(),model);
 		this.open_models.remove(model);
-		if (this.open_models.size() == 0) if (this.listener != null) this.listener.closeApp();
+		if (this.open_models.size() == 0) {
+			if (this.listener != null) this.listener.closeApp();
+		} else {
+			Iterator<Entry<String, PrimeModel>> iter = this.open_models.entrySet().iterator();
+			Map.Entry<String, PrimeModel> entry = iter.next();
+			if (entry != null) this.setCurrentModel(entry.getKey());
+		}
+		if (this.listener != null) this.listener.recentlyOpenedChanged();
 	}
 	
 	/**

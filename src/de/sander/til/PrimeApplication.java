@@ -24,6 +24,7 @@ public class PrimeApplication implements SettingsListener {
 		this.settings = new StateLoader().loadSettings();
 		this.settings.setListener(this);
 		this.controller = new HashMap<PrimeModel,PrimeController>();
+		this.colorer = new ColorController(this.settings.getCurrentModel());
 		Iterator<Entry<String, PrimeModel>> iter = this.settings.getOpenModels().entrySet().iterator();
 		while (iter.hasNext()) {
 			Map.Entry<String, PrimeModel> entry = (Map.Entry<String, PrimeModel>) iter.next();
@@ -38,7 +39,6 @@ public class PrimeApplication implements SettingsListener {
             	stopApp();
             }
         });
-		this.colorer = new ColorController(this.settings.getCurrentModel());
 	}
 	
 	/**
@@ -96,6 +96,7 @@ public class PrimeApplication implements SettingsListener {
 		PrimeController pcon = this.controller.get(model);
 		if (pcon != null) {
 			pcon.focusView();
+			if (this.colorer == null) System.out.println("no colorer");
 			this.colorer.setModel(model);
 		}
 	}
@@ -103,6 +104,16 @@ public class PrimeApplication implements SettingsListener {
 	@Override
 	public void closeApp() {
 		this.stopApp();
+	}
+
+	@Override
+	public void recentlyOpenedChanged() {
+		Iterator<Entry<PrimeModel, PrimeController>> iter = this.controller.entrySet().iterator();
+		while (iter.hasNext()) {
+			Map.Entry<PrimeModel,PrimeController> entry = (Map.Entry<PrimeModel,PrimeController>) iter.next();
+			PrimeController pcon = (PrimeController) entry.getValue();
+			if (pcon != null) pcon.getMenu().updateRecentlyOpened();
+		}
 	}
 	
 }

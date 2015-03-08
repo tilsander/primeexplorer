@@ -26,7 +26,8 @@ public class Primes {
 	private Map<Integer,Integer> calcMatchCount;
 	private Map<Integer, Long> divisorSums;
 	private Map<Integer, Integer> totients;
-	private int prime_offset = 0, prime_count=0;
+	private Map<Integer,Integer> hcn; // number of divisors - hcn
+	private int prime_offset = 0, prime_count=0, current_hcn=0, hcn_div_count=0;
 	private static Primes instance = null;
 	
 	/**
@@ -72,6 +73,7 @@ public class Primes {
 		this.calcMatchCount = new HashMap<Integer,Integer>();
 		this.divisorSums = new HashMap<Integer,Long>();
 		this.totients = new HashMap<Integer,Integer>();
+		this.hcn = new TreeMap<Integer,Integer>();
 	}
 	
 	/**
@@ -101,7 +103,7 @@ public class Primes {
 	
 	/**
 	 * generate prime numbers up to the given parameter
-	 * @param up
+	 * @param up a positive integer
 	 */
 	private void generatePrimes(int up) {
 		for (int i = this.prime_offset+1; i <= up; ++i) {
@@ -115,7 +117,7 @@ public class Primes {
 	
 	/**
 	 * generate the exponents for the specified number
-	 * @param number
+	 * @param number a positive integer
 	 */
 	private void generateExponents(int number) {
 		Map<Integer,Integer> entry = new TreeMap<Integer,Integer>();
@@ -131,7 +133,7 @@ public class Primes {
 	
 	/**
 	 * calculate the goldbach numbers for the given number
-	 * @param number
+	 * @param number a positive integer
 	 */
 	private void generateMatches(int number) {
 		int n2 = number*2;
@@ -151,7 +153,7 @@ public class Primes {
 	
 	/**
 	 * generate the divisors of the number
-	 * @param number
+	 * @param number a positive integer
 	 */
 	private void generateDivisors(int number) {
 		if (this.divisors.containsKey(number)) return;
@@ -160,11 +162,30 @@ public class Primes {
 		this.divisors.put(number, divs);
 	}
 	
+	/**
+	 * calculates and stores all high composite numbers less than or equal number
+	 * @param number a positive integer
+	 */
+	private void generateHCN(int number) {
+		for (int i = this.current_hcn + 1; i <= number; ++i) {
+			List<Integer> divs=null;
+			if ((divs = this.divisors.get(i)) == null) {
+				this.generateDivisors(i);
+				if ((divs = this.divisors.get(i)) == null) continue;
+			}
+			if (divs.size() > this.hcn_div_count) {
+				this.hcn_div_count = divs.size();
+				this.hcn.put(this.hcn_div_count, i);
+			}
+		}
+		this.current_hcn = number;
+	}
+	
 	// query methods
 	
 	/**
 	 * 
-	 * @param number
+	 * @param number a positive integer
 	 * @return true if the number is prime
 	 */
 	public boolean isPrime(int number) {
@@ -174,7 +195,7 @@ public class Primes {
 	
 	/**
 	 * 
-	 * @param number
+	 * @param number a positive integer
 	 * @return the number of primes less or equal than number 
 	 */
 	public int primesUntil(int number) {
@@ -188,7 +209,7 @@ public class Primes {
 	
 	/**
 	 * 
-	 * @param number
+	 * @param number a positive integer
 	 * @return the next prime number relative to number
 	 */
 	public int getNextPrime(int number) {
@@ -201,7 +222,7 @@ public class Primes {
 	
 	/**
 	 * 
-	 * @param number
+	 * @param number a positive integer
 	 * @return the previous prime number relative to number
 	 */
 	public int getPrevPrime(int number) {
@@ -215,7 +236,7 @@ public class Primes {
 	/**
 	 * 
 	 * @param fac
-	 * @param number
+	 * @param number a positive integer
 	 * @return the exponent of the factor fac of the number
 	 */
 	public int getExponent(int fac, int number) {
@@ -229,7 +250,7 @@ public class Primes {
 	
 	/**
 	 * 
-	 * @param number
+	 * @param number a positive integer
 	 * @return all exponents for the number
 	 */
 	public Map<Integer,Integer> getExponents(int number) {
@@ -250,7 +271,7 @@ public class Primes {
 	
 	/**
 	 * 
-	 * @param number
+	 * @param number a positive integer
 	 * @return the sum of the exponents for the number
 	 */
 	public int getExponentSum(int number) {
@@ -269,7 +290,7 @@ public class Primes {
 	
 	/**
 	 * 
-	 * @param number
+	 * @param number a positive integer
 	 * @return the maximum exponent count until number
 	 */
 	public int getMaxExpCount(int number) {
@@ -283,7 +304,7 @@ public class Primes {
 	
 	/**
 	 * 
-	 * @param number
+	 * @param number a positive integer
 	 * @return the maximum exponent sum until number
 	 */
 	public int getMaxExpSum(int number) {
@@ -297,8 +318,8 @@ public class Primes {
 	
 	/**
 	 * 
-	 * @param prime
-	 * @param number
+	 * @param prime a prime number
+	 * @param number a positive integer
 	 * @return true if the prime is a goldbach number for number
 	 */
 	public boolean isMatch(int prime, int number) {
@@ -312,7 +333,7 @@ public class Primes {
 	
 	/**
 	 * 
-	 * @param number
+	 * @param number a positive integer
 	 * @return the goldbach numbers for number
 	 */
 	public Map<Integer,Integer> getMatches(int number) {
@@ -326,7 +347,7 @@ public class Primes {
 	
 	/**
 	 * 
-	 * @param number
+	 * @param number a positive integer
 	 * @return the count of goldbach numbers for number
 	 */
 	public int getMatchCount(int number) {
@@ -338,7 +359,7 @@ public class Primes {
 	
 	/**
 	 * 
-	 * @param number
+	 * @param number a positive integer
 	 * @return the maximum count of goldbach numbers until number
 	 */
 	public int getMaxMatchCount(int number) {
@@ -352,7 +373,7 @@ public class Primes {
 	
 	/**
 	 * 
-	 * @param number
+	 * @param number a positive integer
 	 * @return the first goldbach number for number
 	 */
 	public int getFirstMatch(int number) {
@@ -366,7 +387,7 @@ public class Primes {
 	
 	/**
 	 * 
-	 * @param upto
+	 * @param upto a positive integer
 	 * @return the maximum of the first goldbach number until upto
 	 */
 	public int getMaxFirstMatch(int upto) {
@@ -380,7 +401,7 @@ public class Primes {
 	
 	/**
 	 * a void is a prime that is not a goldbach number for the given number
-	 * @param number
+	 * @param number a positive integer
 	 * @return a list of void for the number
 	 */
 	private List<Integer> getVoids(int number) {
@@ -397,7 +418,7 @@ public class Primes {
 	
 	/**
 	 * 
-	 * @param number
+	 * @param number a positive integer
 	 * @return the first void
 	 */
 	public int getFirstVoid(int number) {
@@ -409,7 +430,7 @@ public class Primes {
 	
 	/**
 	 * 
-	 * @param number
+	 * @param number a positive integer
 	 * @return the count of voids for number
 	 */
 	public int getVoidCount(int number) {
@@ -421,7 +442,7 @@ public class Primes {
 	
 	/**
 	 * 
-	 * @param upto
+	 * @param upto a positive integer
 	 * @return return the maximum of first voids until upto
 	 */
 	public int getMaxFirstVoid(int upto) {
@@ -501,7 +522,7 @@ public class Primes {
 	
 	/**
 	 * 
-	 * @param number
+	 * @param number a positive integer
 	 * @param exponent
 	 * @return return the value of the divisor function for number and exponent
 	 */
@@ -518,7 +539,7 @@ public class Primes {
 	
 	/**
 	 * 
-	 * @param number
+	 * @param number a positive integer
 	 * @param exponent
 	 * @return the maximum divisor sum until number
 	 */
@@ -533,7 +554,7 @@ public class Primes {
 	
 	/**
 	 * 
-	 * @param number
+	 * @param number a positive integer
 	 * @return the value of the euler totient function
 	 */
 	public int getEulerTotient(int number) {
@@ -557,7 +578,7 @@ public class Primes {
 	
 	/**
 	 * 
-	 * @param number
+	 * @param number a positive integer
 	 * @return the maximum of the euler totient function until number
 	 */
 	public int getMaxEulerTotient(int number) {
@@ -574,6 +595,17 @@ public class Primes {
 	 */
 	public void resetDivisorSum() {
 		this.divisorSums.clear();
+	}
+	
+	/**
+	 * 
+	 * @param number a positive integer
+	 * @return true if number is a high composite number
+	 */
+	public boolean isHCN(int number) {
+		if (this.current_hcn >= number) return this.hcn.values().contains(number);
+		else this.generateHCN(number);
+		return this.hcn.values().contains(number);
 	}
 	
 	// algorithms
@@ -610,6 +642,8 @@ public class Primes {
 		}
 		return exp;
 	}
+	
+	// polynomial calculations
 	
 	/**
 	 * this function is special because it uses just sets of natural numbers and polynomials to calculate the number of primes less than or equal number

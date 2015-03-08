@@ -2,8 +2,6 @@ package de.sander.til;
 
 import java.awt.MouseInfo;
 import java.awt.Point;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -18,7 +16,7 @@ import javax.swing.SwingUtilities;
  * The PrimeController controls a PrimeView.
  * It listens for Mouse-, Key-, Focus- and Windowevents.
  */
-public class PrimeController implements MouseMotionListener, MouseListener, KeyListener, FocusListener, WindowListener {
+public class PrimeController implements MouseMotionListener, MouseListener, KeyListener, WindowListener {
 	
 	private PrimeModel model;
 	private PrimeView view;
@@ -40,7 +38,6 @@ public class PrimeController implements MouseMotionListener, MouseListener, KeyL
 		this.view.addMouseMotionListener(this);
 		this.view.addMouseListener(this);
 		this.view.addKeyListener(this);
-		this.view.addFocusListener(this);
 		this.view.addWindowListener(this);
 		this.focusView();
 	}
@@ -67,6 +64,10 @@ public class PrimeController implements MouseMotionListener, MouseListener, KeyL
 			this.REFRESH = false;
 			this.view.draw();
 		}
+	}
+	
+	public MenuController getMenu() {
+		return this.menu;
 	}
 	
 	/**
@@ -177,7 +178,7 @@ public class PrimeController implements MouseMotionListener, MouseListener, KeyL
 		        		break;
 		        	case FACTOR:
 		        		int fy = this.model.getFactorY();
-		        		if (fy > 0) this.model.setFactorY(fy-this.model.getDelta()*1);
+		        		if (fy > 0) this.model.setFactorY(fy-1);
 		        		break;
 		        	}
 		            break;
@@ -188,7 +189,7 @@ public class PrimeController implements MouseMotionListener, MouseListener, KeyL
 		        		break;
 		        	case FACTOR:
 		        		int fy = this.model.getFactorY();
-		        		this.model.setFactorY(fy+this.model.getDelta()*1);
+		        		this.model.setFactorY(fy+1);
 		        		break;
 		        	}
 		            break;
@@ -200,7 +201,7 @@ public class PrimeController implements MouseMotionListener, MouseListener, KeyL
 		        		break;
 		        	case FACTOR:
 		        		int fx = this.model.getFactorX();
-		        		this.model.setFactorX(fx-this.model.getDelta()*2);
+		        		this.model.setFactorX(fx-2);
 		        		break;
 		        	}
 		            break;
@@ -211,7 +212,7 @@ public class PrimeController implements MouseMotionListener, MouseListener, KeyL
 		        		break;
 		        	case FACTOR:
 		        		int fx = this.model.getFactorX();
-		        		this.model.setFactorX(fx+this.model.getDelta()*2);
+		        		this.model.setFactorX(fx+2);
 		        		break;
 		        	}
 		            break;
@@ -225,16 +226,6 @@ public class PrimeController implements MouseMotionListener, MouseListener, KeyL
 	@Override
 	public void keyReleased(KeyEvent e) {}
 
-	// FocusListener
-	
-	@Override
-	public void focusGained(FocusEvent e) {
-		this.settings.setCurrentModel(this.model);
-	}
-
-	@Override
-	public void focusLost(FocusEvent e) {}
-	
 	// WindowListener
 	
 	@Override
@@ -255,7 +246,9 @@ public class PrimeController implements MouseMotionListener, MouseListener, KeyL
 	public void windowDeiconified(WindowEvent e) {}
 
 	@Override
-	public void windowActivated(WindowEvent e) {}
+	public void windowActivated(WindowEvent e) {
+		this.settings.setCurrentModel(this.model);
+	}
 
 	@Override
 	public void windowDeactivated(WindowEvent e) {}

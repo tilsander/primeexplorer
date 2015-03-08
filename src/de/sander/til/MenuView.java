@@ -5,6 +5,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBoxMenuItem;
@@ -34,7 +37,7 @@ public class MenuView {
 	@SuppressWarnings("unused")
 	private JCheckBoxMenuItem chartPrimes, chartExponent, chartMatchCount, chartFirstMatch, chartVoidCount, chartFirstVoid, chartPrimesCalc, chartMatchCountCalc, chartDivisorSum, chartEulerTotient,
 			chartProp, expSum, showCharts,
-			primes, factors, rectangles, helper, rays, polys, mirror, yTransform, polarFactors, showStats, polarBalance, factorsOnlyOuter, factorsOnlyNeeded, rotateView;
+			primes, factors, rectangles, helper, rays, polys, mirror, yTransform, polarFactors, showStats, polarBalance, factorsOnlyOuter, factorsOnlyNeeded, rotateView, highlyCompositeNumbers;
 	private JRadioButtonMenuItem zoomMode, verticalStep, horizontalStep, verticalOffset, horizontalOffset, polySize, polyFactor, polyDelta, divisorExp,
 			goldbachMode, factorMode;
 	private MenuListener listener;
@@ -127,13 +130,14 @@ public class MenuView {
 		viewMenu.add(this.connect(rays = new JCheckBoxMenuItem("Rays",this.model.isRays()),							MenuAction.RAYS,KeyEvent.VK_L,CTRL));
 		viewMenu.add(this.connect(polys = new JCheckBoxMenuItem("Polys",this.model.isPolynomials()),				MenuAction.POLYS,KeyEvent.VK_U,CTRL));
 		viewMenu.add(this.connect(mirror = new JCheckBoxMenuItem("Mirror",this.model.isPrimeMirror()),				MenuAction.MIRROR,KeyEvent.VK_M,CTRL));
-		viewMenu.add(this.connect(yTransform = new JCheckBoxMenuItem("Y-Transorm",this.model.isCheckedPattern()),					MenuAction.Y_TRANSFORM,KeyEvent.VK_Y,CTRL));
-		viewMenu.add(this.connect(polarFactors = new JCheckBoxMenuItem("Polar Factors",this.model.isPolarFactors()),				MenuAction.POLAR_FACTORS,KeyEvent.VK_P,CTRL_SHIFT));
-		viewMenu.add(this.connect(polarBalance = new JCheckBoxMenuItem("Polar Balance",this.model.isPolarBalance()),				MenuAction.POLAR_BALANCE,KeyEvent.VK_B,CTRL_SHIFT));
-		viewMenu.add(this.connect(factorsOnlyOuter = new JCheckBoxMenuItem("Factors Only Outer",this.model.isFactorOnlyOuter()),	MenuAction.FACTORS_ONLY_OUTER,KeyEvent.VK_O,CTRL_SHIFT));
-		viewMenu.add(this.connect(factorsOnlyNeeded = new JCheckBoxMenuItem("Factors Only Needed",this.model.isFactorOnlyNeeded()),	MenuAction.FACTORS_ONLY_NEEDED,KeyEvent.VK_N,CTRL_SHIFT));
-		viewMenu.add(this.connect(rotateView = new JCheckBoxMenuItem("Rotate View",this.model.isRotateView()),						MenuAction.ROTATE_VIEW,KeyEvent.VK_R,CTRL_SHIFT));
-		viewMenu.add(this.connect(showStats = new JCheckBoxMenuItem("Show Stats",this.model.isStats()),								MenuAction.SHOW_STATS,KeyEvent.VK_S,CTRL_SHIFT));
+		viewMenu.add(this.connect(yTransform = new JCheckBoxMenuItem("Y-Transorm",this.model.isCheckedPattern()),						MenuAction.Y_TRANSFORM,KeyEvent.VK_Y,CTRL));
+		viewMenu.add(this.connect(polarFactors = new JCheckBoxMenuItem("Polar Factors",this.model.isPolarFactors()),					MenuAction.POLAR_FACTORS,KeyEvent.VK_P,CTRL_SHIFT));
+		viewMenu.add(this.connect(polarBalance = new JCheckBoxMenuItem("Polar Balance",this.model.isPolarBalance()),					MenuAction.POLAR_BALANCE,KeyEvent.VK_B,CTRL_SHIFT));
+		viewMenu.add(this.connect(factorsOnlyOuter = new JCheckBoxMenuItem("Factors Only Outer",this.model.isFactorOnlyOuter()),		MenuAction.FACTORS_ONLY_OUTER,KeyEvent.VK_O,CTRL_SHIFT));
+		viewMenu.add(this.connect(factorsOnlyNeeded = new JCheckBoxMenuItem("Factors Only Needed",this.model.isFactorOnlyNeeded()),		MenuAction.FACTORS_ONLY_NEEDED,KeyEvent.VK_N,CTRL_SHIFT));
+		viewMenu.add(this.connect(rotateView = new JCheckBoxMenuItem("Rotate View",this.model.isRotateView()),							MenuAction.ROTATE_VIEW,KeyEvent.VK_R,CTRL_SHIFT));
+		viewMenu.add(this.connect(highlyCompositeNumbers = new JCheckBoxMenuItem("Highly Composite Numbers",this.model.isShowHCN()),	MenuAction.HIGHLY_COMPOSITE_NUMBERS,KeyEvent.VK_H,CTRL_SHIFT));
+		viewMenu.add(this.connect(showStats = new JCheckBoxMenuItem("Show Stats",this.model.isStats()),									MenuAction.SHOW_STATS,KeyEvent.VK_S,CTRL_SHIFT));
 		
 		// chart menu
 		chartMenu.add(this.connect(chartPrimes = new JCheckBoxMenuItem("Primes (Algo)",this.model.isChartPrimes()),						MenuAction.CHART_PRIMES,KeyEvent.VK_1,CTRL));
@@ -161,6 +165,16 @@ public class MenuView {
 		menuBar.add(helpMenu);
 	}
 	
+	public void buildRecentlyOpened(Map<Long,String> recentlyOpened) {
+		recently.removeAll();
+		Iterator<Entry<Long, String>> iter = recentlyOpened.entrySet().iterator();
+		while (iter.hasNext()) {
+			Map.Entry<Long, String> entry = (Map.Entry<Long, String>)iter.next();
+			String file = entry.getValue();
+			recently.add(this.connect(new JMenuItem(file), file),0);
+		}
+	}
+	
 	/**
 	 * create a action listener with the given menu action
 	 * @param act a menu action
@@ -171,6 +185,16 @@ public class MenuView {
 
 			public void actionPerformed(ActionEvent e) {
 				listener.handle(act);
+			}
+			
+		};
+	}
+	
+	private ActionListener createRecentlyListener(final String file) {
+		return new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				listener.openRecently(file);
 			}
 			
 		};
@@ -198,6 +222,17 @@ public class MenuView {
 	private JMenuItem connect(JMenuItem item, MenuAction act, int key, int modifier) {
 		item.setAccelerator(KeyStroke.getKeyStroke(key,modifier));
 		item.addActionListener(this.createActionListener(act));
+		return item;
+	}
+	
+	/**
+	 * connect a menu item with a file
+	 * @param item a menu item
+	 * @param file a file name 
+	 * @return the connected menu item
+	 */
+	private JMenuItem connect(JMenuItem item, String file) {
+		item.addActionListener(this.createRecentlyListener(file));
 		return item;
 	}
 	

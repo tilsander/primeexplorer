@@ -25,6 +25,7 @@ public class MenuController implements MenuListener {
 		this.settings = settings;
 		this.view = new MenuView(this.model);
 		this.view.setListener(this);
+		this.view.buildRecentlyOpened(this.settings.getRecentlyOpened());
 	}
 	
 	/**
@@ -33,6 +34,10 @@ public class MenuController implements MenuListener {
 	 */
 	public JMenuBar getMenuBar() {
 		return this.view.getMenuBar();
+	}
+	
+	public void updateRecentlyOpened() {
+		this.view.buildRecentlyOpened(settings.getRecentlyOpened());
 	}
 	
 	/**
@@ -107,6 +112,9 @@ public class MenuController implements MenuListener {
 			break;
 		case HELPER:
 			this.model.setHelper(!this.model.isHelper());
+			break;
+		case HIGHLY_COMPOSITE_NUMBERS:
+			this.model.setShowHCN(!this.model.isShowHCN());
 			break;
 		case HORIZONTAL_OFFSET:
 			this.model.setPmmode(PrimeModel.PMMode.HORIZONTAL_OFFSET);
@@ -245,6 +253,11 @@ public class MenuController implements MenuListener {
 		}
 	}
 	
+	@Override
+	public void openRecently(String file) {
+		this.settings.openModel(file);
+	}
+	
 	/**
 	 * create a open dialog
 	 */
@@ -262,6 +275,7 @@ public class MenuController implements MenuListener {
 	private void createModel() {
 		FileDialog dialog = new FileDialog((Frame)null, "New File", FileDialog.SAVE);
 		dialog.setVisible(true);
+		dialog.setDirectory(PrimeUtil.getContentDir());
 		String file = dialog.getFile();
 		String dir = dialog.getDirectory();
 		if (file != null) {
@@ -273,7 +287,9 @@ public class MenuController implements MenuListener {
 	 * open javadoc documentation
 	 */
 	private void openDocumentation() {
-		
+		String index = PrimeUtil.getDocIndex();
+		if (index != null) PrimeUtil.openWebpage("file://"+index);
+		else PrimeUtil.openWebpage("http://www.til-sander.de/prime-explorer/doc/index.html");
 	}
 	
 	/**
@@ -282,6 +298,5 @@ public class MenuController implements MenuListener {
 	private void openAbout() {
 		PrimeUtil.openWebpage("http://www.til-sander.de/");
 	}
-
 
 }

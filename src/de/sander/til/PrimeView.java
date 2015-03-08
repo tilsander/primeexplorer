@@ -15,6 +15,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowListener;
 
@@ -225,6 +226,7 @@ public class PrimeView extends JPanel {
 		this.drawField();
 		Map<Integer,Point2D> rays = this.drawRays();
 		this.drawText();
+		if (this.model.isShowHCN()) this.drawHCN();
 		this.drawPolys();
 		if (this.model.isPolarFactors()) this.drawPolarFactors();
 		this.drawAxis();
@@ -928,7 +930,7 @@ public class PrimeView extends JPanel {
 	 * draw the polar polynomials at the top of the view
 	 */
 	private void drawPolarPolys() {
-		double mid, low, half, last_x, last_y, cur_x, cur_y, bal, shift;
+		double mid, low, half, last_x, last_y, cur_x, cur_y, bal, shift, nolap, onlyOuter;
 		shift = (double)X_POS;
 		for (int i = 2; i <= this.POLAR_FACTOR_X/2; ++i) {
 			mid = ((double)i+2.0)/2.0;
@@ -936,42 +938,59 @@ public class PrimeView extends JPanel {
 			half = mid % 1.0;
 			last_x = last_y = cur_x = cur_y = 0.0;
 			bal = this.model.isPolarBalance() ? (double)POLAR_FACTOR_X/4.0 - ((double)i*0.5) : 0.0;
+			nolap = this.model.isPolarOverlap() && this.model.isPolarBalance() ? ((double)POLAR_FACTOR_X/2.0-4.0)/2.0*POLAR_FACTOR_Y : 0.0;
+			onlyOuter = this.model.isFactorOnlyOuter() && this.model.isPolarBalance() ? -(((double)POLAR_FACTOR_X-4.0)*POLAR_FACTOR_Y/4.0) : 0.0;
 			for (int b = 0; b < (i-2)/2+1; ++b) {
 				cur_x = ((double)b+half)*((double)b+half);
 				cur_y = (b+half);
 				g2d.setColor(this.model.getColor("POLAR_FACTOR_LEFT"));
 				g2d.drawLine((int)((low-cur_x-0.5-shift)*BLOCK)+X_LEFT,
-							 (int)((mid+cur_y-0.5+bal)*POLAR_FACTOR_Y*BLOCK-0.5*(POLAR_FACTOR_Y-1.0)*BLOCK)+Y_TOP,
+							 (int)((mid+cur_y-0.5+bal)*POLAR_FACTOR_Y*BLOCK-0.5*(POLAR_FACTOR_Y-1.0)*BLOCK+(onlyOuter)*BLOCK)+Y_TOP,
 							 (int)((low-last_x-0.5-shift)*BLOCK)+X_LEFT,
-							 (int)((mid+last_y-0.5+bal)*POLAR_FACTOR_Y*BLOCK-0.5*(POLAR_FACTOR_Y-1.0)*BLOCK)+Y_TOP);
-				g2d.drawLine((int)((low-cur_x-0.5-shift)*BLOCK)+X_LEFT,
-						 (int)((mid-cur_y-0.5+bal)*POLAR_FACTOR_Y*BLOCK-0.5*(POLAR_FACTOR_Y-1.0)*BLOCK)+Y_TOP,
+							 (int)((mid+last_y-0.5+bal)*POLAR_FACTOR_Y*BLOCK-0.5*(POLAR_FACTOR_Y-1.0)*BLOCK+(onlyOuter)*BLOCK)+Y_TOP);
+				if (this.model.isFactorOnlyOuter() == false || this.model.isPolarBalance() == false) g2d.drawLine((int)((low-cur_x-0.5-shift)*BLOCK)+X_LEFT,
+						 (int)((mid-cur_y-0.5+bal)*POLAR_FACTOR_Y*BLOCK-0.5*(POLAR_FACTOR_Y-1.0)*BLOCK+(onlyOuter)*BLOCK)+Y_TOP,
 						 (int)((low-last_x-0.5-shift)*BLOCK)+X_LEFT,
-						 (int)((mid-last_y-0.5+bal)*POLAR_FACTOR_Y*BLOCK-0.5*(POLAR_FACTOR_Y-1.0)*BLOCK)+Y_TOP);
+						 (int)((mid-last_y-0.5+bal)*POLAR_FACTOR_Y*BLOCK-0.5*(POLAR_FACTOR_Y-1.0)*BLOCK+(onlyOuter)*BLOCK)+Y_TOP);
 				if (this.model.isPolarBalance()) {
 					g2d.drawOval((int)((low-cur_x-0.5-shift)*BLOCK-0.5*BLOCK)+X_LEFT,
-							 	 (int)((mid+cur_y-0.5+bal)*POLAR_FACTOR_Y*BLOCK-0.5*(POLAR_FACTOR_Y-1.0)*BLOCK-0.5*BLOCK)+Y_TOP, BLOCK, BLOCK);
-					g2d.drawOval((int)((low-cur_x-0.5-shift)*BLOCK-0.5*BLOCK)+X_LEFT,
-							 	 (int)((mid-cur_y-0.5+bal)*POLAR_FACTOR_Y*BLOCK-0.5*(POLAR_FACTOR_Y-1.0)*BLOCK-0.5*BLOCK)+Y_TOP, BLOCK, BLOCK);
+							 	 (int)((mid+cur_y-0.5+bal)*POLAR_FACTOR_Y*BLOCK-0.5*(POLAR_FACTOR_Y-1.0)*BLOCK-0.5*BLOCK+(onlyOuter)*BLOCK)+Y_TOP, BLOCK, BLOCK);
+					if (this.model.isFactorOnlyOuter() == false) g2d.drawOval((int)((low-cur_x-0.5-shift)*BLOCK-0.5*BLOCK)+X_LEFT,
+							 	 (int)((mid-cur_y-0.5+bal)*POLAR_FACTOR_Y*BLOCK-0.5*(POLAR_FACTOR_Y-1.0)*BLOCK-0.5*BLOCK+(onlyOuter)*BLOCK)+Y_TOP, BLOCK, BLOCK);
 				}
 
 				g2d.setColor(this.model.getColor("POLAR_FACTOR_RIGHT"));
-				g2d.drawLine((int)(((POLAR_FACTOR_X-1.0-shift)-(low-cur_x-0.5))*BLOCK)+X_LEFT,
-							 (int)((mid+cur_y-0.5+bal)*POLAR_FACTOR_Y*BLOCK-0.5*(POLAR_FACTOR_Y-1.0)*BLOCK)+Y_TOP,
+				if (this.model.isFactorOnlyOuter() == false || this.model.isPolarBalance() == false) g2d.drawLine((int)(((POLAR_FACTOR_X-1.0-shift)-(low-cur_x-0.5))*BLOCK)+X_LEFT,
+							 (int)((mid+cur_y-0.5+bal)*POLAR_FACTOR_Y*BLOCK-0.5*(POLAR_FACTOR_Y-1.0)*BLOCK+(nolap+onlyOuter)*BLOCK)+Y_TOP,
 							 (int)(((POLAR_FACTOR_X-1.0-shift)-(low-last_x-0.5))*BLOCK)+X_LEFT,
-							 (int)((mid+last_y-0.5+bal)*POLAR_FACTOR_Y*BLOCK-0.5*(POLAR_FACTOR_Y-1.0)*BLOCK)+Y_TOP);
+							 (int)((mid+last_y-0.5+bal)*POLAR_FACTOR_Y*BLOCK-0.5*(POLAR_FACTOR_Y-1.0)*BLOCK+(nolap+onlyOuter)*BLOCK)+Y_TOP);
 				g2d.drawLine((int)(((POLAR_FACTOR_X-1.0-shift)-(low-cur_x-0.5))*BLOCK)+X_LEFT,
-						 	 (int)((mid-cur_y-0.5+bal)*POLAR_FACTOR_Y*BLOCK-0.5*(POLAR_FACTOR_Y-1.0)*BLOCK)+Y_TOP,
+						 	 (int)((mid-cur_y-0.5+bal)*POLAR_FACTOR_Y*BLOCK-0.5*(POLAR_FACTOR_Y-1.0)*BLOCK+(nolap+onlyOuter)*BLOCK)+Y_TOP,
 						 	 (int)(((POLAR_FACTOR_X-1.0-shift)-(low-last_x-0.5))*BLOCK)+X_LEFT,
-						 	 (int)((mid-last_y-0.5+bal)*POLAR_FACTOR_Y*BLOCK-0.5*(POLAR_FACTOR_Y-1.0)*BLOCK)+Y_TOP);
+						 	 (int)((mid-last_y-0.5+bal)*POLAR_FACTOR_Y*BLOCK-0.5*(POLAR_FACTOR_Y-1.0)*BLOCK+(nolap+onlyOuter)*BLOCK)+Y_TOP);
 				if (this.model.isPolarBalance()) {
+					if (this.model.isFactorOnlyOuter() == false) g2d.drawOval((int)(((POLAR_FACTOR_X-1.0-shift)-(low-cur_x-0.5))*BLOCK-0.5*BLOCK)+X_LEFT,
+							 	 (int)((mid+cur_y-0.5+bal)*POLAR_FACTOR_Y*BLOCK-0.5*(POLAR_FACTOR_Y-1.0)*BLOCK-0.5*BLOCK+(nolap+onlyOuter)*BLOCK)+Y_TOP, BLOCK, BLOCK);
 					g2d.drawOval((int)(((POLAR_FACTOR_X-1.0-shift)-(low-cur_x-0.5))*BLOCK-0.5*BLOCK)+X_LEFT,
-							 	 (int)((mid+cur_y-0.5+bal)*POLAR_FACTOR_Y*BLOCK-0.5*(POLAR_FACTOR_Y-1.0)*BLOCK-0.5*BLOCK)+Y_TOP, BLOCK, BLOCK);
-					g2d.drawOval((int)(((POLAR_FACTOR_X-1.0-shift)-(low-cur_x-0.5))*BLOCK-0.5*BLOCK)+X_LEFT,
-						 	 	 (int)((mid-cur_y-0.5+bal)*POLAR_FACTOR_Y*BLOCK-0.5*(POLAR_FACTOR_Y-1.0)*BLOCK-0.5*BLOCK)+Y_TOP, BLOCK, BLOCK);
+						 	 	 (int)((mid-cur_y-0.5+bal)*POLAR_FACTOR_Y*BLOCK-0.5*(POLAR_FACTOR_Y-1.0)*BLOCK-0.5*BLOCK+(nolap+onlyOuter)*BLOCK)+Y_TOP, BLOCK, BLOCK);
 				}
 				last_x = cur_x;
 				last_y = cur_y;
+			}
+		}
+	}
+	
+	/**
+	 * draw highly composite numbers
+	 */
+	public void drawHCN() {
+		int y;
+		for (int yp = 1; yp <= Y_COUNT; ++yp) {
+			y = this.transformY(yp);
+			if (Primes._().isHCN(y)) {
+				System.out.println("hcn: "+y);
+				g2d.setColor(this.getHightlightTextColor());
+				g2d.drawLine(X_LEFT, (int)(((double)yp-0.5)*BLOCK)+Y_TOP, WIDTH-X_RIGHT, (int)(((double)yp-0.5)*BLOCK)+Y_TOP);
 			}
 		}
 	}
