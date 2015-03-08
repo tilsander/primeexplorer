@@ -264,6 +264,7 @@ public class MenuController implements MenuListener {
 	private void openModel() {
 		FileDialog dialog = new FileDialog((Frame)null);
 		dialog.setVisible(true);
+		dialog.setDirectory(PrimeUtil.getContentDir());
 		String file = dialog.getFile();
 		String dir = dialog.getDirectory();
 		if (file != null) this.settings.openModel(new File(dir,file).getPath());
