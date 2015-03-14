@@ -123,19 +123,13 @@ public class PrimeController implements MouseMotionListener, MouseListener, KeyL
 	// MouseListener
 
 	@Override
-	public void mouseClicked(MouseEvent e) {
-		System.out.println("click");
-	}
+	public void mouseClicked(MouseEvent e) {}
 
 	@Override
-	public void mousePressed(MouseEvent e) {
-		System.out.println("press");
-	}
+	public void mousePressed(MouseEvent e) {}
 
 	@Override
-	public void mouseReleased(MouseEvent e) {
-		System.out.println("release");
-	}
+	public void mouseReleased(MouseEvent e) {}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {}

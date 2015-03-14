@@ -24,7 +24,7 @@ public class Primes {
 	private Map<String,Polynomial> polys;
 	private Map<Integer,Integer> calcPrimeCount;
 	private Map<Integer,Integer> calcMatchCount;
-	private Map<Integer, Long> divisorSums;
+	private Map<Integer, Map<Integer,Long>> divisorSums;
 	private Map<Integer, Integer> totients;
 	private Map<Integer,Integer> hcn; // number of divisors - hcn
 	private int prime_offset = 0, prime_count=0, current_hcn=0, hcn_div_count=0;
@@ -71,7 +71,7 @@ public class Primes {
 		this.polys = new HashMap<String,Polynomial>();
 		this.calcPrimeCount = new HashMap<Integer,Integer>();
 		this.calcMatchCount = new HashMap<Integer,Integer>();
-		this.divisorSums = new HashMap<Integer,Long>();
+		this.divisorSums = new HashMap<Integer,Map<Integer,Long>>();
 		this.totients = new HashMap<Integer,Integer>();
 		this.hcn = new TreeMap<Integer,Integer>();
 	}
@@ -527,13 +527,14 @@ public class Primes {
 	 * @return return the value of the divisor function for number and exponent
 	 */
 	public long getDivisorSum(int number, int exponent) {
-		if (this.divisorSums.containsKey(number)) return this.divisorSums.get(number);
+		if (this.divisorSums.containsKey(exponent) == false) this.divisorSums.put(exponent, new HashMap<Integer,Long>());
+		if (this.divisorSums.get(exponent).containsKey(number)) return this.divisorSums.get(exponent).get(number);
 		this.generateDivisors(number);
 		List<Integer> divs = this.divisors.get(number);
 		if (divs == null) return 0;
 		long sum = 0;
 		for (Integer div : divs) sum += Math.pow(div, exponent);
-		this.divisorSums.put(number, sum);
+		this.divisorSums.get(exponent).put(number, sum);
 		return sum;
 	}
 	
@@ -588,13 +589,6 @@ public class Primes {
 			if (temp > max) max = temp;
 		}
 		return max;
-	}
-	
-	/**
-	 * reset the divisor sum cache
-	 */
-	public void resetDivisorSum() {
-		this.divisorSums.clear();
 	}
 	
 	/**
@@ -687,8 +681,8 @@ public class Primes {
 		if (this.calcMatchCount.containsKey(number)) return this.calcMatchCount.get(number);
 		
 		int count=0, n = number;
-		HashSet<Integer> comps = this.A(n);
-		comps.addAll(this.U(n));
+		HashSet<Integer> comps = this.A(n,3);
+		comps.addAll(this.U(n,2));
 		
 		count = (n-1)-comps.size();
 		
@@ -718,7 +712,7 @@ public class Primes {
 	private HashSet<Integer> A(int n) {
 		int comp=0;
 		HashSet<Integer> comps = new HashSet<Integer>();
-		for (int i = 3; i < n; ++i) {
+		for (int i = 3; i <= n; ++i) {
 			for (int k = 2; k <= i-1; ++k) {
 				comp = Ti(i,k);
 				if (comp >= 2 && comp <= n) comps.add(comp);
@@ -763,6 +757,106 @@ public class Primes {
 	 */
 	private int Li(int n, int i, int k) {
 		return 2*n - Ti(i,k);
+	}
+	
+	// general coefficient versions
+	
+	/**
+	 * @param n
+	 * @param c the coefficient of the parabolas
+	 * @return a set of factors of the first n polynomials
+	 */
+	private HashSet<Integer> A(int n, int c) {
+		int comp=0;
+		HashSet<Integer> comps = new HashSet<Integer>();
+		for (int j = 2-c; j <= 1; ++j) {
+			for (int i = 3; i <= n; ++i) {
+				for (int k = 2; k <= i-1; ++k) {
+					comp = Ti(i,j,c,k);
+					if (comp >= 2 && comp <= n) comps.add(comp);
+				}
+			}			
+		}
+		return comps;
+	}
+	
+	/**
+	 * 
+	 * @param i
+	 * @param j
+	 * @param p
+	 * @param k
+	 * @return the value of the k-th polynomial at the i-th position
+	 */
+	private int Ti(int i, int j, int c, int k) {
+		return c*k*(i-k)+k*j;
+	}
+	
+	/**
+	 * 
+	 * @param n
+	 * @param c
+	 * @return a set of factors of the first n polar polynomial
+	 */
+	private HashSet<Integer> U(int n, int c) {
+		int comp=0;
+		HashSet<Integer> comps = new HashSet<Integer>();
+		for (int j = 2-c; j <= 1; ++j) {
+			for (int i = 3; i <= n; ++i) {
+				for (int k = 2; k <= i-1; ++k) {
+					comp = Li(n,i,j,c,k);
+					if (comp >= 2 && comp <= n) comps.add(comp);
+				}
+			}			
+		}
+		return comps;
+	}
+	
+	/**
+	 * 
+	 * @param n
+	 * @param i
+	 * @param j
+	 * @param c
+	 * @param k
+	 * @return the value of the k-th polynomial at the i-th position with the offset n
+	 */
+	private int Li(int n, int i, int j, int c, int k) {
+		return 2*n - Ti(i,j,c,k);
+	}
+	
+	/**
+	 * linear sieve rtl
+	 * @param n
+	 * @return a set of composite numbers
+	 */
+	private HashSet<Integer> myu(int n) {
+		HashSet<Integer> comps = new HashSet<Integer>();
+		int c = 0;
+		for (int i = 3; i <= n; ++i) {
+			for (int k = 2; k <= n-i+1; ++k) {
+				c = (i-1)*k;
+				if (c <= n) comps.add(c);
+			}
+		}
+		return comps;
+	}
+	
+	/**
+	 * linear sieve ltr
+	 * @param n
+	 * @return a set of composite numbers
+	 */
+	private HashSet<Integer> phi(int n) {
+		HashSet<Integer> comps = new HashSet<Integer>();
+		int c = 0;
+		for (int i = 3; i <= n; ++i) {
+			for (int k = 2; k <= i-1; ++k) {
+				c = (n+2-i)*k;
+				if (c <= n) comps.add(c);
+			}
+		}
+		return comps;
 	}
 
 }

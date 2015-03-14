@@ -141,6 +141,9 @@ public class MenuController implements MenuListener {
 		case POLAR_FACTORS:
 			this.model.setPolarFactors(!this.model.isPolarFactors());
 			break;
+		case POLAR_OVERLAP:
+			this.model.setPolarOverlap(!this.model.isPolarOverlap());
+			break;
 		case POLYS:
 			this.model.setPolynomials(!this.model.isPolynomials());
 			break;
@@ -211,7 +214,6 @@ public class MenuController implements MenuListener {
 				break;
 			case DIVISOR_EXP:
 				this.model.setDivisorSumExponent(this.model.getDivisorSumExponent()+1);
-				Primes._().resetDivisorSum();
 				break;
 			}
 			break;
@@ -243,7 +245,6 @@ public class MenuController implements MenuListener {
 				break;
 			case DIVISOR_EXP:
 				this.model.setDivisorSumExponent(this.model.getDivisorSumExponent()-1);
-				Primes._().resetDivisorSum();
 				break;
 			}
 			break;

@@ -549,7 +549,7 @@ public class PrimeView extends JPanel {
 		}
 		
 		int Y_MAX = this.transformY(Y_COUNT),
-			X_CHART_LEFT = WIDTH - X_RIGHT,
+			X_CHART_LEFT = WIDTH - X_RIGHT + 1,
 			xc_val=0, y=0;
 		double chart_px=0.0, cpx_dev=1.0;
 		if (this.model.isChartProp()) {
@@ -605,7 +605,7 @@ public class PrimeView extends JPanel {
 				return;
 			}
 		}
-		chart_px = (double)this.X_RIGHT/(cpx_dev+1.0);
+		chart_px = ((double)this.X_RIGHT-1.0)/(cpx_dev+1.0);
 		
 		for (int yp = 1; yp <= Y_COUNT; ++yp) {
 			y = this.transformY(yp);
@@ -938,7 +938,7 @@ public class PrimeView extends JPanel {
 			half = mid % 1.0;
 			last_x = last_y = cur_x = cur_y = 0.0;
 			bal = this.model.isPolarBalance() ? (double)POLAR_FACTOR_X/4.0 - ((double)i*0.5) : 0.0;
-			nolap = this.model.isPolarOverlap() && this.model.isPolarBalance() ? ((double)POLAR_FACTOR_X/2.0-4.0)/2.0*POLAR_FACTOR_Y : 0.0;
+			nolap = !this.model.isPolarOverlap() && this.model.isPolarBalance() ? ((double)POLAR_FACTOR_X/2.0-4.0)/2.0*POLAR_FACTOR_Y : 0.0;
 			onlyOuter = this.model.isFactorOnlyOuter() && this.model.isPolarBalance() ? -(((double)POLAR_FACTOR_X-4.0)*POLAR_FACTOR_Y/4.0) : 0.0;
 			for (int b = 0; b < (i-2)/2+1; ++b) {
 				cur_x = ((double)b+half)*((double)b+half);

@@ -37,7 +37,7 @@ public class MenuView {
 	@SuppressWarnings("unused")
 	private JCheckBoxMenuItem chartPrimes, chartExponent, chartMatchCount, chartFirstMatch, chartVoidCount, chartFirstVoid, chartPrimesCalc, chartMatchCountCalc, chartDivisorSum, chartEulerTotient,
 			chartProp, expSum, showCharts,
-			primes, factors, rectangles, helper, rays, polys, mirror, yTransform, polarFactors, showStats, polarBalance, factorsOnlyOuter, factorsOnlyNeeded, rotateView, highlyCompositeNumbers;
+			primes, factors, rectangles, helper, rays, polys, mirror, yTransform, polarFactors, showStats, polarBalance, polarOverlap, factorsOnlyOuter, factorsOnlyNeeded, rotateView, highlyCompositeNumbers;
 	private JRadioButtonMenuItem zoomMode, verticalStep, horizontalStep, verticalOffset, horizontalOffset, polySize, polyFactor, polyDelta, divisorExp,
 			goldbachMode, factorMode;
 	private MenuListener listener;
@@ -133,6 +133,7 @@ public class MenuView {
 		viewMenu.add(this.connect(yTransform = new JCheckBoxMenuItem("Y-Transorm",this.model.isCheckedPattern()),						MenuAction.Y_TRANSFORM,KeyEvent.VK_Y,CTRL));
 		viewMenu.add(this.connect(polarFactors = new JCheckBoxMenuItem("Polar Factors",this.model.isPolarFactors()),					MenuAction.POLAR_FACTORS,KeyEvent.VK_P,CTRL_SHIFT));
 		viewMenu.add(this.connect(polarBalance = new JCheckBoxMenuItem("Polar Balance",this.model.isPolarBalance()),					MenuAction.POLAR_BALANCE,KeyEvent.VK_B,CTRL_SHIFT));
+		viewMenu.add(this.connect(polarOverlap = new JCheckBoxMenuItem("Polar Overlap",this.model.isPolarOverlap()),					MenuAction.POLAR_OVERLAP,KeyEvent.VK_L,CTRL_SHIFT));
 		viewMenu.add(this.connect(factorsOnlyOuter = new JCheckBoxMenuItem("Factors Only Outer",this.model.isFactorOnlyOuter()),		MenuAction.FACTORS_ONLY_OUTER,KeyEvent.VK_O,CTRL_SHIFT));
 		viewMenu.add(this.connect(factorsOnlyNeeded = new JCheckBoxMenuItem("Factors Only Needed",this.model.isFactorOnlyNeeded()),		MenuAction.FACTORS_ONLY_NEEDED,KeyEvent.VK_N,CTRL_SHIFT));
 		viewMenu.add(this.connect(rotateView = new JCheckBoxMenuItem("Rotate View",this.model.isRotateView()),							MenuAction.ROTATE_VIEW,KeyEvent.VK_R,CTRL_SHIFT));
