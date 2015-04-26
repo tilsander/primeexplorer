@@ -29,9 +29,9 @@ public class PrimeController implements MouseMotionListener, MouseListener, KeyL
 	private MenuController menu;
 	private Settings settings;
 	private boolean REFRESH=true;
+	private long lastFocus = 0L;
 	
 	/**
-	 * 
 	 * @param mod
 	 * @param settings
 	 */
@@ -49,21 +49,23 @@ public class PrimeController implements MouseMotionListener, MouseListener, KeyL
 	}
 	
 	/**
-	 * focus the prime view
+	 * Focus the prime view.
 	 */
 	public void focusView() {
-		this.view.focus();		
+		long now = System.currentTimeMillis();
+		if (now - this.lastFocus > 1000) this.view.focus();
+		this.lastFocus = now;
 	}
 	
 	/**
-	 * close the prime view
+	 * Close the prime view.
 	 */
 	public void closeView() {
 		this.view.close();
 	}
 	
 	/**
-	 * update the prime view
+	 * Update the prime view.
 	 */
 	public void updateView() {
 		if (this.REFRESH || this.model.isChanged()) {
@@ -72,12 +74,15 @@ public class PrimeController implements MouseMotionListener, MouseListener, KeyL
 		}
 	}
 	
+	/**
+	 * @return The menu controller.
+	 */
 	public MenuController getMenu() {
 		return this.menu;
 	}
 	
 	/**
-	 * refresh the the mouse pointer position
+	 * Refresh the the mouse pointer position.
 	 */
 	public void refreshMouse() {
 		Point b = null;
@@ -93,14 +98,14 @@ public class PrimeController implements MouseMotionListener, MouseListener, KeyL
 	}
 	
 	/**
-	 * set the refresh flag
+	 * Set the refresh flag.
 	 */
 	public void refreshScreen() {
 		this.REFRESH = true;
 	}
 	
 	/**
-	 * set the current mouse pointer position
+	 * Set the current mouse pointer position.
 	 * @param x
 	 * @param y
 	 */

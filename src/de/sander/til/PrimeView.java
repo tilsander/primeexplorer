@@ -154,14 +154,14 @@ public class PrimeView extends JPanel {
 	}
 	
 	/**
-	 * set the focus to the view frame
+	 * Set the focus to the view frame.
 	 */
 	public void focus() {
 		this.viewFrame.setVisible(true);
 	}
 	
 	/**
-	 * close the window
+	 * Close the window.
 	 */
 	public void close() {
 		this.viewFrame.setVisible(false);
@@ -169,7 +169,7 @@ public class PrimeView extends JPanel {
 	}
 	
 	/**
-	 * set the menu bar of this view
+	 * Set the menu bar of this view.
 	 * @param menu
 	 */
 	public void setMenuBar(JMenuBar menu) {
@@ -177,15 +177,14 @@ public class PrimeView extends JPanel {
 	}
 	
 	/**
-	 * 
-	 * @return the prime model
+	 * @return The prime model.
 	 */
 	public PrimeModel getModel() {
 		return model;
 	}
 
 	/**
-	 * set the model of this view
+	 * Set the model of this view.
 	 * @param model
 	 */
 	public void setModel(PrimeModel model) {
@@ -193,7 +192,7 @@ public class PrimeView extends JPanel {
 	}
 
 	/**
-	 * draw the view
+	 * Draw the view.
 	 */
 	public void draw() {
 		this.setModel(model);
@@ -201,7 +200,7 @@ public class PrimeView extends JPanel {
 	}
 	
 	/**
-	 * initialize the view metric
+	 * Initialize the view metric.
 	 * @param g2d
 	 */
 	private void initMetric(Graphics2D g2d) {
@@ -213,7 +212,7 @@ public class PrimeView extends JPanel {
 	}
 
 	/**
-	 * paint the view
+	 * Paint the view.
 	 */
 	public void paintComponent(Graphics g) {
 		this.g2d = (Graphics2D) g;
@@ -222,7 +221,7 @@ public class PrimeView extends JPanel {
 	}
 	
 	/**
-	 * draw the primes, exonents, rays, axis etc.
+	 * Draw the primes, exonents, rays, axis etc.
 	 */
 	private void drawGoldbach() {
 		this.setupEnv();
@@ -254,7 +253,7 @@ public class PrimeView extends JPanel {
 	}
 	
 	/**
-	 * draw the polar factors at the top
+	 * Draw the polar factors at the top.
 	 */
 	private void drawPolarFactors() {
 		this.drawPolarPolys();
@@ -262,7 +261,7 @@ public class PrimeView extends JPanel {
 	}
 	
 	/**
-	 * initialize all environment variables
+	 * Initialize all environment variables.
 	 */
 	private void setupEnv() {
 		if (this.model.isRotateView()) {
@@ -306,7 +305,7 @@ public class PrimeView extends JPanel {
 	}
 	
 	/**
-	 * draw the views background
+	 * Draw the views background.
 	 */
 	private void drawBackground() {
 		// clear background
@@ -315,7 +314,7 @@ public class PrimeView extends JPanel {
 	}
 	
 	/**
-	 * draws lines at the bottom right
+	 * Draw lines at the bottom right.
 	 */
 	private void drawBottomRight() {
 		// right-bottom-border
@@ -328,7 +327,7 @@ public class PrimeView extends JPanel {
 	}
 	
 	/**
-	 * draws the x and y axis
+	 * Draw the x and y axis.
 	 */
 	private void drawAxis() {
 		int x, y, y_str;
@@ -387,7 +386,7 @@ public class PrimeView extends JPanel {
 	}
 	
 	/**
-	 * draw the number field
+	 * Draw the number field.
 	 */
 	private void drawField() {
 		int x, y, cp=0;
@@ -435,7 +434,7 @@ public class PrimeView extends JPanel {
 	}
 	
 	/**
-	 * draw the factor field
+	 * Draw the factor field.
 	 */
 	private void drawFactorField() {
 		int x, y;
@@ -487,7 +486,7 @@ public class PrimeView extends JPanel {
 	}
 	
 	/**
-	 * draw text
+	 * Draw text.
 	 */
 	private void drawText() {
 		int x, y, cp=0;
@@ -513,7 +512,7 @@ public class PrimeView extends JPanel {
 	}
 	
 	/**
-	 * draw the chart with the specified type
+	 * Draw the chart with the specified type.
 	 * @param type
 	 */
 	private void drawChart(ChartType type) {
@@ -652,7 +651,7 @@ public class PrimeView extends JPanel {
 	}
 	
 	/**
-	 * draw the chart description
+	 * Draw the chart description.
 	 */
 	private void drawChartDesc() {
 		if (MOUSE_Y > Y_POS) {
@@ -728,8 +727,8 @@ public class PrimeView extends JPanel {
 	}
 	
 	/**
-	 * draw the rays, i.e. the lines along the factors of order n
-	 * @return
+	 * Draw the rays, i.e. the lines along the factors of order n.
+	 * @return A map of points where the rays end, stored by the ray order.
 	 */
 	private Map<Integer,Point2D> drawRays() {
 		int x, y;
@@ -782,7 +781,7 @@ public class PrimeView extends JPanel {
 	}
 	
 	/**
-	 * draw the order of the selected rays
+	 * Draw the order of the selected rays.
 	 * @param rays
 	 */
 	private void drawRayOrder(Map<Integer,Point2D> rays) {
@@ -811,7 +810,7 @@ public class PrimeView extends JPanel {
 	}
 	
 	/**
-	 * draw the stats at the bottom
+	 * Draw the stats at the bottom.
 	 */
 	private void drawStats() {
 		int start_y = HEIGHT - Y_BOTTOM + 40,
@@ -851,11 +850,11 @@ public class PrimeView extends JPanel {
 	}
 	
 	/**
-	 * draw a composite as as product of primes, e.g. 12 = 2^2 * 3^1
+	 * Draw a composite as as product of primes, e.g. 12 = 2^2 * 3^1.
 	 * @param product
 	 * @param x
 	 * @param y
-	 * @return the new postion
+	 * @return The new position.
 	 */
 	private int drawPrimeProduct(Map<Integer,Integer> product, int x, int y) {
 		if (product == null) return 0;
@@ -877,7 +876,7 @@ public class PrimeView extends JPanel {
 	}
 	
 	/**
-	 * draw a box at the specified xy-position with the given width and height
+	 * Draw a box at the specified xy-position with the given width and height.
 	 * @param x
 	 * @param y
 	 * @param width
@@ -889,7 +888,7 @@ public class PrimeView extends JPanel {
 	}
 	
 	/**
-	 * draw all recognized polynomials within the view rect
+	 * Draw all recognized polynomials within the view rect.
 	 */
 	private void drawPolys() {
 		if (!this.model.isPolynomials() || this.model.isCheckedPattern() || this.model.getVerticalStep() > 1 || this.model.getHorizontalStep() > 1) return;
@@ -931,7 +930,7 @@ public class PrimeView extends JPanel {
 	}
 	
 	/**
-	 * draw the polar polynomials at the top of the view
+	 * Draw the polar polynomials at the top of the view.
 	 */
 	private void drawPolarPolys() {
 		double mid, low, half, last_x, last_y, cur_x, cur_y, bal, shift, nolap, onlyOuter;
@@ -985,7 +984,7 @@ public class PrimeView extends JPanel {
 	}
 	
 	/**
-	 * draw highly composite numbers
+	 * Draw highly composite numbers.
 	 */
 	private void drawHCN() {
 		int y;
@@ -999,7 +998,7 @@ public class PrimeView extends JPanel {
 	}
 	
 	/**
-	 * change the font
+	 * Change the font.
 	 * @param font
 	 */
 	private void changeFont(Font font) {
@@ -1007,10 +1006,9 @@ public class PrimeView extends JPanel {
 	}
 	
 	/**
-	 * 
 	 * @param x
 	 * @param y
-	 * @return the text at the position (x|y)
+	 * @return The text at the position (x|y).
 	 */
 	private String getText(int x, int y) {
 		if (Primes._().isPrime(x)) {
@@ -1021,11 +1019,10 @@ public class PrimeView extends JPanel {
 	}
 	
 	/**
-	 * 
 	 * @param x
 	 * @param y
 	 * @param ct
-	 * @return the color at the position (x|y)
+	 * @return The color at the position (x|y).
 	 */
 	private Color getColor(int x, int y, ColorType ct) {
 		if (this.model.isPrimeMirror() && MOUSE_Y == y) {
@@ -1119,11 +1116,10 @@ public class PrimeView extends JPanel {
 	}
 	
 	/**
-	 * 
 	 * @param x
 	 * @param y
 	 * @param fix
-	 * @return true if the point is on a helper line
+	 * @return <code>true</code> if the point is on a helper line.
 	 */
 	private boolean isOnLine(int x, int y, int fix) {
 		if (x%2==0 && fix%2==1 || x%2==1 && fix%2==0) return false;
@@ -1134,52 +1130,46 @@ public class PrimeView extends JPanel {
 	}
 	
 	/**
-	 * 
-	 * @return the background color of the view
+	 * @return The background color of the view.
 	 */
 	private Color getBackgroundColor() {
 		return this.model.getColor("BACKGROUND");
 	}
 	
 	/**
-	 * 
-	 * @return the text color of the view
+	 * @return The text color of the view.
 	 */
 	private Color getTextColor() {
 		return this.model.getColor("TEXT_COLOR");
 	}
 	
 	/**
-	 * 
-	 * @return the highlight text color of the view
+	 * @return The highlight text color of the view.
 	 */
 	private Color getHightlightTextColor() {
 		return this.model.getColor("HIGHLIGHT_TEXT_COLOR");
 	}
 	
 	/**
-	 * 
 	 * @param x
-	 * @return the transformed x postion of the mouse pointer
+	 * @return The transformed x postion of the mouse pointer.
 	 */
 	public int transformMouseX(int x) {
 		return this.transform(x, 0);
 	}
 
 	/**
-	 * 
 	 * @param y
-	 * @return the transformed y postion of the mouse pointer
+	 * @return The transformed y postion of the mouse pointer.
 	 */
 	public int transformMouseY(int y) {
 		return this.transform(y, 1);
 	}
 	
 	/**
-	 * 
 	 * @param c
 	 * @param i 
-	 * @return
+	 * @return The transformed coordinate.
 	 */
 	private int transform(int c, int i) {
 		double temp = 0.0;
@@ -1194,6 +1184,10 @@ public class PrimeView extends JPanel {
 		}
 	}
 	
+	/**
+	 * @param x
+	 * @return The transformed x coordinate.
+	 */
 	private int transformX(int x) {
 		x += this.model.getXPos();
 		x *= this.model.getHorizontalStep();
@@ -1202,6 +1196,10 @@ public class PrimeView extends JPanel {
 		return x;
 	}
 	
+	/**
+	 * @param y
+	 * @return The transformed y coordinate.
+	 */
 	private int transformY(int y) {
 		y += this.model.getYPos();
 		y *= this.model.getVerticalStep();
@@ -1211,14 +1209,14 @@ public class PrimeView extends JPanel {
 	}
 	
 	/**
-	 * add a listener for key events in the typing area
+	 * Add a listener for key events in the typing area.
 	 */
 	public void addKeyListener(KeyListener keyl) {
 		this.typingArea.addKeyListener(keyl);
 	}
 	
 	/**
-	 * add a listener for window events of the views frame
+	 * Add a listener for window events of the views frame.
 	 * @param wl
 	 */
 	public void addWindowListener(WindowListener wl) {

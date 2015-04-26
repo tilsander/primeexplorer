@@ -37,7 +37,7 @@ public class Primes {
 	private static Primes instance = null;
 	
 	/**
-	 * stores a factor polynomial
+	 * Stores a factor polynomial.
 	 */
 	class Polynomial {
 		
@@ -83,8 +83,7 @@ public class Primes {
 	}
 	
 	/**
-	 * 
-	 * @return the singleton instance
+	 * @return The singleton instance.
 	 */
 	public static Primes getInstance() {
 		if(instance == null) {
@@ -98,8 +97,8 @@ public class Primes {
 	}
 	
 	/**
-	 * short form for getInstance()
-	 * @return the singleton instance
+	 * Short form for getInstance().
+	 * @return The singleton instance.
 	 */
 	public static Primes _() {
 		return Primes.getInstance();
@@ -108,7 +107,7 @@ public class Primes {
 	// generate cache
 	
 	/**
-	 * generate prime numbers up to the given parameter
+	 * Generate prime numbers up to the given parameter.
 	 * @param up a positive integer
 	 */
 	private void generatePrimes(int up) {
@@ -122,7 +121,7 @@ public class Primes {
 	}
 	
 	/**
-	 * generate the exponents for the specified number
+	 * Generate the exponents for the specified number.
 	 * @param number a positive integer
 	 */
 	private void generateExponents(int number) {
@@ -138,7 +137,7 @@ public class Primes {
 	}
 	
 	/**
-	 * calculate the goldbach numbers for the given number
+	 * Calculate the goldbach numbers for the given number.
 	 * @param number a positive integer
 	 */
 	private void generateMatches(int number) {
@@ -158,7 +157,7 @@ public class Primes {
 	}
 	
 	/**
-	 * generate the divisors of the number
+	 * Generate the divisors of the number.
 	 * @param number a positive integer
 	 */
 	private void generateDivisors(int number) {
@@ -169,7 +168,7 @@ public class Primes {
 	}
 	
 	/**
-	 * calculates and stores all high composite numbers less than or equal number
+	 * Calculates and stores all high composite numbers less than or equal number.
 	 * @param number a positive integer
 	 */
 	private void generateHCN(int number) {
@@ -190,9 +189,8 @@ public class Primes {
 	// query methods
 	
 	/**
-	 * 
 	 * @param number a positive integer
-	 * @return true if the number is prime
+	 * @return <code>true</code> if the number is prime.
 	 */
 	public boolean isPrime(int number) {
 		if (number > this.prime_offset) this.generatePrimes(number);
@@ -200,9 +198,8 @@ public class Primes {
 	}
 	
 	/**
-	 * 
 	 * @param number a positive integer
-	 * @return the number of primes less or equal than number 
+	 * @return The number of primes less or equal than number. 
 	 */
 	public int primesUntil(int number) {
 		if (number <= 1) return 0;
@@ -214,9 +211,8 @@ public class Primes {
 	}
 	
 	/**
-	 * 
 	 * @param number a positive integer
-	 * @return the next prime number relative to number
+	 * @return The next prime number relative to number.
 	 */
 	public int getNextPrime(int number) {
 		if (number <= 2) return 2;
@@ -227,9 +223,8 @@ public class Primes {
 	}
 	
 	/**
-	 * 
 	 * @param number a positive integer
-	 * @return the previous prime number relative to number
+	 * @return The previous prime number relative to number.
 	 */
 	public int getPrevPrime(int number) {
 		if (number <= 2) return 2;
@@ -240,10 +235,9 @@ public class Primes {
 	}
 	
 	/**
-	 * 
 	 * @param fac
 	 * @param number a positive integer
-	 * @return the exponent of the factor fac of the number
+	 * @return The exponent of the factor fac of the number.
 	 */
 	public int getExponent(int fac, int number) {
 		if (fac > number) return 0;
@@ -255,9 +249,8 @@ public class Primes {
 	}
 	
 	/**
-	 * 
 	 * @param number a positive integer
-	 * @return all exponents for the number
+	 * @return All exponents for the number.
 	 */
 	public Map<Integer,Integer> getExponents(int number) {
 		if (number <= 0) return null;
@@ -276,9 +269,8 @@ public class Primes {
 	}
 	
 	/**
-	 * 
 	 * @param number a positive integer
-	 * @return the sum of the exponents for the number
+	 * @return The sum of the exponents for the number.
 	 */
 	public int getExponentSum(int number) {
 		Map<Integer,Integer> m = this.getExponents(number);
@@ -295,9 +287,8 @@ public class Primes {
 	}
 	
 	/**
-	 * 
 	 * @param number a positive integer
-	 * @return the maximum exponent count until number
+	 * @return The maximum exponent count until number.
 	 */
 	public int getMaxExpCount(int number) {
 		int ret=0, temp=0;
@@ -309,9 +300,8 @@ public class Primes {
 	}
 	
 	/**
-	 * 
 	 * @param number a positive integer
-	 * @return the maximum exponent sum until number
+	 * @return The maximum exponent sum until number.
 	 */
 	public int getMaxExpSum(int number) {
 		int ret=0, temp=0;
@@ -323,10 +313,9 @@ public class Primes {
 	}
 	
 	/**
-	 * 
 	 * @param prime a prime number
 	 * @param number a positive integer
-	 * @return true if the prime is a goldbach number for number
+	 * @return <code>true</code> if the prime is a goldbach number for number.
 	 */
 	public boolean isMatch(int prime, int number) {
 		if (prime > number*2) return false;
@@ -338,9 +327,8 @@ public class Primes {
 	}
 	
 	/**
-	 * 
 	 * @param number a positive integer
-	 * @return the goldbach numbers for number
+	 * @return The goldbach numbers for number.
 	 */
 	public Map<Integer,Integer> getMatches(int number) {
 		Map<Integer,Integer> ret = this.matches.get(number);
@@ -352,9 +340,8 @@ public class Primes {
 	}
 	
 	/**
-	 * 
 	 * @param number a positive integer
-	 * @return the count of goldbach numbers for number
+	 * @return The count of goldbach numbers for number.
 	 */
 	public int getMatchCount(int number) {
 		Map<Integer,Integer> ret = this.getMatches(number);
@@ -364,9 +351,8 @@ public class Primes {
 	}
 	
 	/**
-	 * 
 	 * @param number a positive integer
-	 * @return the maximum count of goldbach numbers until number
+	 * @return The maximum count of goldbach numbers until number.
 	 */
 	public int getMaxMatchCount(int number) {
 		int ret=0, temp=0;
@@ -378,9 +364,8 @@ public class Primes {
 	}
 	
 	/**
-	 * 
 	 * @param number a positive integer
-	 * @return the first goldbach number for number
+	 * @return The first goldbach number for number.
 	 */
 	public int getFirstMatch(int number) {
 		Map<Integer,Integer> ret = this.getMatches(number);
@@ -392,9 +377,8 @@ public class Primes {
 	}
 	
 	/**
-	 * 
 	 * @param upto a positive integer
-	 * @return the maximum of the first goldbach number until upto
+	 * @return The maximum of the first goldbach number until upto.
 	 */
 	public int getMaxFirstMatch(int upto) {
 		int max = 0, temp = 0;
@@ -406,9 +390,9 @@ public class Primes {
 	}
 	
 	/**
-	 * a void is a prime that is not a goldbach number for the given number
+	 * A void is a prime that is not a goldbach number for the given number.
 	 * @param number a positive integer
-	 * @return a list of void for the number
+	 * @return A list of void for the number.
 	 */
 	private List<Integer> getVoids(int number) {
 		List<Integer> void_list = this.voids.get(number);
@@ -423,9 +407,8 @@ public class Primes {
 	}
 	
 	/**
-	 * 
 	 * @param number a positive integer
-	 * @return the first void
+	 * @return The first void.
 	 */
 	public int getFirstVoid(int number) {
 		if (this.isMatch(3, (number+1))) return 0;
@@ -435,9 +418,8 @@ public class Primes {
 	}
 	
 	/**
-	 * 
 	 * @param number a positive integer
-	 * @return the count of voids for number
+	 * @return The count of voids for number.
 	 */
 	public int getVoidCount(int number) {
 		if (this.isMatch(3, (number+1))) return 0;
@@ -447,9 +429,8 @@ public class Primes {
 	}
 	
 	/**
-	 * 
 	 * @param upto a positive integer
-	 * @return return the maximum of first voids until upto
+	 * @return The maximum of first voids until upto.
 	 */
 	public int getMaxFirstVoid(int upto) {
 		int max = 0, temp = 0;
@@ -461,9 +442,8 @@ public class Primes {
 	}
 	
 	/**
-	 * 
 	 * @param upto
-	 * @return the maximum void count until upto
+	 * @return The maximum void count until upto.
 	 */
 	public int getMaxVoidCount(int upto) {
 		int max = 0, temp = 0;
@@ -475,12 +455,11 @@ public class Primes {
 	}
 	
 	/**
-	 * 
 	 * @param xp
 	 * @param yp
 	 * @param pdelta
 	 * @param y_factor
-	 * @return a polynomial if there is a factor polynomial with origin at (xp|yp) and the specified delta and y_factor
+	 * @return A polynomial if there is a factor polynomial with origin at (xp|yp) and the specified delta and y_factor.
 	 */
 	public Polynomial getPoly(int xp, int yp, int pdelta, int y_factor) {
 		if (pdelta <= 0 || y_factor <= 0) return null;
@@ -517,7 +496,7 @@ public class Primes {
 	}
 	
 	/**
-	 * remove a polyomial from the cache
+	 * Remove a polyomial from the cache.
 	 * @param xp
 	 * @param yp
 	 */
@@ -527,10 +506,9 @@ public class Primes {
 	}
 	
 	/**
-	 * 
 	 * @param number a positive integer
 	 * @param exponent
-	 * @return return the value of the divisor function for number and exponent
+	 * @return The value of the divisor function for number and exponent.
 	 */
 	public long getDivisorSum(int number, int exponent) {
 		if (this.divisorSums.containsKey(exponent) == false) this.divisorSums.put(exponent, new HashMap<Integer,Long>());
@@ -545,10 +523,9 @@ public class Primes {
 	}
 	
 	/**
-	 * 
 	 * @param number a positive integer
 	 * @param exponent
-	 * @return the maximum divisor sum until number
+	 * @return The maximum divisor sum until number.
 	 */
 	public long getMaxDivisorSum(int number, int exponent) {
 		long max = 0, temp = 0;
@@ -560,9 +537,8 @@ public class Primes {
 	}
 	
 	/**
-	 * 
 	 * @param number a positive integer
-	 * @return the value of the euler totient function
+	 * @return The value of the euler totient function.
 	 */
 	public int getEulerTotient(int number) {
 		if (this.totients.containsKey(number)) return this.totients.get(number);
@@ -584,9 +560,8 @@ public class Primes {
 	}
 	
 	/**
-	 * 
 	 * @param number a positive integer
-	 * @return the maximum of the euler totient function until number
+	 * @return The maximum of the euler totient function until number.
 	 */
 	public int getMaxEulerTotient(int number) {
 		int max = 0, temp = 0;
@@ -598,9 +573,8 @@ public class Primes {
 	}
 	
 	/**
-	 * 
 	 * @param number a positive integer
-	 * @return true if number is a high composite number
+	 * @return <code>true</code> if number is a high composite number.
 	 */
 	public boolean isHCN(int number) {
 		if (this.current_hcn >= number) return this.hcn.values().contains(number);
@@ -611,9 +585,8 @@ public class Primes {
 	// algorithms
 	
 	/**
-	 * 
 	 * @param n
-	 * @return true if n is a prime
+	 * @return <code>true</code> if n is a prime.
 	 */
 	private boolean checkPrime(int n) {
 		if(n < 2) return false;
@@ -627,10 +600,9 @@ public class Primes {
 	}
 	
 	/**
-	 * 
 	 * @param pfac
 	 * @param number
-	 * @return the exponent for the factor pfac and the composite number
+	 * @return The exponent for the factor pfac and the composite number.
 	 */
 	private int getExp(int pfac, int number) {
 		if (pfac <= 0) return 0;
@@ -646,9 +618,10 @@ public class Primes {
 	// polynomial calculations
 	
 	/**
-	 * this function is special because it uses just sets of natural numbers and polynomials to calculate the number of primes less than or equal number
+	 * This function is special because it uses just sets of natural numbers
+	 * and polynomials to calculate the number of primes less than or equal number.
 	 * @param number
-	 * @return the value of the pi function
+	 * @return The value of the pi function.
 	 */
 	public int calculatePrimeCount(int number) {
 		if (number <= 0) return 0;
@@ -664,9 +637,8 @@ public class Primes {
 	}
 	
 	/**
-	 * 
 	 * @param number
-	 * @return the maximum calculated number of primes
+	 * @return The maximum calculated number of primes.
 	 */
 	public int getMaxPrimeCountCalc(int number) {
 		int ret = 0, temp;
@@ -678,9 +650,10 @@ public class Primes {
 	}
 	
 	/**
-	 * this function like the calculatePrimeCount function uses just sets of natural numbers, elementary operations on these and polynomials to calculate the count of goldbach numbers
+	 * This function like the calculatePrimeCount function uses just sets of natural numbers,
+	 * elementary operations on these and polynomials to calculate the count of goldbach numbers.
 	 * @param number
-	 * @return the value of goldbach numbers for number
+	 * @return The value of goldbach numbers for number.
 	 */
 	public int calculateMatchCount(int number) {
 		if (number <= 2) return 0;
@@ -697,9 +670,8 @@ public class Primes {
 	}
 	
 	/**
-	 * 
 	 * @param number
-	 * @return the maximum calculated goldbach number count
+	 * @return The maximum calculated goldbach number count.
 	 */
 	public int getMaxMatchCountCalc(int number) {
 		int ret = 0, temp;
@@ -711,9 +683,8 @@ public class Primes {
 	}
 	
 	/**
-	 * 
 	 * @param n
-	 * @return a set of factors of the first n polynomials
+	 * @return A set of factors of the first n polynomials.
 	 */
 	private HashSet<Integer> A(int n) {
 		int comp=0;
@@ -728,19 +699,17 @@ public class Primes {
 	}
 	
 	/**
-	 * 
 	 * @param i
 	 * @param k
-	 * @return the value of the k-th polynomial at the i-th position
+	 * @return The value of the k-th polynomial at the i-th position.
 	 */
 	private int Ti(int i, int k) {
 		return k*(i+1-k);
 	}
 	
 	/**
-	 * 
 	 * @param n
-	 * @return a set of factors of the first n polar polynomial
+	 * @return A set of factors of the first n polar polynomial.
 	 */
 	private HashSet<Integer> U(int n) {
 		int comp=0;
@@ -755,11 +724,10 @@ public class Primes {
 	}
 	
 	/**
-	 * 
 	 * @param n
 	 * @param i
 	 * @param k
-	 * @return the value of the k-th polynomial at the i-th position with the offset n
+	 * @return The value of the k-th polynomial at the i-th position with the offset n.
 	 */
 	private int Li(int n, int i, int k) {
 		return 2*n - Ti(i,k);
@@ -770,7 +738,7 @@ public class Primes {
 	/**
 	 * @param n
 	 * @param c the coefficient of the parabolas
-	 * @return a set of factors of the first n polynomials
+	 * @return A set of factors of the first n polynomials.
 	 */
 	private HashSet<Integer> A(int n, int c) {
 		int comp=0;
@@ -787,22 +755,20 @@ public class Primes {
 	}
 	
 	/**
-	 * 
 	 * @param i
 	 * @param j
 	 * @param p
 	 * @param k
-	 * @return the value of the k-th polynomial at the i-th position
+	 * @return The value of the k-th polynomial at the i-th position.
 	 */
 	private int Ti(int i, int j, int c, int k) {
 		return c*k*(i-k)+k*j;
 	}
 	
 	/**
-	 * 
 	 * @param n
 	 * @param c
-	 * @return a set of factors of the first n polar polynomial
+	 * @return A set of factors of the first n polar polynomial.
 	 */
 	private HashSet<Integer> U(int n, int c) {
 		int comp=0;
@@ -819,22 +785,21 @@ public class Primes {
 	}
 	
 	/**
-	 * 
 	 * @param n
 	 * @param i
 	 * @param j
 	 * @param c
 	 * @param k
-	 * @return the value of the k-th polynomial at the i-th position with the offset n
+	 * @return The value of the k-th polynomial at the i-th position with the offset n.
 	 */
 	private int Li(int n, int i, int j, int c, int k) {
 		return 2*n - Ti(i,j,c,k);
 	}
 	
 	/**
-	 * linear sieve rtl
+	 * Linear sieve rtl.
 	 * @param n
-	 * @return a set of composite numbers
+	 * @return A set of composite numbers.
 	 */
 	private HashSet<Integer> myu(int n) {
 		HashSet<Integer> comps = new HashSet<Integer>();
@@ -849,9 +814,9 @@ public class Primes {
 	}
 	
 	/**
-	 * linear sieve ltr
+	 * Linear sieve ltr.
 	 * @param n
-	 * @return a set of composite numbers
+	 * @return A set of composite numbers.
 	 */
 	private HashSet<Integer> phi(int n) {
 		HashSet<Integer> comps = new HashSet<Integer>();

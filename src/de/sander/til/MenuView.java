@@ -139,8 +139,8 @@ public class MenuView {
 		viewMenu.add(this.connect(polarFactors = new JCheckBoxMenuItem("Polar Factors",this.model.isPolarFactors()),					MenuAction.POLAR_FACTORS,KeyEvent.VK_P,CTRL_SHIFT));
 		viewMenu.add(this.connect(polarBalance = new JCheckBoxMenuItem("Polar Balance",this.model.isPolarBalance()),					MenuAction.POLAR_BALANCE,KeyEvent.VK_B,CTRL_SHIFT));
 		viewMenu.add(this.connect(polarOverlap = new JCheckBoxMenuItem("Polar Overlap",this.model.isPolarOverlap()),					MenuAction.POLAR_OVERLAP,KeyEvent.VK_L,CTRL_SHIFT));
-		viewMenu.add(this.connect(factorsOnlyOuter = new JCheckBoxMenuItem("Factors Only Outer",this.model.isFactorOnlyOuter()),		MenuAction.FACTORS_ONLY_OUTER,KeyEvent.VK_O,CTRL_SHIFT));
-		viewMenu.add(this.connect(factorsOnlyNeeded = new JCheckBoxMenuItem("Factors Only Needed",this.model.isFactorOnlyNeeded()),		MenuAction.FACTORS_ONLY_NEEDED,KeyEvent.VK_N,CTRL_SHIFT));
+		viewMenu.add(this.connect(factorsOnlyOuter = new JCheckBoxMenuItem("Polar Only Outer",this.model.isFactorOnlyOuter()),		MenuAction.FACTORS_ONLY_OUTER,KeyEvent.VK_O,CTRL_SHIFT));
+		viewMenu.add(this.connect(factorsOnlyNeeded = new JCheckBoxMenuItem("Polar Only Needed",this.model.isFactorOnlyNeeded()),		MenuAction.FACTORS_ONLY_NEEDED,KeyEvent.VK_N,CTRL_SHIFT));
 		viewMenu.add(this.connect(rotateView = new JCheckBoxMenuItem("Rotate View",this.model.isRotateView()),							MenuAction.ROTATE_VIEW,KeyEvent.VK_R,CTRL_SHIFT));
 		viewMenu.add(this.connect(highlyCompositeNumbers = new JCheckBoxMenuItem("Highly Composite Numbers",this.model.isShowHCN()),	MenuAction.HIGHLY_COMPOSITE_NUMBERS,KeyEvent.VK_H,CTRL_SHIFT));
 		viewMenu.add(this.connect(showStats = new JCheckBoxMenuItem("Show Stats",this.model.isStats()),									MenuAction.SHOW_STATS,KeyEvent.VK_S,CTRL_SHIFT));
@@ -148,7 +148,7 @@ public class MenuView {
 		// chart menu
 		chartMenu.add(this.connect(chartPrimes = new JCheckBoxMenuItem("Primes (Algo)",this.model.isChartPrimes()),						MenuAction.CHART_PRIMES,KeyEvent.VK_1,CTRL));
 		chartMenu.add(this.connect(chartExponent = new JCheckBoxMenuItem("Exponent Count",this.model.isChartExp()),						MenuAction.CHART_EXPONENTS,KeyEvent.VK_2,CTRL));
-		chartMenu.add(this.connect(chartMatchCount = new JCheckBoxMenuItem("Match Count (Algo)",this.model.isChartMatchCount()),		MenuAction.CHART_MATCH_COUNT,KeyEvent.VK_3,CTRL));
+		chartMenu.add(this.connect(chartMatchCount = new JCheckBoxMenuItem("Match Count",this.model.isChartMatchCount()),		MenuAction.CHART_MATCH_COUNT,KeyEvent.VK_3,CTRL));
 		chartMenu.add(this.connect(chartFirstMatch = new JCheckBoxMenuItem("First Match",this.model.isChartFirstMatch()),				MenuAction.CHART_FIRST_MATCH,KeyEvent.VK_4,CTRL));
 		chartMenu.add(this.connect(chartVoidCount = new JCheckBoxMenuItem("Void Count",this.model.isChartVoidCount()),					MenuAction.CHART_VOID_COUNT,KeyEvent.VK_5,CTRL));
 		chartMenu.add(this.connect(chartFirstVoid = new JCheckBoxMenuItem("First Void",this.model.isChartFirstVoid()),					MenuAction.CHART_FIRST_VOID,KeyEvent.VK_6,CTRL));
@@ -158,7 +158,7 @@ public class MenuView {
 		chartMenu.add(this.connect(chartEulerTotient = new JCheckBoxMenuItem("Euler's Totient",this.model.isChartEulerTotient()),		MenuAction.CHART_EULER_TOTIENT,KeyEvent.VK_0,CTRL));
 		chartMenu.addSeparator();
 		chartMenu.add(this.connect(chartProp = new JCheckBoxMenuItem("Proportional",this.model.isChartProp()),	MenuAction.CHART_PROP,KeyEvent.VK_T,CTRL));
-		chartMenu.add(this.connect(expSum = new JCheckBoxMenuItem("Exponent Sum",this.model.isChartExpSum()),	MenuAction.EXPONENT_SUM,KeyEvent.VK_E,CTRL));
+		//chartMenu.add(this.connect(expSum = new JCheckBoxMenuItem("Exponent Sum",this.model.isChartExpSum()),	MenuAction.EXPONENT_SUM,KeyEvent.VK_E,CTRL));
 		chartMenu.add(this.connect(showCharts = new JCheckBoxMenuItem("Show Charts",this.model.isChart()),		MenuAction.SHOW_CHARTS,KeyEvent.VK_C,CTRL_SHIFT));
 		
 		// help menu
@@ -182,7 +182,7 @@ public class MenuView {
 	}
 	
 	/**
-	 * create a action listener with the given menu action
+	 * Create a action listener with the given menu action.
 	 * @param act a menu action
 	 * @return a action listener that calls the action <code>act</code> on the listener
 	 */
@@ -196,6 +196,11 @@ public class MenuView {
 		};
 	}
 	
+	/**
+	 * Create a listener for recently changed files.
+	 * @param file
+	 * @return A listener for recently changed files.
+	 */
 	private ActionListener createRecentlyListener(final String file) {
 		return new ActionListener() {
 

@@ -31,7 +31,7 @@ public class PrimeModel {
 	}
 	
 	/**
-	 * a enumeration of view modes (keys: up/down/left/right)
+	 * A enumeration of view modes (keys: up/down/left/right).
 	 */
 	public enum PMView {
 		GOLDBACH,
