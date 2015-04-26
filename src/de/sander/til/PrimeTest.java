@@ -6,7 +6,13 @@ import java.util.TreeMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class PrimeTest {
+	
+	@SuppressWarnings("unused")
+	private static final Logger logger = LogManager.getLogger(PrimeTest.class.getSimpleName());
 	
 	class Point {
 		public double x, y;

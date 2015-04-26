@@ -5,12 +5,18 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
  * This class loads the settings and models and creates a view controller for every model.
  * The controllers are updated in a continuous update cycle. 
  * It listens for changes in the settings.
  */
 public class PrimeApplication implements SettingsListener {
+	
+	@SuppressWarnings("unused")
+	private static final Logger logger = LogManager.getLogger(PrimeApplication.class.getSimpleName());
 	
 	private Settings settings;
 	private Map<PrimeModel,PrimeController> controller;
@@ -21,6 +27,7 @@ public class PrimeApplication implements SettingsListener {
 	 * 
 	 */
 	public PrimeApplication() {
+		
 		this.settings = new StateLoader().loadSettings();
 		this.settings.setListener(this);
 		this.controller = new HashMap<PrimeModel,PrimeController>();

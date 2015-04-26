@@ -12,6 +12,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -19,6 +22,9 @@ import com.google.gson.GsonBuilder;
  * A StateLoader is used to load settings and models from json files
  */
 public class StateLoader {
+	
+	@SuppressWarnings("unused")
+	private static final Logger logger = LogManager.getLogger(StateLoader.class.getSimpleName());
 	
 	/**
 	 * load all models that are open in the setting

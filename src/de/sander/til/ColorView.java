@@ -8,7 +8,13 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class ColorView extends JPanel {
+	
+	@SuppressWarnings("unused")
+	private static final Logger logger = LogManager.getLogger(ColorView.class.getSimpleName());
 
 	private static final long serialVersionUID = 1L;
 	

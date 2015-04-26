@@ -17,6 +17,9 @@ import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import de.sander.til.MenuListener.MenuAction;;
 
 /**
@@ -25,9 +28,11 @@ import de.sander.til.MenuListener.MenuAction;;
  */
 public class MenuView {
 	
+	@SuppressWarnings("unused")
+	private static final Logger logger = LogManager.getLogger(MenuView.class.getSimpleName());
+	
 	private PrimeModel model;
 	private JMenuBar menuBar;
-	@SuppressWarnings("unused")
 	private JMenu fileMenu, viewMenu, chartMenu, helpMenu,
 			cModeSub, vModeSub, recently;
 	@SuppressWarnings("unused")
@@ -89,7 +94,7 @@ public class MenuView {
 		fileMenu.add(recently = new JMenu("Recently Opened"));
 		
 		// view menu		
-		cModeSub = new JMenu("Control Mode");
+		cModeSub = new JMenu("Control Mode (+/-)");
 		ButtonGroup cgroup = new ButtonGroup();
 		cModeSub.add(this.connect(zoomMode = new JRadioButtonMenuItem("Zoom",this.model.getPmmode()==PrimeModel.PMMode.ZOOM),									MenuAction.ZOOM,KeyEvent.VK_Z,CTRL_ALT));
 		cModeSub.add(this.connect(verticalStep = new JRadioButtonMenuItem("Vertical Step",this.model.getPmmode()==PrimeModel.PMMode.VERTICAL_STEP),				MenuAction.VERTICAL_STEP,KeyEvent.VK_V,CTRL_ALT));
@@ -111,7 +116,7 @@ public class MenuView {
 		cgroup.add(divisorExp);
 		viewMenu.add(cModeSub);
 		
-		vModeSub = new JMenu("View Mode");
+		vModeSub = new JMenu("View Mode (Arrow Keys)");
 		ButtonGroup vgroup = new ButtonGroup();
 		vModeSub.add(this.connect(goldbachMode = new JRadioButtonMenuItem("Goldbach",this.model.getPmview()==PrimeModel.PMView.GOLDBACH),	MenuAction.GOLDBACH_VIEW,KeyEvent.VK_G,CTRL_SHIFT));
 		vModeSub.add(this.connect(factorMode = new JRadioButtonMenuItem("Factors",this.model.getPmview()==PrimeModel.PMView.FACTOR),	MenuAction.FACTOR_VIEW,KeyEvent.VK_F,CTRL_SHIFT));

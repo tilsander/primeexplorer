@@ -4,10 +4,16 @@ import java.awt.Color;
 import java.util.TreeMap;
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
  * This class stores the state of a PrimeView
  */
 public class PrimeModel {
+	
+	@SuppressWarnings("unused")
+	private static final Logger logger = LogManager.getLogger(PrimeModel.class.getSimpleName());
 	
 	/**
 	 * a enumeration of control modes (+/-)

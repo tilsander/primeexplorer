@@ -6,10 +6,16 @@ import java.io.File;
 
 import javax.swing.JMenuBar;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
  * This class controls the menu bar and listens for menu actions
  */
 public class MenuController implements MenuListener {
+	
+	@SuppressWarnings("unused")
+	private static final Logger logger = LogManager.getLogger(MenuController.class.getSimpleName());
 	
 	private PrimeModel model;
 	private MenuView view;

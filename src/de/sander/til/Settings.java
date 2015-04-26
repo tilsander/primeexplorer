@@ -8,7 +8,13 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class Settings {
+	
+	@SuppressWarnings("unused")
+	private static final Logger logger = LogManager.getLogger(Settings.class.getSimpleName());
 	
 	private State state;
 	private Map<String,PrimeModel> open_models;

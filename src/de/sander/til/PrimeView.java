@@ -15,7 +15,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
-import java.awt.event.FocusListener;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowListener;
 
@@ -25,12 +24,18 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import de.sander.til.PrimeModel.InfoEntry;
 
 /**
  * A PrimeView renders the content of a prime model.
  */
 public class PrimeView extends JPanel {
+	
+	@SuppressWarnings("unused")
+	private static final Logger logger = LogManager.getLogger(PrimeView.class.getSimpleName());
 	
 	private enum ColorType {
 		BORDER,
@@ -630,10 +635,10 @@ public class PrimeView extends JPanel {
 				xc_val = X_CHART_LEFT + (int)((double)Primes._().getVoidCount(y)*chart_px);
 				break;
 			case PRIME_COUNT_CALC:
-				xc_val = 2 + X_CHART_LEFT + (int)((double)Primes._().calculatePrimeCount(y)*chart_px);
+				xc_val = X_CHART_LEFT + (int)((double)Primes._().calculatePrimeCount(y)*chart_px);
 				break;
 			case MATCH_COUNT_CALC:
-				xc_val = 2 + X_CHART_LEFT + (int)((double)Primes._().calculateMatchCount(y)*chart_px);
+				xc_val = X_CHART_LEFT + (int)((double)Primes._().calculateMatchCount(y)*chart_px);
 				break;
 			case DIVISOR_SUM:
 				xc_val = X_CHART_LEFT + (int)((double)Primes._().getDivisorSum(y, this.model.getDivisorSumExponent())*chart_px);
@@ -818,7 +823,6 @@ public class PrimeView extends JPanel {
 		Iterator<Entry<Integer, InfoEntry>> iter = infos.entrySet().iterator();
 		while (iter.hasNext()) {
 			Map.Entry<Integer, InfoEntry> entry = (Map.Entry<Integer, InfoEntry>)iter.next();
-			int index = (Integer)entry.getKey();
 			PrimeModel.InfoEntry info = (PrimeModel.InfoEntry)entry.getValue(); 
 			String key = info.getKey();
 			String value = info.getValue();
@@ -983,12 +987,11 @@ public class PrimeView extends JPanel {
 	/**
 	 * draw highly composite numbers
 	 */
-	public void drawHCN() {
+	private void drawHCN() {
 		int y;
 		for (int yp = 1; yp <= Y_COUNT; ++yp) {
 			y = this.transformY(yp);
 			if (Primes._().isHCN(y)) {
-				System.out.println("hcn: "+y);
 				g2d.setColor(this.getHightlightTextColor());
 				g2d.drawLine(X_LEFT, (int)(((double)yp-0.5)*BLOCK)+Y_TOP, WIDTH-X_RIGHT, (int)(((double)yp-0.5)*BLOCK)+Y_TOP);
 			}

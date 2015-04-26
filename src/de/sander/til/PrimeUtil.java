@@ -7,10 +7,16 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
  * This class provides some static auxiliary functions
  */
 public class PrimeUtil {
+	
+	@SuppressWarnings("unused")
+	private static final Logger logger = LogManager.getLogger(PrimeUtil.class.getSimpleName());
 	
 	/**
 	 * Create a unused filename. The path and file_name are used as a base.

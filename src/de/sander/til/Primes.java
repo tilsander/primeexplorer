@@ -9,12 +9,18 @@ import java.util.TreeMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
- * @todo group divisor sums by exponents
+ * TODO: group divisor sums by exponents
  * @author sandtil
  * This singleton class provides functions for the calculation of prime numbers, goldbach numbers and exponents. 
  */
 public class Primes {
+	
+	@SuppressWarnings("unused")
+	private static final Logger logger = LogManager.getLogger(Primes.class.getSimpleName());
 
 	private Map<Integer,Integer> primes;
 	private Map<Integer,Map<Integer,Integer>> exponents; // (number, (prime_factor, exponent)) 

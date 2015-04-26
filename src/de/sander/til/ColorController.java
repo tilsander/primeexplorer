@@ -6,10 +6,16 @@ import java.awt.event.ActionListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
  * This class controls the color chooser view.
  */
 public class ColorController implements ActionListener, ChangeListener {
+	
+	@SuppressWarnings("unused")
+	private static final Logger logger = LogManager.getLogger(ColorController.class.getSimpleName());
 	
 	private PrimeModel model;
 	private ColorView view;

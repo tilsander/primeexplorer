@@ -12,11 +12,17 @@ import java.awt.event.WindowListener;
 
 import javax.swing.SwingUtilities;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
  * The PrimeController controls a PrimeView.
  * It listens for Mouse-, Key-, Focus- and Windowevents.
  */
 public class PrimeController implements MouseMotionListener, MouseListener, KeyListener, WindowListener {
+	
+	@SuppressWarnings("unused")
+	private static final Logger logger = LogManager.getLogger(PrimeController.class.getSimpleName());
 	
 	private PrimeModel model;
 	private PrimeView view;
