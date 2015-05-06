@@ -33,6 +33,7 @@ public class PrimeUtil {
 			if (last_index < 0) new_file_name = file_name + suffix;
 			else new_file_name = file_name.substring(0, last_index) + suffix + file_name.substring(last_index, file_name.length());
 			file = new File(path,new_file_name);
+			++suffix;
 		}
 		return file;
 	}

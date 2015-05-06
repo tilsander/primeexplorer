@@ -27,8 +27,8 @@ public class PrimeApplication implements SettingsListener {
 	 * 
 	 */
 	public PrimeApplication() {
-		
-		this.settings = new StateLoader().loadSettings();
+		StateLoader sl = new StateLoader();
+		this.settings = sl.loadSettings();
 		this.settings.setListener(this);
 		this.controller = new HashMap<PrimeModel,PrimeController>();
 		this.colorer = new ColorController(this.settings.getCurrentModel());

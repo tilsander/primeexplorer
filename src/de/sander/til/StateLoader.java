@@ -142,7 +142,8 @@ public class StateLoader {
 				}
 			}
 		}
-		return new Settings();
+		Settings settings = new Settings();
+		return settings;
 	}
 	
 	/**

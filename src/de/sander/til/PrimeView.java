@@ -120,7 +120,17 @@ public class PrimeView extends JPanel {
 			Y_AXIS_DELTA=0,
 			POLAR_FACTOR_X=0,
 			POLAR_FACTOR_Y=0,
-			POLAR_FACTOR_Z=0;
+			POLAR_FACTOR_Z=0,
+			POLY_DELTA=0,
+			POLY_FACTOR=0,
+			POLY_N=3,
+			POLY_I=3,
+			LAST_X_POS=0,
+			LAST_Y_POS=0,
+			LAST_WIDTH=0,
+			LAST_HEIGHT=0,
+			LAST_POLY_FACTOR;
+	private boolean calc_poly=true;
 	private double STRING_HEIGHT=0.0;
 	private StringMetrics metric;
 	private Font FONT, SMALL_FONT;
@@ -217,13 +227,13 @@ public class PrimeView extends JPanel {
 	public void paintComponent(Graphics g) {
 		this.g2d = (Graphics2D) g;
 		this.initMetric(g2d);
-		this.drawGoldbach();
+		this.drawView();
 	}
 	
 	/**
 	 * Draw the primes, exonents, rays, axis etc.
 	 */
-	private void drawGoldbach() {
+	private void drawView() {
 		this.setupEnv();
 		// draw view
 		this.drawBackground();
@@ -291,17 +301,20 @@ public class PrimeView extends JPanel {
 		this.Y_AXIS_DELTA = (int)(STRING_HEIGHT/(double)BLOCK);
 		if (Y_AXIS_DELTA <= 0) Y_AXIS_DELTA = 1;
 		
-		{
-			double xc = ((double)WIDTH-this.X_LEFT)/((double)BLOCK);
-			this.X_COUNT = (int)Math.ceil(xc);
-			double yc = ((double)HEIGHT-this.Y_TOP)/((double)BLOCK);
-			this.Y_COUNT = (int)Math.ceil(yc);
-		}
-		
+		this.X_COUNT = (int)Math.ceil(((double)WIDTH-this.X_LEFT)/((double)BLOCK));
+		this.Y_COUNT = (int)Math.ceil(((double)HEIGHT-this.Y_TOP)/((double)BLOCK));
 		this.X_LEFT = (int)this.metric.getWidth(""+(this.transformY(Y_COUNT))) + 9;
 		this.POLAR_FACTOR_X = this.model.getFactorX();
 		this.POLAR_FACTOR_Y = this.model.getFactorY();
 		this.POLAR_FACTOR_Z = this.model.getFactorZ();
+		this.POLY_DELTA = this.model.getPolyDelta();
+		this.POLY_FACTOR = this.model.getPolyFactor();
+		this.calc_poly = this.X_POS != this.LAST_X_POS || this.Y_POS != this.LAST_Y_POS || this.WIDTH != this.LAST_WIDTH || this.HEIGHT != this.LAST_HEIGHT || this.POLY_FACTOR != this.LAST_POLY_FACTOR;
+		this.LAST_X_POS = this.X_POS;
+		this.LAST_Y_POS = this.Y_POS;
+		this.LAST_HEIGHT = this.HEIGHT;
+		this.LAST_WIDTH = this.WIDTH;
+		this.LAST_POLY_FACTOR = this.POLY_FACTOR;
 	}
 	
 	/**
@@ -405,16 +418,16 @@ public class PrimeView extends JPanel {
 			}
 		}
 		// borders
-		if (BLOCK > 1) {
-			for (int yp = 1; yp <= Y_COUNT; ++yp) {
-				y = this.transformY(yp);
-				for (int xp = 1; xp <= X_COUNT; ++xp) {
-					if ((xp-1)*BLOCK+X_LEFT > WIDTH-X_RIGHT) continue;
-					x = this.transformX(xp);
-					cp = this.model.isCheckedPattern() ? x/2 : 0;
-					Color bor = this.getColor(x,y+cp,ColorType.BORDER);
-					if (bor != null) {
-						g2d.setColor(bor);
+		for (int yp = 1; yp <= Y_COUNT; ++yp) {
+			y = this.transformY(yp);
+			for (int xp = 1; xp <= X_COUNT; ++xp) {
+				if ((xp-1)*BLOCK+X_LEFT > WIDTH-X_RIGHT) continue;
+				x = this.transformX(xp);
+				cp = this.model.isCheckedPattern() ? x/2 : 0;
+				Color bor = this.getColor(x,y+cp,ColorType.BORDER);
+				if (bor != null) {
+					g2d.setColor(bor);
+					if (BLOCK > 1) {
 						if (this.model.isDrawRect()) {
 							g2d.drawLine((xp-1)*BLOCK+X_LEFT, yp *BLOCK+Y_TOP, xp*BLOCK+X_LEFT, yp*BLOCK+Y_TOP); // bottom
 							if ((y+cp)%x==0 && this.model.isFactors()) {
@@ -427,6 +440,8 @@ public class PrimeView extends JPanel {
 								g2d.drawOval((xp-1)*BLOCK+X_LEFT, (yp-1)*BLOCK+Y_TOP, BLOCK, BLOCK);
 							}
 						}
+					} else {
+						g2d.fillRect((xp-1)*BLOCK+X_LEFT, yp *BLOCK+Y_TOP, 1, 1);
 					}
 				}
 			}
@@ -892,7 +907,154 @@ public class PrimeView extends JPanel {
 	 */
 	private void drawPolys() {
 		if (!this.model.isPolynomials() || this.model.isCheckedPattern() || this.model.getVerticalStep() > 1 || this.model.getHorizontalStep() > 1) return;
-		int x, y, y_sub=0,step=0,base=0,cur_x=0,cur_y=0,last_x=0,last_y=0, polySize=this.model.getPolySize();
+		if (this.calc_poly) this.calcPoly();
+		g2d.setColor(this.model.getColor("POLY_COLOR"));
+		int c = this.POLY_FACTOR;
+		int start_k = 2;
+		if (this.X_POS > 2) start_k = this.X_POS;
+		for (int j = 2 - this.POLY_FACTOR; j <= 1; ++j) {
+			for (int i = this.POLY_I; i <= this.POLY_N; ++i) {
+				int end_k = this.X_POS + this.X_COUNT;
+				if (end_k > i - 1) end_k = i - 1;
+				int last_x = -1, last_y = -1, cur_x = -1, cur_y = -1;
+				for (int k = start_k; k <= end_k; ++k) {
+					cur_x = k;
+					cur_y = k * (c * (i - k) + j);
+					if (last_x < 0) last_x = cur_x;
+					if (last_y < 0) last_y = cur_y;
+					g2d.drawLine((int)((last_x-this.X_POS-0.5)*BLOCK+X_LEFT), (int)((last_y-this.Y_POS-0.5)*BLOCK+Y_TOP), (int)((cur_x-this.X_POS-0.5)*BLOCK+X_LEFT), (int)((cur_y-this.Y_POS-0.5)*BLOCK+Y_TOP));
+					last_x = cur_x;
+					last_y = cur_y;
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Calculate the parameter for the polynomial function.
+	 */
+	private void calcPoly() {
+		if (this.testPoly() == false) this.searchPoly();
+		this.expandPoly();
+	}
+	
+	private boolean testPoly() {
+		int c = this.POLY_FACTOR;
+		int start_k = 2;
+		if (this.X_POS > 2) start_k = this.X_POS;
+		for (int j = 2 - this.POLY_FACTOR; j <= 1; ++j) {
+			for (int i = this.POLY_I; i <= this.POLY_N; ++i) {
+				int end_k = this.X_POS + this.X_COUNT;
+				if (end_k > i - 1) end_k = i - 1;
+				int cur_x = -1, cur_y = -1;
+				for (int k = start_k; k <= end_k; ++k) {
+					cur_x = k;
+					cur_y = k * (c * (i - k) + j);
+					if (cur_x >= this.X_POS && cur_x < this.X_POS + this.X_COUNT && cur_y >= this.Y_POS && cur_y < this.Y_POS + this.Y_COUNT) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	private boolean searchPoly() {
+		this.POLY_I = this.POLY_N = 3;
+		int left_bottom = this.Y_POS + this.Y_COUNT;
+		if (left_bottom <= this.X_POS*2) return false;
+		while (true) {
+			if (this.testPoly()) return true;
+			this.POLY_I = this.POLY_N = this.POLY_N + 1;
+		}
+	}
+	
+	private void expandPoly() {
+		boolean i_found = false;
+		int start_i = this.POLY_I;
+		do {
+			int c = this.POLY_FACTOR;
+			int start_k = 2;
+			if (this.X_POS > 2) start_k = this.X_POS;
+			boolean j_found = false;
+			j_loop: for (int j = 2 - this.POLY_FACTOR; j <= 1; ++j) {
+				int i = start_i;
+				int end_k = this.X_POS + this.X_COUNT;
+				if (end_k > i - 1) end_k = i - 1;
+				int cur_x = -1, cur_y = -1;
+				for (int k = start_k; k <= end_k; ++k) {
+					cur_x = k;
+					cur_y = k * (c * (i - k) + j);
+					if (cur_x >= this.X_POS && cur_x < this.X_POS + this.X_COUNT && cur_y >= this.Y_POS && cur_y < this.Y_POS + this.Y_COUNT) {
+						j_found = true;
+						break j_loop;
+					}
+				}
+			}
+			if (j_found) {
+				i_found = true;
+				this.POLY_I = start_i;
+			} else break;
+			--start_i;
+		} while (true);
+		if (i_found == false) {
+			do {
+				int c = this.POLY_FACTOR;
+				int start_k = 2;
+				if (this.X_POS > 2) start_k = this.X_POS;
+				boolean j_found = false;
+				j_loop: for (int j = 2 - this.POLY_FACTOR; j <= 1; ++j) {
+					int i = start_i;
+					int end_k = this.X_POS + this.X_COUNT;
+					if (end_k > i - 1) end_k = i - 1;
+					int cur_x = -1, cur_y = -1;
+					for (int k = start_k; k <= end_k; ++k) {
+						cur_x = k;
+						cur_y = k * (c * (i - k) + j);
+						if (cur_x >= this.X_POS && cur_x < this.X_POS + this.X_COUNT && cur_y >= this.Y_POS && cur_y < this.Y_POS + this.Y_COUNT) {
+							j_found = true;
+							break j_loop;
+						}
+					}
+				}
+				if (j_found) {
+					i_found = true;
+					this.POLY_I = start_i;
+					break;
+				}
+				++start_i;
+			} while (true);
+		}
+		this.POLY_N = this.POLY_I;
+		int start_n = this.POLY_N;
+		do {
+			int c = this.POLY_FACTOR;
+			int start_k = 2;
+			if (this.X_POS > 2) start_k = this.X_POS;
+			boolean j_found = false;
+			j_loop: for (int j = 2 - this.POLY_FACTOR; j <= 1; ++j) {
+				int i = start_n;
+				int end_k = this.X_POS + this.X_COUNT;
+				if (end_k > i - 1) end_k = i - 1;
+				int cur_x = -1, cur_y = -1;
+				for (int k = start_k; k <= end_k; ++k) {
+					cur_x = k;
+					cur_y = k * (c * (i - k) + j);
+					if (cur_x >= this.X_POS && cur_x < this.X_POS + this.X_COUNT && cur_y >= this.Y_POS && cur_y < this.Y_POS + this.Y_COUNT) {
+						j_found = true;
+						break j_loop;
+					}
+				}
+			}
+			if (j_found) this.POLY_N = start_n;
+			else break;
+			++start_n;
+		} while (true);
+	}
+	
+	/**
+	 * if (!this.model.isPolynomials() || this.model.isCheckedPattern() || this.model.getVerticalStep() > 1 || this.model.getHorizontalStep() > 1) return;
+		int x, y, y_sub=0, step=0, base=0, cur_x=0, cur_y=0, last_x=0, last_y=0, polySize=this.model.getPolySize();
 		g2d.setColor(this.model.getColor("POLY_COLOR"));
 		int max_y = (polySize*polySize)*this.model.getPolyDelta()*this.model.getPolyFactor();
 		column: for (int yp = 1; yp <= Y_COUNT+max_y; ++yp) {
@@ -904,11 +1066,7 @@ public class PrimeView extends JPanel {
 				if (poly != null && poly.getStep() == this.model.getPolyDelta() && poly.getFactor() == this.model.getPolyFactor()) {
 					if (x==this.MOUSE_X && y==this.MOUSE_Y) g2d.setColor(this.model.getColor("RAY_BORDER"));
 					else g2d.setColor(this.model.getColor("POLY_COLOR"));
-					base=0;
-					step=0;
-					y_sub=0;
-					last_x=0;
-					last_y=0;
+					base = step = y_sub = last_x = last_y = 0;
 					do_poly: do {
 						++base;
 						step += poly.getStep();
@@ -927,7 +1085,7 @@ public class PrimeView extends JPanel {
 				}
 			}
 		}
-	}
+	 */
 	
 	/**
 	 * Draw the polar polynomials at the top of the view.
