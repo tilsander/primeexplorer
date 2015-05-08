@@ -906,12 +906,13 @@ public class PrimeView extends JPanel {
 	 * Draw all recognized polynomials within the view rect.
 	 */
 	private void drawPolys() {
-		if (!this.model.isPolynomials() || this.model.isCheckedPattern() || this.model.getVerticalStep() > 1 || this.model.getHorizontalStep() > 1) return;
-		if (this.calc_poly) this.calcPoly();
+		if (!this.model.isPolynomials() || this.model.getVerticalStep() > 1 || this.model.getHorizontalStep() > 1) return;
+		if (this.calc_poly) this.calcPolys();
 		g2d.setColor(this.model.getColor("POLY_COLOR"));
 		int c = this.POLY_FACTOR;
 		int start_k = 2;
 		if (this.X_POS > 2) start_k = this.X_POS;
+		int cp=0, lp=0;
 		for (int j = 2 - this.POLY_FACTOR; j <= 1; ++j) {
 			for (int i = this.POLY_I; i <= this.POLY_N; ++i) {
 				int end_k = this.X_POS + this.X_COUNT;
@@ -922,7 +923,14 @@ public class PrimeView extends JPanel {
 					cur_y = k * (c * (i - k) + j);
 					if (last_x < 0) last_x = cur_x;
 					if (last_y < 0) last_y = cur_y;
-					g2d.drawLine((int)((last_x-this.X_POS-0.5)*BLOCK+X_LEFT), (int)((last_y-this.Y_POS-0.5)*BLOCK+Y_TOP), (int)((cur_x-this.X_POS-0.5)*BLOCK+X_LEFT), (int)((cur_y-this.Y_POS-0.5)*BLOCK+Y_TOP));
+					if (this.model.isCheckedPattern()) {
+						cp = cur_x/2;
+						lp = last_x/2;
+					} else {
+						cp = 0;
+						lp = 0;
+					}
+					g2d.drawLine((int)((last_x-this.X_POS-0.5)*BLOCK+X_LEFT), (int)((last_y-lp-this.Y_POS-0.5)*BLOCK+Y_TOP), (int)((cur_x-this.X_POS-0.5)*BLOCK+X_LEFT), (int)((cur_y-cp-this.Y_POS-0.5)*BLOCK+Y_TOP));
 					last_x = cur_x;
 					last_y = cur_y;
 				}
@@ -933,12 +941,15 @@ public class PrimeView extends JPanel {
 	/**
 	 * Calculate the parameter for the polynomial function.
 	 */
-	private void calcPoly() {
-		if (this.testPoly() == false) this.searchPoly();
-		this.expandPoly();
+	private void calcPolys() {
+		if (this.testPolys() == false) this.searchPolys();
+		this.expandPolys();
 	}
 	
-	private boolean testPoly() {
+	/**
+	 * @return <code>true</code> if there are polynomials in the view rect for the current values of POLY_I and POLY_N .
+	 */
+	private boolean testPolys() {
 		int c = this.POLY_FACTOR;
 		int start_k = 2;
 		if (this.X_POS > 2) start_k = this.X_POS;
@@ -959,17 +970,24 @@ public class PrimeView extends JPanel {
 		return false;
 	}
 	
-	private boolean searchPoly() {
+	/**
+	 * Search for the smallest value for POLY_I that creates a polynomial within the view rect.
+	 * @return <code>true</code> if a value was found.
+	 */
+	private boolean searchPolys() {
 		this.POLY_I = this.POLY_N = 3;
 		int left_bottom = this.Y_POS + this.Y_COUNT;
 		if (left_bottom <= this.X_POS*2) return false;
 		while (true) {
-			if (this.testPoly()) return true;
+			if (this.testPolys()) return true;
 			this.POLY_I = this.POLY_N = this.POLY_N + 1;
 		}
 	}
 	
-	private void expandPoly() {
+	/**
+	 * Adjust the values of POLY_I and POLY_N.
+	 */
+	private void expandPolys() {
 		boolean i_found = false;
 		int start_i = this.POLY_I;
 		do {
@@ -1051,41 +1069,6 @@ public class PrimeView extends JPanel {
 			++start_n;
 		} while (true);
 	}
-	
-	/**
-	 * if (!this.model.isPolynomials() || this.model.isCheckedPattern() || this.model.getVerticalStep() > 1 || this.model.getHorizontalStep() > 1) return;
-		int x, y, y_sub=0, step=0, base=0, cur_x=0, cur_y=0, last_x=0, last_y=0, polySize=this.model.getPolySize();
-		g2d.setColor(this.model.getColor("POLY_COLOR"));
-		int max_y = (polySize*polySize)*this.model.getPolyDelta()*this.model.getPolyFactor();
-		column: for (int yp = 1; yp <= Y_COUNT+max_y; ++yp) {
-			y = this.transformY(yp);
-			row: for (int xp = -polySize*this.model.getPolyDelta(); xp <= X_COUNT+polySize*this.model.getPolyDelta(); ++xp) {
-				if ((xp-1)*BLOCK+X_LEFT > WIDTH-X_RIGHT) continue row;
-				x = this.transformX(xp);
-				Primes.Polynomial poly = Primes._().getPoly(x, y, this.model.getPolyDelta(),this.model.getPolyFactor());
-				if (poly != null && poly.getStep() == this.model.getPolyDelta() && poly.getFactor() == this.model.getPolyFactor()) {
-					if (x==this.MOUSE_X && y==this.MOUSE_Y) g2d.setColor(this.model.getColor("RAY_BORDER"));
-					else g2d.setColor(this.model.getColor("POLY_COLOR"));
-					base = step = y_sub = last_x = last_y = 0;
-					do_poly: do {
-						++base;
-						step += poly.getStep();
-						y_sub = base*base*poly.getStep()*poly.getFactor();
-						if (y_sub==0) break do_poly;
-						cur_x = step;
-						cur_y = -y_sub;
-						//if ((double)(y+cur_y)/(double)(x+cur_x) < 2.0) break do_poly;
-						if (base <= polySize) {
-							g2d.drawLine((int)((xp+last_x-0.5)*BLOCK+X_LEFT), (int)((yp+last_y-0.5)*BLOCK+Y_TOP), (int)((xp+cur_x-0.5)*BLOCK+X_LEFT), (int)((yp+cur_y-0.5)*BLOCK+Y_TOP));
-							g2d.drawLine((int)((xp-last_x-0.5)*BLOCK+X_LEFT), (int)((yp+last_y-0.5)*BLOCK+Y_TOP), (int)((xp-cur_x-0.5)*BLOCK+X_LEFT), (int)((yp+cur_y-0.5)*BLOCK+Y_TOP));
-						} else break do_poly;
-						last_x=cur_x;
-						last_y=cur_y;
-					} while (y_sub <= yp);
-				}
-			}
-		}
-	 */
 	
 	/**
 	 * Draw the polar polynomials at the top of the view.
