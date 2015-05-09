@@ -5,8 +5,8 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * 
- * @author Til Sander
  * This class is used to create and run the application
+ * @author Til Sander
  */
 public class PrimeExplorer {
 	

@@ -61,13 +61,13 @@ public class PrimeModel {
 	private int blockSize = 12, xPos = 0, yPos = 0, mouseX = 0, mouseY = 0,
 			verticalStep=1, horizontalStep=1, verticalOffset=0, horizontalOffset=0,
 			window_width=1200, window_height=800, polySize=5, polyFactor=1, polyDelta=1,
-			factorX=0, factorY=1, factorZ=1, divisorSumExponent=1;
+			factorX=30, factorY=1, factorZ=1, divisorSumExponent=1;
 	private boolean	drawRect = true, helper = true,
 			rays = false, factors = true, chart = true, chartProp = true, chartPrimeCountCalc=false, chartMatchCountCalc=false,
 			chartExp = false, chartPrimes = true, chartMatchCount = true, chartFirstMatch=false, chartFirstVoid=false, chartVoidCount=false,
 			chartExpSum = true, stats=false, primes=true, _changed=false, polynomials=false, checkedPattern=false, primeMirror=true,
-			polarFactors=true, factorOnlyOuter=true, factorOnlyNeeded=true, polarBalance=true, rotateView=false,
-			chartDivisorSum=false, chartEulerTotient=false, polarOverlap=true, showHCN=false;
+			polarFactors=false, factorOnlyOuter=false, factorOnlyNeeded=false, polarBalance=false, rotateView=false,
+			chartDivisorSum=false, chartEulerTotient=false, polarOverlap=false, showHCN=false;
 	private PMMode pmmode=PMMode.ZOOM;
 	private PMView pmview=PMView.GOLDBACH;
 	private Color BACKGROUND=null,

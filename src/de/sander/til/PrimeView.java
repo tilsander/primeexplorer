@@ -88,10 +88,12 @@ public class PrimeView extends JPanel {
 			return value;
 		}
 
+		@SuppressWarnings("unused")
 		public int getKeyWidth() {
 			return key_width;
 		}
 
+		@SuppressWarnings("unused")
 		public int getValueWidth() {
 			return value_width;
 		}
@@ -100,6 +102,7 @@ public class PrimeView extends JPanel {
 	
 	private static final long serialVersionUID = 1L;
 	private PrimeModel model;
+	@SuppressWarnings("unused")
 	private int X_LEFT=40,
 			Y_TOP=50,
 			Y_BOTTOM=150,
@@ -129,7 +132,8 @@ public class PrimeView extends JPanel {
 			LAST_Y_POS=0,
 			LAST_WIDTH=0,
 			LAST_HEIGHT=0,
-			LAST_POLY_FACTOR;
+			LAST_POLY_FACTOR=0,
+			LAST_BLOCK_SIZE=0;
 	private boolean calc_poly=true;
 	private double STRING_HEIGHT=0.0;
 	private StringMetrics metric;
@@ -309,7 +313,7 @@ public class PrimeView extends JPanel {
 		this.POLAR_FACTOR_Z = this.model.getFactorZ();
 		this.POLY_DELTA = this.model.getPolyDelta();
 		this.POLY_FACTOR = this.model.getPolyFactor();
-		this.calc_poly = this.X_POS != this.LAST_X_POS || this.Y_POS != this.LAST_Y_POS || this.WIDTH != this.LAST_WIDTH || this.HEIGHT != this.LAST_HEIGHT || this.POLY_FACTOR != this.LAST_POLY_FACTOR;
+		this.calc_poly = this.calc_poly || X_POS != LAST_X_POS || Y_POS != LAST_Y_POS || WIDTH != LAST_WIDTH || HEIGHT != LAST_HEIGHT || POLY_FACTOR != LAST_POLY_FACTOR || BLOCK != LAST_BLOCK_SIZE;
 		this.LAST_X_POS = this.X_POS;
 		this.LAST_Y_POS = this.Y_POS;
 		this.LAST_HEIGHT = this.HEIGHT;
@@ -672,9 +676,9 @@ public class PrimeView extends JPanel {
 		if (MOUSE_Y > Y_POS) {
 			int y = MOUSE_Y;
 			int yp = y;
-			yp -= this.model.getVerticalOffset();
-			yp /= this.model.getVerticalStep();
-			yp -= this.model.getYPos();
+			yp -= Y_OFF;
+			yp /= Y_STEP;
+			yp -= Y_POS;
 			String str = "-";
 			int chartCount = 0;
 			if (this.model.isChartPrimes()) {
@@ -906,7 +910,7 @@ public class PrimeView extends JPanel {
 	 * Draw all recognized polynomials within the view rect.
 	 */
 	private void drawPolys() {
-		if (!this.model.isPolynomials() || this.model.getVerticalStep() > 1 || this.model.getHorizontalStep() > 1) return;
+		if (!this.model.isPolynomials() || Y_STEP > 1 || X_STEP > 1) return;
 		if (this.calc_poly) this.calcPolys();
 		g2d.setColor(this.model.getColor("POLY_COLOR"));
 		int c = this.POLY_FACTOR;
@@ -944,6 +948,7 @@ public class PrimeView extends JPanel {
 	private void calcPolys() {
 		if (this.testPolys() == false) this.searchPolys();
 		this.expandPolys();
+		this.calc_poly = false;
 	}
 	
 	/**
@@ -1330,10 +1335,10 @@ public class PrimeView extends JPanel {
 	 * @return The transformed x coordinate.
 	 */
 	private int transformX(int x) {
-		x += this.model.getXPos();
-		x *= this.model.getHorizontalStep();
-		x += this.model.getHorizontalOffset();
-		x -= this.model.getHorizontalStep()-1;
+		x += X_POS;
+		x *= X_STEP;
+		x += X_OFF;
+		x -= X_STEP-1;
 		return x;
 	}
 	
@@ -1342,10 +1347,10 @@ public class PrimeView extends JPanel {
 	 * @return The transformed y coordinate.
 	 */
 	private int transformY(int y) {
-		y += this.model.getYPos();
-		y *= this.model.getVerticalStep();
-		y += this.model.getVerticalOffset();
-		y -= this.model.getVerticalStep()-1;
+		y += Y_POS;
+		y *= Y_STEP;
+		y += Y_OFF;
+		y -= Y_STEP-1;
 		return y;
 	}
 	

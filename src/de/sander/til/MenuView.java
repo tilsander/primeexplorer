@@ -118,7 +118,7 @@ public class MenuView {
 		
 		vModeSub = new JMenu("View Mode (Arrow Keys)");
 		ButtonGroup vgroup = new ButtonGroup();
-		vModeSub.add(this.connect(goldbachMode = new JRadioButtonMenuItem("Goldbach",this.model.getPmview()==PrimeModel.PMView.GOLDBACH),	MenuAction.GOLDBACH_VIEW,KeyEvent.VK_G,CTRL_SHIFT));
+		vModeSub.add(this.connect(goldbachMode = new JRadioButtonMenuItem("Move",this.model.getPmview()==PrimeModel.PMView.GOLDBACH),	MenuAction.GOLDBACH_VIEW,KeyEvent.VK_M,CTRL_SHIFT));
 		vModeSub.add(this.connect(factorMode = new JRadioButtonMenuItem("Factors",this.model.getPmview()==PrimeModel.PMView.FACTOR),	MenuAction.FACTOR_VIEW,KeyEvent.VK_F,CTRL_SHIFT));
 		vgroup.add(goldbachMode);
 		vgroup.add(factorMode);
@@ -146,7 +146,7 @@ public class MenuView {
 		viewMenu.add(this.connect(showStats = new JCheckBoxMenuItem("Show Stats",this.model.isStats()),									MenuAction.SHOW_STATS,KeyEvent.VK_S,CTRL_SHIFT));
 		
 		// chart menu
-		chartMenu.add(this.connect(chartPrimes = new JCheckBoxMenuItem("Primes (Algo)",this.model.isChartPrimes()),						MenuAction.CHART_PRIMES,KeyEvent.VK_1,CTRL));
+		chartMenu.add(this.connect(chartPrimes = new JCheckBoxMenuItem("Primes",this.model.isChartPrimes()),						MenuAction.CHART_PRIMES,KeyEvent.VK_1,CTRL));
 		chartMenu.add(this.connect(chartExponent = new JCheckBoxMenuItem("Exponent Count",this.model.isChartExp()),						MenuAction.CHART_EXPONENTS,KeyEvent.VK_2,CTRL));
 		chartMenu.add(this.connect(chartMatchCount = new JCheckBoxMenuItem("Match Count",this.model.isChartMatchCount()),		MenuAction.CHART_MATCH_COUNT,KeyEvent.VK_3,CTRL));
 		chartMenu.add(this.connect(chartFirstMatch = new JCheckBoxMenuItem("First Match",this.model.isChartFirstMatch()),				MenuAction.CHART_FIRST_MATCH,KeyEvent.VK_4,CTRL));

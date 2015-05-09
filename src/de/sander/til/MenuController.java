@@ -146,6 +146,8 @@ public class MenuController implements MenuListener {
 			break;
 		case POLAR_FACTORS:
 			this.model.setPolarFactors(!this.model.isPolarFactors());
+			if (this.model.isPolarFactors()) this.model.setPmview(PrimeModel.PMView.FACTOR);
+			else this.model.setPmview(PrimeModel.PMView.GOLDBACH);
 			break;
 		case POLAR_OVERLAP:
 			this.model.setPolarOverlap(!this.model.isPolarOverlap());

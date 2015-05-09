@@ -660,8 +660,8 @@ public class Primes {
 		if (this.calcMatchCount.containsKey(number)) return this.calcMatchCount.get(number);
 		
 		int count=0, n = number;
-		HashSet<Integer> comps = this.A(n,3);
-		comps.addAll(this.U(n,2));
+		HashSet<Integer> comps = this.A(n);
+		comps.addAll(this.U(n));
 		
 		count = (n-1)-comps.size();
 		
@@ -740,6 +740,7 @@ public class Primes {
 	 * @param c the coefficient of the parabolas
 	 * @return A set of factors of the first n polynomials.
 	 */
+	@SuppressWarnings("unused")
 	private HashSet<Integer> A(int n, int c) {
 		int comp=0;
 		HashSet<Integer> comps = new HashSet<Integer>();
@@ -770,6 +771,7 @@ public class Primes {
 	 * @param c
 	 * @return A set of factors of the first n polar polynomial.
 	 */
+	@SuppressWarnings("unused")
 	private HashSet<Integer> U(int n, int c) {
 		int comp=0;
 		HashSet<Integer> comps = new HashSet<Integer>();
@@ -801,6 +803,7 @@ public class Primes {
 	 * @param n
 	 * @return A set of composite numbers.
 	 */
+	@SuppressWarnings("unused")
 	private HashSet<Integer> myu(int n) {
 		HashSet<Integer> comps = new HashSet<Integer>();
 		int c = 0;
@@ -818,6 +821,7 @@ public class Primes {
 	 * @param n
 	 * @return A set of composite numbers.
 	 */
+	@SuppressWarnings("unused")
 	private HashSet<Integer> phi(int n) {
 		HashSet<Integer> comps = new HashSet<Integer>();
 		int c = 0;
