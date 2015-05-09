@@ -55,7 +55,7 @@ public class PrimeUtil {
 	
 	/**
 	 * open a webpage with the given url
-	 * @param uri
+	 * @param url
 	 */
 	public static void openWebpage(URL url) {
 	    try {

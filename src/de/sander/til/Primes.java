@@ -100,7 +100,7 @@ public class Primes {
 	 * Short form for getInstance().
 	 * @return The singleton instance.
 	 */
-	public static Primes _() {
+	public static Primes $() {
 		return Primes.getInstance();
 	}
 	

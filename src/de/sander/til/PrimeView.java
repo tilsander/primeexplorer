@@ -370,7 +370,7 @@ public class PrimeView extends JPanel {
 		int last_x_offset = 0;
 		for (int xp = 1; xp <= X_COUNT; ++xp) {
 			x = this.transformX(xp);
-			if (Primes._().isPrime(x) || MOUSE_X==x || MOUSE_Y==x) {
+			if (Primes.$().isPrime(x) || MOUSE_X==x || MOUSE_Y==x) {
 				int cx_p = (xp-1)*BLOCK+X_LEFT;
 				if (MOUSE_X==x || MOUSE_Y==x) {
 					g2d.setColor(this.getHightlightTextColor());
@@ -379,7 +379,7 @@ public class PrimeView extends JPanel {
 					int cy_p = Y_TOP-(int)STRING_HEIGHT-2;
 					if (MOUSE_X==x) cy_p -= 15;
 					g2d.drawString(dstr, cx_p, cy_p);
-					this.drawPrimeProduct(Primes._().getExponents(x), cx_p+dw+1, cy_p);
+					this.drawPrimeProduct(Primes.$().getExponents(x), cx_p+dw+1, cy_p);
 					g2d.setColor(this.getTextColor());
 				} else {
 					if (cx_p > last_x_offset) {
@@ -397,7 +397,7 @@ public class PrimeView extends JPanel {
 			int cy_p = Y_TOP-(int)STRING_HEIGHT-2;
 			int cx_p = (MOUSE_Y <= X_POS ? this.X_LEFT : WIDTH - 130);
 			g2d.drawString(dstr, cx_p, cy_p);
-			this.drawPrimeProduct(Primes._().getExponents(MOUSE_Y), cx_p+dw+1, cy_p);
+			this.drawPrimeProduct(Primes.$().getExponents(MOUSE_Y), cx_p+dw+1, cy_p);
 			g2d.setColor(this.getTextColor());
 		}
 	}
@@ -498,7 +498,7 @@ public class PrimeView extends JPanel {
 		g2d.setColor(new Color(255,255,255,100));
 		for (int xp = 1; xp <= X_COUNT; ++xp) {
 			x = xp + X_POS;
-			if (Primes._().isPrime(x) && Primes._().isPrime(POLAR_FACTOR_X - (xp + X_POS))) {
+			if (Primes.$().isPrime(x) && Primes.$().isPrime(POLAR_FACTOR_X - (xp + X_POS))) {
 				g2d.drawLine((xp-1)*BLOCK+BLOCK/2+X_LEFT, Y_TOP, (xp-1)*BLOCK+BLOCK/2+X_LEFT, HEIGHT);
 			}
 		}
@@ -577,52 +577,52 @@ public class PrimeView extends JPanel {
 		double chart_px=0.0, cpx_dev=1.0;
 		if (this.model.isChartProp()) {
 			List<Double> devs = new ArrayList<Double>();
-			if (this.model.isChartPrimes()) devs.add((double)(Primes._().primesUntil(Y_MAX)));
-			if (this.model.isChartMatchCount()) devs.add((double)(Primes._().getMaxMatchCount(Y_MAX)));
+			if (this.model.isChartPrimes()) devs.add((double)(Primes.$().primesUntil(Y_MAX)));
+			if (this.model.isChartMatchCount()) devs.add((double)(Primes.$().getMaxMatchCount(Y_MAX)));
 			if (this.model.isChartExp()) {
-				if (this.model.isChartExpSum()) devs.add((double)(Primes._().getMaxExpSum(Y_MAX)));
-				else devs.add((double)(Primes._().getMaxExpCount(Y_MAX)));
+				if (this.model.isChartExpSum()) devs.add((double)(Primes.$().getMaxExpSum(Y_MAX)));
+				else devs.add((double)(Primes.$().getMaxExpCount(Y_MAX)));
 			}
-			if (this.model.isChartFirstMatch()) devs.add((double)(Primes._().getMaxFirstMatch(Y_MAX)));
-			if (this.model.isChartFirstVoid()) devs.add((double)(Primes._().getMaxFirstVoid(Y_MAX)));
-			if (this.model.isChartVoidCount()) devs.add((double)(Primes._().getMaxVoidCount(Y_MAX)));
-			if (this.model.isChartPrimeCountCalc()) devs.add((double)(Primes._().getMaxPrimeCountCalc(Y_MAX)));
-			if (this.model.isChartMatchCountCalc()) devs.add((double)(Primes._().getMaxMatchCountCalc(Y_MAX)));
-			if (this.model.isChartDivisorSum()) devs.add((double)(Primes._().getMaxDivisorSum(Y_MAX, this.model.getDivisorSumExponent())));
-			if (this.model.isChartEulerTotient()) devs.add((double)(Primes._().getMaxEulerTotient(Y_MAX)));
+			if (this.model.isChartFirstMatch()) devs.add((double)(Primes.$().getMaxFirstMatch(Y_MAX)));
+			if (this.model.isChartFirstVoid()) devs.add((double)(Primes.$().getMaxFirstVoid(Y_MAX)));
+			if (this.model.isChartVoidCount()) devs.add((double)(Primes.$().getMaxVoidCount(Y_MAX)));
+			if (this.model.isChartPrimeCountCalc()) devs.add((double)(Primes.$().getMaxPrimeCountCalc(Y_MAX)));
+			if (this.model.isChartMatchCountCalc()) devs.add((double)(Primes.$().getMaxMatchCountCalc(Y_MAX)));
+			if (this.model.isChartDivisorSum()) devs.add((double)(Primes.$().getMaxDivisorSum(Y_MAX, this.model.getDivisorSumExponent())));
+			if (this.model.isChartEulerTotient()) devs.add((double)(Primes.$().getMaxEulerTotient(Y_MAX)));
 			cpx_dev = Collections.max(devs);
 		} else {
 			switch (type) {
 			case PRIME_COUNT:
-				cpx_dev = (double)(Primes._().primesUntil(Y_MAX));
+				cpx_dev = (double)(Primes.$().primesUntil(Y_MAX));
 				break;
 			case MATCH_COUNT:
-				cpx_dev = (double)(Primes._().getMaxMatchCount(Y_MAX));
+				cpx_dev = (double)(Primes.$().getMaxMatchCount(Y_MAX));
 				break;
 			case EXPONENT:
-				if (this.model.isChartExpSum()) cpx_dev = (double)(Primes._().getMaxExpSum(Y_MAX)); 
-				else cpx_dev = (double)(Primes._().getMaxExpCount(Y_MAX));
+				if (this.model.isChartExpSum()) cpx_dev = (double)(Primes.$().getMaxExpSum(Y_MAX)); 
+				else cpx_dev = (double)(Primes.$().getMaxExpCount(Y_MAX));
 				break;
 			case FIRST_MATCH:
-				cpx_dev = (double)(Primes._().getMaxFirstMatch(Y_MAX));
+				cpx_dev = (double)(Primes.$().getMaxFirstMatch(Y_MAX));
 				break;
 			case FIRST_VOID:
-				cpx_dev = (double)(Primes._().getMaxFirstVoid(Y_MAX));
+				cpx_dev = (double)(Primes.$().getMaxFirstVoid(Y_MAX));
 				break;
 			case VOID_COUNT:
-				cpx_dev = (double)(Primes._().getMaxVoidCount(Y_MAX));
+				cpx_dev = (double)(Primes.$().getMaxVoidCount(Y_MAX));
 				break;
 			case PRIME_COUNT_CALC:
-				cpx_dev = (double)(Primes._().getMaxPrimeCountCalc(Y_MAX));
+				cpx_dev = (double)(Primes.$().getMaxPrimeCountCalc(Y_MAX));
 				break;
 			case MATCH_COUNT_CALC:
-				cpx_dev = (double)(Primes._().getMaxMatchCountCalc(Y_MAX));
+				cpx_dev = (double)(Primes.$().getMaxMatchCountCalc(Y_MAX));
 				break;
 			case DIVISOR_SUM:
-				cpx_dev = (double)(Primes._().getMaxDivisorSum(Y_MAX, this.model.getDivisorSumExponent()));
+				cpx_dev = (double)(Primes.$().getMaxDivisorSum(Y_MAX, this.model.getDivisorSumExponent()));
 				break;
 			case EULER_TOTIENT:
-				cpx_dev = (double)(Primes._().getMaxEulerTotient(Y_MAX));
+				cpx_dev = (double)(Primes.$().getMaxEulerTotient(Y_MAX));
 				break;
 			default:
 				return;
@@ -634,35 +634,35 @@ public class PrimeView extends JPanel {
 			y = this.transformY(yp);
 			switch (type) {
 			case PRIME_COUNT:
-				xc_val = X_CHART_LEFT + (int)((double)Primes._().primesUntil(y)*chart_px);
+				xc_val = X_CHART_LEFT + (int)((double)Primes.$().primesUntil(y)*chart_px);
 				break;
 			case MATCH_COUNT:
-				xc_val = X_CHART_LEFT + (int)((double)Primes._().getMatchCount(y)*chart_px);
+				xc_val = X_CHART_LEFT + (int)((double)Primes.$().getMatchCount(y)*chart_px);
 				break;
 			case EXPONENT:
-				if (this.model.isChartExpSum()) xc_val = X_CHART_LEFT + (int)((double)Primes._().getExponentSum(y)*chart_px);
-				else xc_val = X_CHART_LEFT + (int)((double)Primes._().getExponentCount(y)*chart_px);
+				if (this.model.isChartExpSum()) xc_val = X_CHART_LEFT + (int)((double)Primes.$().getExponentSum(y)*chart_px);
+				else xc_val = X_CHART_LEFT + (int)((double)Primes.$().getExponentCount(y)*chart_px);
 				break;
 			case FIRST_MATCH:
-				xc_val = X_CHART_LEFT + (int)((double)Primes._().getFirstMatch(y)*chart_px);
+				xc_val = X_CHART_LEFT + (int)((double)Primes.$().getFirstMatch(y)*chart_px);
 				break;
 			case FIRST_VOID:
-				xc_val = X_CHART_LEFT + (int)((double)Primes._().getFirstVoid(y)*chart_px);
+				xc_val = X_CHART_LEFT + (int)((double)Primes.$().getFirstVoid(y)*chart_px);
 				break;
 			case VOID_COUNT:
-				xc_val = X_CHART_LEFT + (int)((double)Primes._().getVoidCount(y)*chart_px);
+				xc_val = X_CHART_LEFT + (int)((double)Primes.$().getVoidCount(y)*chart_px);
 				break;
 			case PRIME_COUNT_CALC:
-				xc_val = X_CHART_LEFT + (int)((double)Primes._().calculatePrimeCount(y)*chart_px);
+				xc_val = X_CHART_LEFT + (int)((double)Primes.$().calculatePrimeCount(y)*chart_px);
 				break;
 			case MATCH_COUNT_CALC:
-				xc_val = X_CHART_LEFT + (int)((double)Primes._().calculateMatchCount(y)*chart_px);
+				xc_val = X_CHART_LEFT + (int)((double)Primes.$().calculateMatchCount(y)*chart_px);
 				break;
 			case DIVISOR_SUM:
-				xc_val = X_CHART_LEFT + (int)((double)Primes._().getDivisorSum(y, this.model.getDivisorSumExponent())*chart_px);
+				xc_val = X_CHART_LEFT + (int)((double)Primes.$().getDivisorSum(y, this.model.getDivisorSumExponent())*chart_px);
 				break;
 			case EULER_TOTIENT:
-				xc_val = X_CHART_LEFT + (int)((double)Primes._().getEulerTotient(y)*chart_px);
+				xc_val = X_CHART_LEFT + (int)((double)Primes.$().getEulerTotient(y)*chart_px);
 				break;
 			}
 			g2d.drawLine(xc_val, (yp-1)*BLOCK+Y_TOP, xc_val, yp*BLOCK+Y_TOP);
@@ -683,62 +683,62 @@ public class PrimeView extends JPanel {
 			int chartCount = 0;
 			if (this.model.isChartPrimes()) {
 				this.g2d.setColor(this.model.getColor("CHART_PRIME"));
-				str = "" + Primes._().primesUntil(y);
+				str = "" + Primes.$().primesUntil(y);
 				g2d.drawString(str, WIDTH-X_RIGHT+10, yp*BLOCK+((int)STRING_HEIGHT+2)*chartCount);
 				chartCount++;
 			}
 			if (this.model.isChartMatchCount()) {
 				this.g2d.setColor(this.model.getColor("CHART_MATCH_COUNT"));
-				str = "" + Primes._().getMatchCount(y);
+				str = "" + Primes.$().getMatchCount(y);
 				g2d.drawString(str, WIDTH-X_RIGHT+10, yp*BLOCK+((int)STRING_HEIGHT+2)*chartCount);
 				chartCount++;
 			}
 			if (this.model.isChartExp()) {
 				this.g2d.setColor(this.model.getColor("CHART_EXP"));
-				if (this.model.isChartExpSum()) str = "" + Primes._().getExponentSum(y);
-				else str = "" + Primes._().getExponentCount(y);
+				if (this.model.isChartExpSum()) str = "" + Primes.$().getExponentSum(y);
+				else str = "" + Primes.$().getExponentCount(y);
 				g2d.drawString(str, WIDTH-X_RIGHT+10, yp*BLOCK+((int)STRING_HEIGHT+2)*chartCount);
 				chartCount++;
 			}
 			if (this.model.isChartFirstMatch()) {
 				this.g2d.setColor(this.model.getColor("CHART_FIRST_MATCH"));
-				str = "" + Primes._().getFirstMatch(y);
+				str = "" + Primes.$().getFirstMatch(y);
 				g2d.drawString(str, WIDTH-X_RIGHT+10, yp*BLOCK+((int)STRING_HEIGHT+2)*chartCount);
 				chartCount++;
 			}
 			if (this.model.isChartVoidCount()) {
 				this.g2d.setColor(this.model.getColor("CHART_VOID_COUNT"));
-				str = "" + Primes._().getVoidCount(y);
+				str = "" + Primes.$().getVoidCount(y);
 				g2d.drawString(str, WIDTH-X_RIGHT+10, yp*BLOCK+((int)STRING_HEIGHT+2)*chartCount);
 				chartCount++;
 			}
 			if (this.model.isChartFirstVoid()) {
 				this.g2d.setColor(this.model.getColor("CHART_FIRST_VOID"));
-				str = "" + Primes._().getFirstVoid(y);
+				str = "" + Primes.$().getFirstVoid(y);
 				g2d.drawString(str, WIDTH-X_RIGHT+10, yp*BLOCK+((int)STRING_HEIGHT+2)*chartCount);
 				chartCount++;
 			}
 			if (this.model.isChartPrimeCountCalc()) {
 				this.g2d.setColor(this.model.getColor("CHART_PRIME_COUNT_CALC"));
-				str = "" + Primes._().calculatePrimeCount(y);
+				str = "" + Primes.$().calculatePrimeCount(y);
 				g2d.drawString(str, WIDTH-X_RIGHT+10, yp*BLOCK+((int)STRING_HEIGHT+2)*chartCount);
 				chartCount++;
 			}
 			if (this.model.isChartMatchCountCalc()) {
 				this.g2d.setColor(this.model.getColor("CHART_MATCH_COUNT_CALC"));
-				str = "" + Primes._().calculateMatchCount(y);
+				str = "" + Primes.$().calculateMatchCount(y);
 				g2d.drawString(str, WIDTH-X_RIGHT+10, yp*BLOCK+((int)STRING_HEIGHT+2)*chartCount);
 				chartCount++;
 			}
 			if (this.model.isChartDivisorSum()) {
 				this.g2d.setColor(this.model.getColor("CHART_DIVISOR_SUM"));
-				str = "" + Primes._().getDivisorSum(y, this.model.getDivisorSumExponent());
+				str = "" + Primes.$().getDivisorSum(y, this.model.getDivisorSumExponent());
 				g2d.drawString(str, WIDTH-X_RIGHT+10, yp*BLOCK+((int)STRING_HEIGHT+2)*chartCount);
 				chartCount++;
 			}
 			if (this.model.isChartEulerTotient()) {
 				this.g2d.setColor(this.model.getColor("CHART_EULER_TOTIENT"));
-				str = "" + Primes._().getEulerTotient(y);
+				str = "" + Primes.$().getEulerTotient(y);
 				g2d.drawString(str, WIDTH-X_RIGHT+10, yp*BLOCK+((int)STRING_HEIGHT+2)*chartCount);
 				chartCount++;
 			}
@@ -767,7 +767,7 @@ public class PrimeView extends JPanel {
 						int order = y/x;
 						double ratio = ((double)order)*((double)X_STEP/(double)Y_STEP);
 						if (rays.get(order) == null || y == MOUSE_Y) {
-							if (Primes._().isPrime(x) && y == MOUSE_Y) g2d.setColor(this.getHightlightTextColor());
+							if (Primes.$().isPrime(x) && y == MOUSE_Y) g2d.setColor(this.getHightlightTextColor());
 							else g2d.setColor(this.model.getColor("RAY_BORDER")); 
 							x_left = ((double)xp - 0.5)*(double)BLOCK;
 							y_up = (x_left*ratio);
@@ -790,7 +790,7 @@ public class PrimeView extends JPanel {
 							to_x = start_x + x_right;
 							to_y = start_y + y_down;
 							g2d.drawLine((int)to_x, (int)to_y, (int)from_x, (int)from_y);
-							rays.put(order,new Point2D((int)to_x, (int)to_y, Primes._().isPrime(x) && y == MOUSE_Y));
+							rays.put(order,new Point2D((int)to_x, (int)to_y, Primes.$().isPrime(x) && y == MOUSE_Y));
 						}
 					}
 				}
@@ -1136,7 +1136,7 @@ public class PrimeView extends JPanel {
 		int y;
 		for (int yp = 1; yp <= Y_COUNT; ++yp) {
 			y = this.transformY(yp);
-			if (Primes._().isHCN(y)) {
+			if (Primes.$().isHCN(y)) {
 				g2d.setColor(this.getHightlightTextColor());
 				g2d.drawLine(X_LEFT, (int)(((double)yp-0.5)*BLOCK)+Y_TOP, WIDTH-X_RIGHT, (int)(((double)yp-0.5)*BLOCK)+Y_TOP);
 			}
@@ -1157,8 +1157,8 @@ public class PrimeView extends JPanel {
 	 * @return The text at the position (x|y).
 	 */
 	private String getText(int x, int y) {
-		if (Primes._().isPrime(x)) {
-			int exp = Primes._().getExponent(x, y);
+		if (Primes.$().isPrime(x)) {
+			int exp = Primes.$().getExponent(x, y);
 			if (exp > 0) return ""+exp;
 		}
 		return null;
@@ -1172,7 +1172,7 @@ public class PrimeView extends JPanel {
 	 */
 	private Color getColor(int x, int y, ColorType ct) {
 		if (this.model.isPrimeMirror() && MOUSE_Y == y) {
-			if (Primes._().isPrime(MOUSE_Y*2-x) && ct == ColorType.BOX) {
+			if (Primes.$().isPrime(MOUSE_Y*2-x) && ct == ColorType.BOX) {
 				return this.model.getColor("PRIME_MIRROR");
 			}
 		}
@@ -1184,21 +1184,21 @@ public class PrimeView extends JPanel {
 				if (y%x==0 && this.model.isFactors()) return this.model.getColor("RAY_BORDER");
 				else return this.model.getColor("HELPER_BORDER");
 			case BOX:
-				if (Primes._().isMatch(x, y)) return this.model.getColor("HELPER_BOX_LIGHT");
-				else if (Primes._().getExponent(x, y)>0) return this.model.getColor("EXP_BOX");
+				if (Primes.$().isMatch(x, y)) return this.model.getColor("HELPER_BOX_LIGHT");
+				else if (Primes.$().getExponent(x, y)>0) return this.model.getColor("EXP_BOX");
 				else return this.model.getColor("HELPER_BOX");
 			case TEXT: return this.model.getColor("HELPER_TEXT");
 			}
 		}
-		if (Primes._().isPrime(x)) {
-			if (this.model.isPrimes() && Primes._().isMatch(x, y)) {
+		if (Primes.$().isPrime(x)) {
+			if (this.model.isPrimes() && Primes.$().isMatch(x, y)) {
 				switch (ct) {
 				case BORDER: return this.model.getColor("MATCH_BORDER");
 				case BOX: return this.model.getColor("MATCH_BOX");
 				case TEXT: return this.model.getColor("MATCH_TEXT");
 				}
 			} else {
-				if (this.model.isChartExpSum() && Primes._().getExponent(x, y)>0) {
+				if (this.model.isChartExpSum() && Primes.$().getExponent(x, y)>0) {
 					switch (ct) {
 					case BORDER: return this.model.getColor("EXP_BORDER");
 					case BOX: return this.model.getColor("EXP_BOX");
