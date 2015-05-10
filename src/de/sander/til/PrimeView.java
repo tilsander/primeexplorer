@@ -313,7 +313,13 @@ public class PrimeView extends JPanel {
 		this.POLAR_FACTOR_Z = this.model.getFactorZ();
 		this.POLY_DELTA = this.model.getPolyDelta();
 		this.POLY_FACTOR = this.model.getPolyFactor();
-		this.calc_poly = this.calc_poly || X_POS != LAST_X_POS || Y_POS != LAST_Y_POS || WIDTH != LAST_WIDTH || HEIGHT != LAST_HEIGHT || POLY_FACTOR != LAST_POLY_FACTOR || BLOCK != LAST_BLOCK_SIZE;
+		this.calc_poly = this.calc_poly ||
+				X_POS != LAST_X_POS ||
+				Y_POS != LAST_Y_POS ||
+				WIDTH != LAST_WIDTH ||
+				HEIGHT != LAST_HEIGHT ||
+				POLY_FACTOR != LAST_POLY_FACTOR ||
+				BLOCK != LAST_BLOCK_SIZE;
 		this.LAST_X_POS = this.X_POS;
 		this.LAST_Y_POS = this.Y_POS;
 		this.LAST_HEIGHT = this.HEIGHT;

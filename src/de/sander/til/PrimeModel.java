@@ -8,7 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * This class stores the state of a PrimeView
+ * This class stores the state of a PrimeView.
  */
 public class PrimeModel {
 	
@@ -16,7 +16,7 @@ public class PrimeModel {
 	private static final Logger logger = LogManager.getLogger(PrimeModel.class.getSimpleName());
 	
 	/**
-	 * a enumeration of control modes (+/-)
+	 * A enumeration of control modes (key: +/-).
 	 */
 	public enum PMMode {
 		VERTICAL_STEP,
