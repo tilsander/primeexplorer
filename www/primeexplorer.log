@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2015.5.2)  10 MAY 2015 20:37
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.10.24)  12 MAY 2015 13:46
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -370,20 +370,9 @@ File: listings.cfg 2014/03/04 1.5c listings configuration
 ))
 Package: listings 2014/03/04 1.5c (Carsten Heinz)
 
-(/usr/local/texlive/2014/texmf-dist/tex/latex/fancyhdr/fancyhdr.sty
-\fancy@headwidth=\skip43
-\f@ncyO@elh=\skip44
-\f@ncyO@erh=\skip45
-\f@ncyO@olh=\skip46
-\f@ncyO@orh=\skip47
-\f@ncyO@elf=\skip48
-\f@ncyO@erf=\skip49
-\f@ncyO@olf=\skip50
-\f@ncyO@orf=\skip51
-)
 (/usr/local/texlive/2014/texmf-dist/tex/latex/amsmath/amsmath.sty
 Package: amsmath 2013/01/14 v2.14 AMS math features
-\@mathmargin=\skip52
+\@mathmargin=\skip43
 
 For additional information on amsmath, use the `?' option.
 (/usr/local/texlive/2014/texmf-dist/tex/latex/amsmath/amstext.sty
@@ -433,8 +422,8 @@ LaTeX Font Info:    Redeclaring font encoding OMS on input line 567.
 \totwidth@=\dimen122
 \lineht@=\dimen123
 \@envbody=\toks22
-\multlinegap=\skip53
-\multlinetaggap=\skip54
+\multlinegap=\skip44
+\multlinetaggap=\skip45
 \mathdisplay@stack=\toks23
 LaTeX Info: Redefining \[ on input line 2665.
 LaTeX Info: Redefining \] on input line 2666.
@@ -456,9 +445,9 @@ Package: amsthm 2004/08/06 v2.20
 \thm@headfont=\toks26
 \thm@notefont=\toks27
 \thm@headpunct=\toks28
-\thm@preskip=\skip55
-\thm@postskip=\skip56
-\thm@headsep=\skip57
+\thm@preskip=\skip46
+\thm@postskip=\skip47
+\thm@headsep=\skip48
 \dth@everypar=\toks29
 )
 (/usr/local/texlive/2014/texmf-dist/tex/latex/base/fixltx2e.sty
@@ -493,13 +482,13 @@ Package: setspace 2011/12/19 v6.7a set line spacing
 )
 (/usr/local/texlive/2014/texmf-dist/tex/latex/mdwtools/syntax.sty
 Package: syntax 1996/05/17 1.07 Syntax typesetting (MDW)
-\grammarparsep=\skip58
+\grammarparsep=\skip49
 \grammarindent=\dimen125
-\sdstartspace=\skip59
-\sdendspace=\skip60
-\sdmidskip=\skip61
-\sdtokskip=\skip62
-\sdfinalskip=\skip63
+\sdstartspace=\skip50
+\sdendspace=\skip51
+\sdmidskip=\skip52
+\sdtokskip=\skip53
+\sdfinalskip=\skip54
 \sdrulewidth=\dimen126
 \sdcirclediam=\dimen127
 \sdindent=\dimen128
@@ -961,19 +950,19 @@ File: lstlang1.sty 2014/03/04 1.5c listings language file
 (./primeexplorer.aux)
 \openout1 = `primeexplorer.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 126.
-LaTeX Font Info:    ... okay on input line 126.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 126.
-LaTeX Font Info:    ... okay on input line 126.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 126.
-LaTeX Font Info:    ... okay on input line 126.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 126.
-LaTeX Font Info:    ... okay on input line 126.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 126.
-LaTeX Font Info:    ... okay on input line 126.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 126.
-LaTeX Font Info:    ... okay on input line 126.
-LaTeX Font Info:    Try loading font information for T1+lmr on input line 126.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 125.
+LaTeX Font Info:    ... okay on input line 125.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 125.
+LaTeX Font Info:    ... okay on input line 125.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 125.
+LaTeX Font Info:    ... okay on input line 125.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 125.
+LaTeX Font Info:    ... okay on input line 125.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 125.
+LaTeX Font Info:    ... okay on input line 125.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 125.
+LaTeX Font Info:    ... okay on input line 125.
+LaTeX Font Info:    Try loading font information for T1+lmr on input line 125.
  (/usr/local/texlive/2014/texmf-dist/tex/latex/lm/t1lmr.fd
 File: t1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
@@ -997,8 +986,8 @@ Package geometry Warning: The marginal notes overrun the paper.
 * \textheight=556.47656pt
 * \oddsidemargin=-15.36449pt
 * \evensidemargin=-15.36449pt
-* \topmargin=-30.32536pt
-* \headheight=28.45274pt
+* \topmargin=-1.87262pt
+* \headheight=0.0pt
 * \headsep=25.0pt
 * \topskip=12.0pt
 * \footskip=30.0pt
@@ -1115,145 +1104,152 @@ LaTeX Font Info:    Try loading font information for U+msb on input line 131.
 (/usr/local/texlive/2014/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-Underfull \hbox (badness 10000) in paragraph at lines 130--134
+Underfull \hbox (badness 10000) in paragraph at lines 126--227
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 130--134
+Underfull \hbox (badness 10000) in paragraph at lines 126--227
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 130--134
+Underfull \hbox (badness 10000) in paragraph at lines 126--227
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 130--134
+Underfull \hbox (badness 10000) in paragraph at lines 126--227
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 130--134
+Underfull \hbox (badness 10000) in paragraph at lines 126--227
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 225--243
+Underfull \hbox (badness 10000) in paragraph at lines 126--227
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 225--243
+Underfull \hbox (badness 10000) in paragraph at lines 126--227
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 225--243
+Underfull \hbox (badness 10000) in paragraph at lines 126--227
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 225--243
+Underfull \hbox (badness 10000) in paragraph at lines 126--227
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 225--243
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 228--254
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 225--243
+Underfull \hbox (badness 10000) in paragraph at lines 228--254
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 225--243
-
- []
-
-[1{/usr/local/texlive/2014/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
-
-]
-Underfull \hbox (badness 10000) in paragraph at lines 250--270
+Underfull \hbox (badness 10000) in paragraph at lines 228--254
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 250--270
+Underfull \hbox (badness 10000) in paragraph at lines 228--254
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 250--270
+Underfull \hbox (badness 10000) in paragraph at lines 228--254
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 250--270
+Underfull \hbox (badness 10000) in paragraph at lines 228--254
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 250--270
-
- []
-
-[2]
-Underfull \hbox (badness 10000) in paragraph at lines 275--287
-
- []
-
-[3]
-Underfull \hbox (badness 10000) in paragraph at lines 296--308
+Underfull \hbox (badness 10000) in paragraph at lines 228--254
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 315--324
-
- []
-
-[4]
-Underfull \hbox (badness 10000) in paragraph at lines 337--343
+Underfull \hbox (badness 10000) in paragraph at lines 228--254
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 337--343
+Underfull \hbox (badness 10000) in paragraph at lines 228--254
 
  []
 
-[5] (./primeexplorer.aux) ) 
+
+Underfull \hbox (badness 10000) in paragraph at lines 228--254
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 228--254
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 228--254
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 228--254
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 228--254
+
+ []
+
+[1
+
+{/usr/local/texlive/2014/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+[2] [3] (./primeexplorer.aux) ) 
 Here is how much of TeX's memory you used:
- 18690 strings out of 493117
- 365143 string characters out of 6135434
- 488015 words of memory out of 5000000
- 21714 multiletter control sequences out of 15000+600000
- 34985 words of font info for 38 fonts, out of 8000000 for 9000
+ 18557 strings out of 493117
+ 363696 string characters out of 6135432
+ 488076 words of memory out of 5000000
+ 21587 multiletter control sequences out of 15000+600000
+ 19961 words of font info for 33 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 55i,18n,67p,417b,345s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/local/texlive/2014/texmf-dist/fonts/enc/dvips/
-lm/lm-rm.enc}{/usr/local/texlive/2014/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{
-/usr/local/texlive/2014/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/local
-/texlive/2014/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/local/texlive/2
-014/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}</usr/local/texlive/2014/texmf-
-dist/fonts/type1/public/lm/lmbx12.pfb></usr/local/texlive/2014/texmf-dist/fonts
-/type1/public/lm/lmex10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/pub
-lic/lm/lmmi12.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/lm/lmm
-i8.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/lm/lmr12.pfb></us
-r/local/texlive/2014/texmf-dist/fonts/type1/public/lm/lmr6.pfb></usr/local/texl
-ive/2014/texmf-dist/fonts/type1/public/lm/lmr8.pfb></usr/local/texlive/2014/tex
-mf-dist/fonts/type1/public/lm/lmsy10.pfb></usr/local/texlive/2014/texmf-dist/fo
-nts/type1/public/lm/lmsy8.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/p
-ublic/amsfonts/symbols/msam10.pfb></usr/local/texlive/2014/texmf-dist/fonts/typ
-e1/public/amsfonts/symbols/msbm10.pfb>
-Output written on primeexplorer.pdf (5 pages, 136793 bytes).
+ 55i,19n,67p,417b,347s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/local/texlive/2014/texmf-dist/fonts/enc/dv
+ips/lm/lm-mathex.enc}{/usr/local/texlive/2014/texmf-dist/fonts/enc/dvips/lm/lm-
+rm.enc}{/usr/local/texlive/2014/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/u
+sr/local/texlive/2014/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/local/t
+exlive/2014/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}</usr/local/texlive/2014/te
+xmf-dist/fonts/type1/public/lm/lmex10.pfb></usr/local/texlive/2014/texmf-dist/f
+onts/type1/public/lm/lmmi12.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1
+/public/lm/lmmi8.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/lm/
+lmr12.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/lm/lmr8.pfb></
+usr/local/texlive/2014/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></usr/local/
+texlive/2014/texmf-dist/fonts/type1/public/lm/lmsy8.pfb></usr/local/texlive/201
+4/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/local/texlive
+/2014/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on primeexplorer.pdf (3 pages, 90097 bytes).
 PDF statistics:
- 74 PDF objects out of 1000 (max. 8388607)
- 55 compressed objects within 1 object stream
+ 60 PDF objects out of 1000 (max. 8388607)
+ 45 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  13 words of extra memory for PDF output out of 10000 (max. 10000000)
 
