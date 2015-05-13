@@ -36,7 +36,7 @@ public class PrimeApplication implements SettingsListener {
 		while (iter.hasNext()) {
 			Map.Entry<String, PrimeModel> entry = (Map.Entry<String, PrimeModel>) iter.next();
 			PrimeModel model = (PrimeModel) entry.getValue();
-			this.controller.put(model,new PrimeController(model,this.settings));
+			if (model != null) this.controller.put(model,new PrimeController(model,this.settings));
 		}
 		Runtime.getRuntime().addShutdownHook(new Thread(){
             public void run(){

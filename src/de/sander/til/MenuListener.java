@@ -53,7 +53,8 @@ public interface MenuListener {
 		FACTOR_VIEW,
 		ORIGIN,
 		DOCUMENTATION,
-		ABOUT
+		ABOUT,
+		UPDATE
 	}
 	
 	/**

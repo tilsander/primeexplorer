@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+
+<html>
+
+<head >
+    <meta charset="utf-8">
+    <meta name="description" content="Software Developer">
+    <meta name="author" content="Til Sander">
+    <title>Prime Explorer</title>
+    <link rel="stylesheet" type="text/css" href="http:www.til-sander.de/assets/css/bootstrap.min.css"></link>
+    <link rel="stylesheet" type="text/css" href="http:www.til-sander.de/assets/css/bootstrap-theme.min.css"></link>
+    <link rel="stylesheet" type="text/css" href="http:www.til-sander.de/assets/css/ts.css"></link>
+    <link rel="stylesheet" type="text/css" href="http:www.til-sander.de/assets/css/shadow.css"></link>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="http:www.til-sander.de/assets/js/bootstrap.min.js"></script>
+    <script src="http:www.til-sander.de/assets/js/ts.js"></script>
+    <script type="text/javascript" src="http://latex.codecogs.com/latexit.js"></script>
+    <script type="text/javascript">
+    LatexIT.add('p',true);
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <style>
+      #forkongithub a {
+        background:#333;
+        color:#fff;
+        text-decoration:none;
+        font-family:arial,sans-serif;
+        text-align:center;
+        font-weight:bold;
+        padding:5px 40px;
+        font-size:1rem;line-height:2rem;
+        position:relative;
+        transition:0.5s;
+      }
+      #forkongithub a:hover {
+        background:#194;
+        color:#fff;
+      }
+      #forkongithub a::before,#forkongithub a::after {
+        content:"";
+        width:100%;
+        display:block;
+        position:absolute;
+        top:1px;left:0;
+        height:1px;
+        background:#fff;
+      }
+      #forkongithub a::after {
+        bottom:1px;
+        top:auto;
+      }
+      @media screen and (min-width:600px) {
+        #forkongithub {
+          position:fixed;
+          display:block;
+          top:0;right:0;
+          width:200px;
+          overflow:hidden;
+          height:200px;
+          z-index:9999;
+        }
+        #forkongithub a {
+          width:200px;
+          position:absolute;
+          top:40px;
+          right:-40px;
+          transform:rotate(45deg);
+          -webkit-transform:rotate(45deg);
+          -ms-transform:rotate(45deg);
+          -moz-transform:rotate(45deg);
+          -o-transform:rotate(45deg);
+          box-shadow:4px 4px 10px rgba(0,0,0,0.8);
+        }
+      }
+    </style>
+  </head>
+  <body onload="time()">
+
+
+    <!-- Navigation -->
+    <div class="container">
+      <header class="navbar" role="banner">
+        
+          <div class="navbar-header">
+            <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a href="/" class="roli blue navbar-brand" style="margin-left: 20px">Til Sander</a>
+          </div>
+          <nav class="collapse navbar-collapse" role="navigation">
+            <ul class="nav navbar-nav pull-right">
+              <li>
+                <a href="/" class="roli active turq">Home</a>
+              </li>
+              <li>
+                <a href="/about" class="roli red">About</a>
+              </li>
+            </ul>
+          </nav>
+        
+      </header>
+      </div>
+    <!-- Navigation End -->
+
+    <!-- Content -->
+    <div class="container content">
+
+      <!-- Articles -->
+      <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10" style="background-color:rgba(255,255,255,1.0);box-shadow:5px 0px 10px rgba(0,0,0,0.3);">
+          <span id="forkongithub"><a target="_blank" href="https://github.com/tilsander/primeexplorer">Fork me on GitHub</a></span>
+          <h1>Prime Explorer</h1>
+          <img src="./primeexplorer.png" style="width:100%; max-width: 500px; float: right; margin-left: 20px;">
+          <p>The application gives a visual representation of <a target="_blank" href="http://en.wikipedia.org/wiki/Goldbach's_conjecture">Goldbach's Conjecture</a>, that every even integer greater than 2 is the sum of two primes. This problem is unsolved since 1742. It combines the multiplicative defined prime numbers with the addition of numbers. The representation of an even integer is not unique, in the most cases there is an increasing number of partitions for an growing n. But it is not monotonically increasing. It could be the case that the primes are in such an arrangement that there is not partition for a (so far unknown) even integer. Computations have shown that there is no such integer below $4 \cdot 10^{18}$.</p>
+          <h3>Installation</h3>
+          <p>Just download the project from <a target="_blank" href="https://github.com/tilsander/primeexplorer">GitHub</a> and run the build script (.sh on Unix/Linux, .bat on Windows).</p>
+          <p>Then run primeexplorer.sh or primeexplorer.bat on Windows.</p>
+          <p>To build and run the application you need the <a target="_blank" href="http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html">Java SDK</a>.</p>
+          <h1>The Math</h1>
+          <p>The sieve of Eratosthenes is an easy method to generate primes.</p>
+          <p>You simply start at 2, and mark the multiples as composite numbers.</p>
+          <p>This is repeated with the next number, which was not marked as a composite, i.e. the next prime.</p>
+          <p>With this algorithm one can specify the prime-counting function as:</p>
+          <p>$\pi: \mathbb{N} \to \mathbb{N},$</p>
+          <p>$\pi(n) = \vert \{2,...,n\} \setminus \bigcup\limits_{i = 2}^{n-1} \bigcup\limits_{k = 2}^{n+1-i} i \cdot k \vert$</p>
+          <p>If you shift the indices, the set of composites, which is substracted from the set $\{2,...,n\}$ could also be written as:</p>
+          <p>$\bigcup\limits_{i = 2}^{n-1} \bigcup\limits_{k = 2}^{n+1-i} i \cdot k = \bigcup\limits_{i = 3}^{n} \bigcup\limits_{k = 2}^{n+2-i} (i-1) \cdot k = \bigcup\limits_{i = 3}^{n} \bigcup\limits_{k = 2}^{i-1} (n+2-i) \cdot k =: \varphi(n)$</p>
+          <p>Now consider the next function:</p>
+          <p>$\bigcup\limits_{i = 3}^{n} \bigcup\limits_{k = 2}^{i-1} (i+1-k) \cdot k =: \psi(n)$</p>
+          <p>The claim is: $\varphi(n) = \psi(n)$ $\forall n \geq 2$, i.e. the two functions generate the same sets.</p>
+          <h3>Proof by Mathematical Induction</h3>
+          <br>
+          <h4>Base Case:</h4>
+          <p>$n=3$ ( $\psi(2)$ is an empty set)</p>
+          <p>$\varphi(3) = \bigcup\limits_{i = 3}^{3} \bigcup\limits_{k = 2}^{i-1} (n+2-i) \cdot k = \{4\} = \bigcup\limits_{i = 3}^{3} \bigcup\limits_{k = 2}^{i-1} (i+1-k) \cdot k = \psi(3)$</p>
+          <h4>Assumption:</h4>
+          <p>$\varphi(n-1) = \bigcup\limits_{i = 3}^{n-1} \bigcup\limits_{k = 2}^{i-1} (n+1-i) \cdot k = \bigcup\limits_{i = 3}^{n-1} \bigcup\limits_{k = 2}^{i-1} (i+1-k) \cdot k = \psi(n-1)$</p>
+          <h4>Induction Step:</h4>
+          <p>$n-1 \rightarrow n$</p>
+          <p>The following tables show the development of the sets of composites for $\varphi(n)$ and $\psi(n)$, starting at $n=3$:</p>
+          <img src="./table_phi_psi.png" style="width:100%; max-width: 600px">
+          <p>For $\varphi$ the added values are those with the highest value for $k$, for $\psi$ it is just the highest $i$.</p>
+          <p>So it shows that</p>
+          <p>$\varphi(n) = \bigcup\limits_{i = 3}^{n} \bigcup\limits_{k = 2}^{i-1} (n+2-i) \cdot k = \varphi(n-1) \cup \bigcup\limits_{i = 3}^{n} (n+2-i) \cdot (i-1) := \varphi(n-1) \cup \varphi'$</p>
+          <p>and</p>
+          <p>$\psi(n) = \bigcup\limits_{i = 3}^{n} \bigcup\limits_{k = 2}^{i-1} (i+1-k) \cdot k = \psi(n-1) \cup \bigcup\limits_{k = 2}^{n-1} (n+1-k) \cdot k := \psi(n-1) \cup \psi'$</p>
+          <p>Now we show that the added sets are equal:</p>
+          <p>$\varphi' = \bigcup\limits_{i = 3}^{n} (n+2-i) \cdot (i-1) = \bigcup\limits_{i = 2}^{n-1} (n+2-(i+1)) \cdot ((i+1)-1)$</p>
+          <p>$ = \bigcup\limits_{i = 2}^{n-1} (n+1-i) \cdot i = \bigcup\limits_{k = 2}^{n-1} (n+1-k) \cdot k = \psi'$</p>
+          <p>$\Rightarrow \varphi(n) = \psi(n)$ $\forall n \geq 2$</p>
+          <p>$\Box$</p>
+          <p>We see that all composite numbers can be described by the polynomial $(i+1-k) \cdot k$.</p>
+          <p>These polynomials are also visible within the application (activate <b>View > Polys</b> to draw the  polynomials).</p>
+          <img src="./polys.png" style="width:100%; max-width: 800px">
+          <h3>Applications:</h3>
+          <p>The prime-counting function (<b>Chart > Primes (Calc)</b>):</p>
+          <p>$\pi: \mathbb{N} \to \mathbb{N},$</p>
+          <p>$\pi(n) = \vert \{2,...,n\} \setminus \psi(n) \vert$</p>
+          <p>The following function calculates the number of Goldbach partitions for the even number $2 \cdot n$ (<b>Chart > Partitions (Calc)</b>):</p>
+          <p>$G: \mathbb{N} \to \mathbb{N},$</p>
+          <p>$G(n) = \vert \{2,...,n\} \setminus \bigcup\limits_{b = 0}^{1} \bigcup\limits_{i = 3}^{n} \bigcup\limits_{k = 2}^{i-1} n + (-1)^b \cdot (n - (i + 1 - k) \cdot k) \vert$</p>
+          <p>You can plot these both functions (and other functions from number theory) within the application:</p>
+          <img src="./chart_primes_partitions.png" style="width:100%; max-width: 800px">
+          <p>The function $\psi(n)$ could be further generalized to use a constant factor $c \in \mathbb{N}$:</p>
+          <p>$\psi_c(n) = \bigcup\limits_{j = 2-c}^{1} \bigcup\limits_{i = 3}^{n} \bigcup\limits_{k = 2}^{i-1} c \cdot (i + \frac{j}{c} - k) \cdot k$</p>
+          <p>The prime-counting function could now be expressed by</p>
+          <p>$\pi_c: \mathbb{N} \to \mathbb{N},$</p>
+          <p>$\pi_c(n) = \vert \{2,...,n\} \setminus \psi_c(n) \vert$</p>
+          <p>You can set the factor c by activating <b>View > Control Mode > Poly Factor</b> and the zoom in/out with <b>Ctrl +/-</b></p>
+          <img src="./poly_factors.gif" style="width:100%; max-width: 800px">
+          <p>And the Goldbach function with a constant factor $c \in \mathbb{N}$:</p>
+          <p>$G_c: \mathbb{N} \to \mathbb{N},$</p>
+          <p>$G_c(n) = \vert \{2,...,n\} \setminus \bigcup\limits_{b = 0}^{1} \bigcup\limits_{j = 2-c}^{1} \bigcup\limits_{i = 3}^{n} \bigcup\limits_{k = 2}^{i-1} n + (-1)^b \cdot (n - c \cdot (i + \frac{j}{c} - k) \cdot k) \vert$</p>
+          <p>It holds that:</p>
+          <p>$\pi(n) = \pi_c(n)$ $\forall_{n,c \in \mathbb{N}}$</p>
+          <p>$G(n) = G_c(n)$ $\forall_{n,c \in \mathbb{N}}$</p>
+          
+        </div>
+      </div>
+      
+      <!-- Articles End -->
+      
+    </div>
+    <!-- Content End -->
+
+
+    <!-- Footer -->
+    <div class="container footer">
+      <div class="row">
+        <div class="col-md-12">
+          <footer>
+            <p>
+              <a href="/" class="roli">Copyright © 2013 Til Sander</a>
+              <a href="https://itunes.apple.com/us/app/deep-sky-rockets/id494297730?mt=8" class="roli turq" target="_blank">App Store</a>
+              <!--<a href="https://github.com/tilsander" class="roli green" target="_blank">GitHub</span></a>-->
+              <a href="/about" class="roli red">About</a>
+            </p>
+          </footer>
+        </div>
+      </div>
+    </div>
+    <!-- Footer End -->
+
+    <script>
+      var supports3DTransforms =  document.body.style['webkitPerspective'] !== undefined || document.body.style['MozPerspective'] !== undefined;
+
+      function linkify( selector ) {
+          if( supports3DTransforms ) {
+              
+              var nodes = document.querySelectorAll( selector );
+
+              for( var i = 0, len = nodes.length; i < len; i++ ) {
+                  var node = nodes[i];
+
+                  if( !node.className || !node.className.match( /roll/g ) ) {
+                      node.className += ' roll';
+                      node.innerHTML = '<span data-hover="'+ node.text +'">' + node.innerHTML + '</span>';
+                  }
+              };
+          }
+      }
+      linkify( '.roli' );
+
+      /*var ixp = 0;
+      function time() {
+        ixp += 300;
+        $('body.rotate-back, .bord-hole.rotate-back').css('background-position', " 0px " + ixp + "px");
+        var myVar=setInterval(function(){
+          ixp += 300;
+          $('body.rotate-back, .bord-hole.rotate-back').css('background-position', " 0px " + ixp + "px");
+        }, 20000);
+      }*/
+
+      $('.carousel').carousel({
+        interval: 6000
+      });
+
+    </script>
+
+  </body>
+
+</html>
+

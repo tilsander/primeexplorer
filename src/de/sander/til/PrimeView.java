@@ -1163,7 +1163,7 @@ public class PrimeView extends JPanel {
 	 * @return The text at the position (x|y).
 	 */
 	private String getText(int x, int y) {
-		if (Primes.$().isPrime(x)) {
+		if (this.model.isChartExpSum() && Primes.$().isPrime(x)) {
 			int exp = Primes.$().getExponent(x, y);
 			if (exp > 0) return ""+exp;
 		}
@@ -1258,7 +1258,7 @@ public class PrimeView extends JPanel {
 		} else {
 			switch (ct) {
 			case BORDER:
-				if (y%x==0 && this.model.isFactors()) return this.model.getColor("RAY_BORDER");
+				if (y%x==0 && x != 1 && this.model.isFactors()) return this.model.getColor("RAY_BORDER");
 				else return this.model.getColor("ODD_BORDER");
 			case BOX: return this.model.getColor("ODD_BOX");
 			case TEXT: return this.model.getColor("ODD_TEXT");

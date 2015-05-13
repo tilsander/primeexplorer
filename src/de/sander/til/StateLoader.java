@@ -118,7 +118,7 @@ public class StateLoader {
 	 * @return a settings instance
 	 */
 	public Settings loadSettings() {
-		File setting_file = new File(PrimeUtil.getContentDir(),"settings.json");
+		File setting_file = new File(PrimeUtil.getConfigurationDir(),"settings.json");
 		if (setting_file.exists()) {
 			BufferedReader br=null;
 			try {
@@ -151,7 +151,7 @@ public class StateLoader {
 	 * @param settings
 	 */
 	public void saveSettings(Settings settings) {
-		File setting_file = new File(PrimeUtil.getContentDir(),"settings.json");
+		File setting_file = new File(PrimeUtil.getConfigurationDir(),"settings.json");
     	if (!setting_file.exists()) {
     		try {
     			setting_file.createNewFile();

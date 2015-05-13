@@ -86,6 +86,14 @@ public class PrimeUtil {
 	
 	/**
 	 * 
+	 * @return the configuration directory
+	 */
+	public static String getConfigurationDir() {
+		return new File(PrimeUtil.getRootDir(),"conf").getPath();
+	}
+	
+	/**
+	 * 
 	 * @return the content directory
 	 */
 	public static String getContentDir() {

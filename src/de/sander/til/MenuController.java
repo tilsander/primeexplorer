@@ -256,6 +256,9 @@ public class MenuController implements MenuListener {
 				break;
 			}
 			break;
+		case UPDATE:
+			this.openUpdate();
+			break;
 		default:
 			break;
 		
@@ -307,6 +310,13 @@ public class MenuController implements MenuListener {
 	 */
 	private void openAbout() {
 		PrimeUtil.openWebpage("http://www.til-sander.de/");
+	}
+	
+	/**
+	 * open update webpage
+	 */
+	private void openUpdate() {
+		PrimeUtil.openWebpage("https://github.com/tilsander/primeexplorer/");
 	}
 
 }

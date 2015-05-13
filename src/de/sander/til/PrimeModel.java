@@ -1,6 +1,7 @@
 package de.sander.til;
 
 import java.awt.Color;
+import java.util.Observable;
 import java.util.TreeMap;
 import java.util.Map;
 
@@ -10,7 +11,7 @@ import org.apache.logging.log4j.Logger;
 /**
  * This class stores the state of a PrimeView.
  */
-public class PrimeModel {
+public class PrimeModel extends Observable {
 	
 	@SuppressWarnings("unused")
 	private static final Logger logger = LogManager.getLogger(PrimeModel.class.getSimpleName());
@@ -343,6 +344,8 @@ public class PrimeModel {
 	 */
 	private void changed() {
 		this._changed = true;
+		this.setChanged();
+		this.notifyObservers();
 	}
 
 	/**
@@ -612,6 +615,7 @@ public class PrimeModel {
 	 */
 	public void setChartFirstMatch(boolean chartFirstMatch) {
 		this.chartFirstMatch = chartFirstMatch;
+		this.changed();
 	}
 
 	/**
@@ -628,6 +632,7 @@ public class PrimeModel {
 	 */
 	public void setChartFirstVoid(boolean chartFirstVoid) {
 		this.chartFirstVoid = chartFirstVoid;
+		this.changed();
 	}
 
 	/**
@@ -644,6 +649,7 @@ public class PrimeModel {
 	 */
 	public void setChartVoidCount(boolean chartVoidCount) {
 		this.chartVoidCount = chartVoidCount;
+		this.changed();
 	}
 
 	/**
@@ -1261,9 +1267,9 @@ public class PrimeModel {
 		ret.put(23,new InfoEntry("SHOW_MIRROR",""+this.isPrimeMirror()));
 		ret.put(24,new InfoEntry("SHOW_CHECKED_PAT",""+this.isCheckedPattern()));
 		ret.put(25,new InfoEntry("SHOW_POLAR_FACTOR",""+this.isPolarFactors()));
-		ret.put(26,new InfoEntry("POLY_SIZE",""+this.getPolySize()));
+		//ret.put(26,new InfoEntry("POLY_SIZE",""+this.getPolySize()));
 		ret.put(27,new InfoEntry("POLY_FACTOR",""+this.getPolyFactor()));
-		ret.put(28,new InfoEntry("POLY_DELTA",""+this.getPolyDelta()));
+		//ret.put(28,new InfoEntry("POLY_DELTA",""+this.getPolyDelta()));
 		ret.put(29,new InfoEntry("CHART_PRIMES",""+this.isChartPrimes()));
 		ret.put(30,new InfoEntry("CHART_EXP",""+this.isChartExp()));
 		ret.put(31,new InfoEntry("CHART_MATCH_COUNT",""+this.isChartMatchCount()));

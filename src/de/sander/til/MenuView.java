@@ -38,7 +38,7 @@ public class MenuView {
 	@SuppressWarnings("unused")
 	private JMenuItem newFile, openFile, closeFile,
 			zoomIn, zoomOut, origin,
-			documentation, online;
+			documentation, online, update;
 	@SuppressWarnings("unused")
 	private JCheckBoxMenuItem chartPrimes, chartExponent, chartMatchCount, chartFirstMatch, chartVoidCount, chartFirstVoid, chartPrimesCalc, chartMatchCountCalc, chartDivisorSum, chartEulerTotient,
 			chartProp, expSum, showCharts,
@@ -98,12 +98,12 @@ public class MenuView {
 		ButtonGroup cgroup = new ButtonGroup();
 		cModeSub.add(this.connect(zoomMode = new JRadioButtonMenuItem("Zoom",this.model.getPmmode()==PrimeModel.PMMode.ZOOM),									MenuAction.ZOOM,KeyEvent.VK_Z,CTRL_ALT));
 		cModeSub.add(this.connect(verticalStep = new JRadioButtonMenuItem("Vertical Step",this.model.getPmmode()==PrimeModel.PMMode.VERTICAL_STEP),				MenuAction.VERTICAL_STEP,KeyEvent.VK_V,CTRL_ALT));
-		cModeSub.add(this.connect(horizontalStep = new JRadioButtonMenuItem("Horizontal Step",this.model.getPmmode()==PrimeModel.PMMode.HORIZONTAL_STEP),		MenuAction.HORIZONTAL_STEP,KeyEvent.VK_H,CTRL_ALT));
 		cModeSub.add(this.connect(verticalOffset = new JRadioButtonMenuItem("Vertical Offset",this.model.getPmmode()==PrimeModel.PMMode.VERTICAL_OFFSET),		MenuAction.VERTICAL_OFFSET,KeyEvent.VK_A,CTRL_ALT));
+		cModeSub.add(this.connect(horizontalStep = new JRadioButtonMenuItem("Horizontal Step",this.model.getPmmode()==PrimeModel.PMMode.HORIZONTAL_STEP),		MenuAction.HORIZONTAL_STEP,KeyEvent.VK_H,CTRL_ALT));
 		cModeSub.add(this.connect(horizontalOffset = new JRadioButtonMenuItem("Horizontal Offset",this.model.getPmmode()==PrimeModel.PMMode.HORIZONTAL_OFFSET),	MenuAction.HORIZONTAL_OFFSET,KeyEvent.VK_W,CTRL_ALT));
-		cModeSub.add(this.connect(polySize = new JRadioButtonMenuItem("Poly Size",this.model.getPmmode()==PrimeModel.PMMode.POLY_SIZE),							MenuAction.POLY_SIZE,KeyEvent.VK_S,CTRL_ALT));
+		//cModeSub.add(this.connect(polySize = new JRadioButtonMenuItem("Poly Size",this.model.getPmmode()==PrimeModel.PMMode.POLY_SIZE),							MenuAction.POLY_SIZE,KeyEvent.VK_S,CTRL_ALT));
 		cModeSub.add(this.connect(polyFactor = new JRadioButtonMenuItem("Poly Factor",this.model.getPmmode()==PrimeModel.PMMode.POLY_FACTOR),					MenuAction.POLY_FACTOR,KeyEvent.VK_F,CTRL_ALT));
-		cModeSub.add(this.connect(polyDelta = new JRadioButtonMenuItem("Poly Delta",this.model.getPmmode()==PrimeModel.PMMode.POLY_DELTA),						MenuAction.POLY_DELTA,KeyEvent.VK_D,CTRL_ALT));
+		//cModeSub.add(this.connect(polyDelta = new JRadioButtonMenuItem("Poly Delta",this.model.getPmmode()==PrimeModel.PMMode.POLY_DELTA),						MenuAction.POLY_DELTA,KeyEvent.VK_D,CTRL_ALT));
 		cModeSub.add(this.connect(divisorExp = new JRadioButtonMenuItem("Divisor Exponent",this.model.getPmmode()==PrimeModel.PMMode.DIVISOR_EXP),				MenuAction.DIVISOR_EXP,KeyEvent.VK_E,CTRL_ALT));
 		cgroup.add(zoomMode);
 		cgroup.add(verticalStep);
@@ -148,22 +148,23 @@ public class MenuView {
 		// chart menu
 		chartMenu.add(this.connect(chartPrimes = new JCheckBoxMenuItem("Primes",this.model.isChartPrimes()),						MenuAction.CHART_PRIMES,KeyEvent.VK_1,CTRL));
 		chartMenu.add(this.connect(chartExponent = new JCheckBoxMenuItem("Exponent Count",this.model.isChartExp()),						MenuAction.CHART_EXPONENTS,KeyEvent.VK_2,CTRL));
-		chartMenu.add(this.connect(chartMatchCount = new JCheckBoxMenuItem("Match Count",this.model.isChartMatchCount()),		MenuAction.CHART_MATCH_COUNT,KeyEvent.VK_3,CTRL));
-		chartMenu.add(this.connect(chartFirstMatch = new JCheckBoxMenuItem("First Match",this.model.isChartFirstMatch()),				MenuAction.CHART_FIRST_MATCH,KeyEvent.VK_4,CTRL));
+		chartMenu.add(this.connect(chartMatchCount = new JCheckBoxMenuItem("Partitions",this.model.isChartMatchCount()),		MenuAction.CHART_MATCH_COUNT,KeyEvent.VK_3,CTRL));
+		chartMenu.add(this.connect(chartFirstMatch = new JCheckBoxMenuItem("First Partition",this.model.isChartFirstMatch()),				MenuAction.CHART_FIRST_MATCH,KeyEvent.VK_4,CTRL));
 		chartMenu.add(this.connect(chartVoidCount = new JCheckBoxMenuItem("Void Count",this.model.isChartVoidCount()),					MenuAction.CHART_VOID_COUNT,KeyEvent.VK_5,CTRL));
 		chartMenu.add(this.connect(chartFirstVoid = new JCheckBoxMenuItem("First Void",this.model.isChartFirstVoid()),					MenuAction.CHART_FIRST_VOID,KeyEvent.VK_6,CTRL));
 		chartMenu.add(this.connect(chartPrimesCalc = new JCheckBoxMenuItem("Primes (Calc)",this.model.isChartPrimeCountCalc()),			MenuAction.CHART_PRIMES_CALC,KeyEvent.VK_7,CTRL));
-		chartMenu.add(this.connect(chartMatchCountCalc = new JCheckBoxMenuItem("Match Count (Calc)",this.model.isChartMatchCountCalc()),MenuAction.CHART_MATCH_COUNT_CALC,KeyEvent.VK_8,CTRL));
+		chartMenu.add(this.connect(chartMatchCountCalc = new JCheckBoxMenuItem("Partitions (Calc)",this.model.isChartMatchCountCalc()),MenuAction.CHART_MATCH_COUNT_CALC,KeyEvent.VK_8,CTRL));
 		chartMenu.add(this.connect(chartDivisorSum = new JCheckBoxMenuItem("Divisor Function",this.model.isChartDivisorSum()),			MenuAction.CHART_DIVISOR_SUM,KeyEvent.VK_9,CTRL));
 		chartMenu.add(this.connect(chartEulerTotient = new JCheckBoxMenuItem("Euler's Totient",this.model.isChartEulerTotient()),		MenuAction.CHART_EULER_TOTIENT,KeyEvent.VK_0,CTRL));
 		chartMenu.addSeparator();
 		chartMenu.add(this.connect(chartProp = new JCheckBoxMenuItem("Proportional",this.model.isChartProp()),	MenuAction.CHART_PROP,KeyEvent.VK_T,CTRL));
-		//chartMenu.add(this.connect(expSum = new JCheckBoxMenuItem("Exponent Sum",this.model.isChartExpSum()),	MenuAction.EXPONENT_SUM,KeyEvent.VK_E,CTRL));
+		chartMenu.add(this.connect(expSum = new JCheckBoxMenuItem("Exponent Sum",this.model.isChartExpSum()),	MenuAction.EXPONENT_SUM,KeyEvent.VK_E,CTRL));
 		chartMenu.add(this.connect(showCharts = new JCheckBoxMenuItem("Show Charts",this.model.isChart()),		MenuAction.SHOW_CHARTS,KeyEvent.VK_C,CTRL_SHIFT));
 		
 		// help menu
 		helpMenu.add(this.connect(documentation = new JMenuItem("Documentation"), MenuAction.DOCUMENTATION));
 		helpMenu.add(this.connect(online = new JMenuItem("About PrimeExplorer"), MenuAction.ABOUT));
+		helpMenu.add(this.connect(update = new JMenuItem("Update"), MenuAction.UPDATE));
 		
 		menuBar.add(fileMenu);
 		menuBar.add(viewMenu);
