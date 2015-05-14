@@ -114,11 +114,14 @@
           <span id="forkongithub"><a target="_blank" href="https://github.com/tilsander/primeexplorer">Fork me on GitHub</a></span>
           <h1>Prime Explorer</h1>
           <img src="./primeexplorer.png" style="width:100%; max-width: 500px; float: right; margin-left: 20px;">
-          <p>The application gives a visual representation of <a target="_blank" href="http://en.wikipedia.org/wiki/Goldbach's_conjecture">Goldbach's Conjecture</a>, that every even integer greater than 2 is the sum of two primes. This problem is unsolved since 1742. It combines the multiplicative defined prime numbers with the addition of numbers. The representation of an even integer is not unique, in the most cases there is an increasing number of partitions for an growing n. But it is not monotonically increasing. It could be the case that the primes are in such an arrangement that there is not partition for a (so far unknown) even integer. Computations have shown that there is no such integer below $4 \cdot 10^{18}$.</p>
+          <p>The application gives a visual representation of <a target="_blank" href="http://en.wikipedia.org/wiki/Goldbach's_conjecture">Goldbach's Conjecture</a>, that every even integer greater than 2 is the sum of two primes. This problem is unsolved since 1742. It combines the multiplicative defined prime numbers with the addition of numbers. The representation of an even integer is not unique, in the most cases there is an increasing number of partitions for an growing n. But it is not monotonically increasing. It could be the case that the primes are in such an arrangement that there is no partition for a (so far unknown) even integer. Computations have shown that there is no such integer below $4 \cdot 10^{18}$.</p>
           <h3>Installation</h3>
           <p>Just download the project from <a target="_blank" href="https://github.com/tilsander/primeexplorer">GitHub</a> and run the build script (.sh on Unix/Linux, .bat on Windows).</p>
           <p>Then run primeexplorer.sh or primeexplorer.bat on Windows.</p>
-          <p>To build and run the application you need the <a target="_blank" href="http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html">Java SDK</a>.</p>
+          <p>To build and run the application you need the <a target="_blank" href="http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html">Java Development Kit</a> (1.7 or higher).</p>
+          <h1>The Application</h1>
+          <p>The application shows a two dimensional field. The left green axis shows the numbers integers ( $n$), the second green axis the corresponding even number ( $2 \cdot n$). So each row belongs to an integer. If a field has a red border the number is a factor of the row number ( $n$). If it has a red background, the number is a prime factor of $n$ with the displayed exponent. The blue fields are the Goldbach partitions for $2 \cdot n$.</p>
+          <p>The field does not end at the bottom, you can scroll down with the arrow keys and zoom in/out with <b>Ctrl +/-</b>.</p>
           <h1>The Math</h1>
           <p>The sieve of Eratosthenes is an easy method to generate primes.</p>
           <p>You simply start at 2, and mark the multiples as composite numbers.</p>

@@ -146,7 +146,7 @@ public class Primes {
 		Map<Integer,Integer> entry = new TreeMap<Integer,Integer>();
 		int m_count = 1;
 		this.generatePrimes(n2-3);
-		for (int i = 3; i <= n2/2; ++i) {
+		for (int i = 2; i <= n2/2; ++i) {
 			if (this.isPrime(i) && this.isPrime(n2-i)) {
 				entry.put(i,m_count);
 				entry.put(n2-i,m_count);
@@ -656,13 +656,11 @@ public class Primes {
 	 * @return The value of goldbach numbers for number.
 	 */
 	public int calculateMatchCount(int number) {
-		if (number <= 2) return 0;
 		if (this.calcMatchCount.containsKey(number)) return this.calcMatchCount.get(number);
 		
 		int count=0, n = number;
 		HashSet<Integer> comps = this.A(n);
 		comps.addAll(this.U(n));
-		
 		count = (n-1)-comps.size();
 		
 		this.calcMatchCount.put(number, count);
