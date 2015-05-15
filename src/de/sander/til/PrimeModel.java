@@ -66,7 +66,7 @@ public class PrimeModel extends Observable {
 	private boolean	drawRect = true, helper = true,
 			rays = false, factors = true, chart = true, chartProp = true, chartPrimeCountCalc=false, chartMatchCountCalc=false,
 			chartExp = false, chartPrimes = true, chartMatchCount = true, chartFirstMatch=false, chartFirstVoid=false, chartVoidCount=false,
-			chartExpSum = true, stats=false, primes=true, _changed=false, polynomials=false, checkedPattern=false, primeMirror=true,
+			chartExpSum = true, stats=false, primes=true, _changed=false, polynomials=false, checkedPattern=false, primeMirror=false,
 			polarFactors=false, factorOnlyOuter=false, factorOnlyNeeded=false, polarBalance=false, rotateView=false,
 			chartDivisorSum=false, chartEulerTotient=false, polarOverlap=false, showHCN=false;
 	private PMMode pmmode=PMMode.ZOOM;
@@ -146,13 +146,13 @@ public class PrimeModel extends Observable {
 		this.CHART_PRIME = new Color(160,225,140);
 		this.CHART_MATCH_COUNT = new Color(255,190,55);
 		this.CHART_EXP = new Color(185,45,90);
-		this.CHART_FIRST_MATCH = new Color(185,45,190);
-		this.CHART_FIRST_VOID = new Color(85,145,190);
-		this.CHART_VOID_COUNT = new Color(225,145,90);
+		this.CHART_FIRST_MATCH = new Color(195,45,180);
+		this.CHART_FIRST_VOID = new Color(75,135,250);
+		this.CHART_VOID_COUNT = new Color(205,95,130);
 		this.CHART_PRIME_COUNT_CALC = new Color(225,145,90);
-		this.CHART_MATCH_COUNT_CALC = new Color(85,145,190);
-		this.CHART_DIVISOR_SUM = new Color(180,205,170);
-		this.CHART_EULER_TOTIENT = new Color(225,190,140);
+		this.CHART_MATCH_COUNT_CALC = new Color(85,185,190);
+		this.CHART_DIVISOR_SUM = new Color(140,205,190);
+		this.CHART_EULER_TOTIENT = new Color(255,120,100);
 		this.PRIME_MIRROR = new Color(255,235,235);
 		this.POLAR_FACTOR_LEFT = Color.RED;
 		this.POLAR_FACTOR_RIGHT = Color.GREEN;
