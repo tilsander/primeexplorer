@@ -97,7 +97,9 @@ public class PrimeUtil {
 	 * @return the content directory
 	 */
 	public static String getContentDir() {
-		return new File(PrimeUtil.getRootDir(),"content").getPath();
+		File cfile = new File(PrimeUtil.getRootDir(),"content");
+		if (cfile.exists() == false) cfile.mkdir();
+		return cfile.getPath();
 	}
 	
 	/**
