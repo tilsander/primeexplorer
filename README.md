@@ -4,4 +4,4 @@
 
 The application gives a visual representation of Goldbach's Conjecture.
 
-![alt tag](http://www.til-sander.de/primeexplorer/zoomout.gif)
+![alt tag](http://www.til-sander.de/assets/images/zoomout.gif)
