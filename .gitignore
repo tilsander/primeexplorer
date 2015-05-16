@@ -3,3 +3,4 @@ bin/org/
 tmp/
 content/
 /bin/
+.DS_Store
